@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Letter Master</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Noto Sans Tamil Font for perfect character rendering -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .tamil-text {
+            font-family: 'Noto Sans Tamil', sans-serif;
+            line-height: 1.2;
+        }
+        
+        /* Flash animations for correct/skip visual feedback */
+        .flash-green { animation: flashG 0.4s ease-out; }
+        .flash-orange { animation: flashO 0.4s ease-out; }
+        .flash-red { animation: flashR 0.4s ease-out; }
+        
+        @keyframes flashG {
+            0% { background-color: #bbf7d0; transform: scale(1.02); }
+            100% { background-color: white; transform: scale(1); }
+        }
+        @keyframes flashO {
+            0% { background-color: #fed7aa; transform: scale(0.98); }
+            100% { background-color: white; transform: scale(1); }
+        }
+        @keyframes flashR {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-blue-50 min-h-screen flex flex-col text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white shadow-md p-4 text-center">
+        <h1 class="text-2xl md:text-3xl font-bold tamil-text">Tamil Letter Master 🏆</h1>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex flex-col items-center justify-center p-4 w-full max-w-4xl mx-auto">
+        
+        <!-- ================= START SCREEN ================= -->
+        <div id="start-screen" class="bg-white rounded-2xl shadow-xl p-6 md:p-10 w-full animate-fade-in">
+            <h2 class="text-2xl font-bold text-center mb-6">Welcome to the Flashcard Challenge!</h2>
+            
+            <!-- Self Learning Guide Section -->
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8 rounded-r-lg text-sm md:text-base">
+                <h3 class="font-bold text-blue-800 mb-2">📖 Self-Learning Guide: The Tamil Alphabet</h3>
+                <p class="mb-2"><strong>Uyir Ezhuthukkal (உயிர் எழுத்துக்கள்):</strong> These are the 12 <strong>Vowels</strong> (+1 special letter ஃ). Just like A, E, I, O, U in English, these are the core sounds of the language.</p>
+                <p class="mb-2"><strong>Mei Ezhuthukkal (மெய் எழுத்துக்கள்):</strong> These are the 18 <strong>Consonants</strong>. You can spot them easily because they have a dot on top (e.g., க்). They act like English consonants (B, C, D) before adding a vowel.</p>
+                <p><strong>Uyirmei Ezhuthukkal (உயிர்மெய் எழுத்துக்கள்):</strong> These 216 <strong>Combined Letters</strong> are made by blending a consonant and a vowel together (e.g., க் + அ = க). This is similar to reading syllables in English like "ba", "ki", or "mo".</p>
+            </div>
+
+            <!-- Game Settings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div>
+                    <label class="block font-semibold mb-2 text-gray-700">Choose Letter Set to Practice:</label>
+                    <select id="category-select" class="w-full border-2 border-gray-300 rounded-lg p-3 text-lg focus:outline-none focus:border-blue-500">
+                        <option value="all">All 247 Letters (அனைத்து எழுத்துக்களும்)</option>
+                        <option value="uyir">Vowels Only (உயிர் எழுத்துக்கள்)</option>
+                        <option value="mei">Consonants Only (மெய் எழுத்துக்கள்)</option>
+                        <option value="uyirmei">Combinations Only (உயிர்மெய் எழுத்துக்கள்)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-semibold mb-2 text-gray-700">Turn Time Limit:</label>
+                    <select id="time-select" class="w-full border-2 border-gray-300 rounded-lg p-3 text-lg focus:outline-none focus:border-blue-500">
+                        <option value="60">60 Seconds</option>
+                        <option value="30">30 Seconds</option>
+                        <option value="90">90 Seconds</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button onclick="startGame()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-10 rounded-full text-xl shadow-lg transition-transform transform hover:scale-105">
+                    Start Turn! ▶️
+                </button>
+                <p class="mt-4 text-sm text-gray-500">Teacher: You can use Right Arrow (Correct) and Down Arrow (Skip) during the game.</p>
+            </div>
+        </div>
+
+        <!-- ================= GAME SCREEN ================= -->
+        <div id="game-screen" class="hidden w-full flex flex-col h-full">
+            
+            <!-- Dashboard -->
+            <div class="flex justify-between items-center bg-gray-800 text-white p-4 rounded-t-2xl shadow-md text-lg md:text-2xl font-bold">
+                <div id="time-display" class="flex items-center gap-2">
+                    ⏱️ <span id="time-left">60</span>s
+                </div>
+                <div class="flex items-center gap-2 text-yellow-300">
+                    ⏭️ Skips: <span id="skips-left">3</span>/3
+                </div>
+                <div class="flex items-center gap-2 text-green-400">
+                    ⭐ Score: <span id="score-display">0</span>
+                </div>
+            </div>
+
+            <!-- Flashcard -->
+            <div id="flashcard" class="bg-white flex-grow flex items-center justify-center rounded-b-2xl shadow-xl border-x-2 border-b-2 border-gray-200 transition-colors duration-200 min-h-[350px] md:min-h-[450px]">
+                <h2 id="letter-display" class="tamil-text text-[8rem] md:text-[12rem] lg:text-[15rem] font-bold text-gray-900 select-none">
+                    அ
+                </h2>
+            </div>
+
+            <!-- Controls for Teacher -->
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <button id="skip-btn" onclick="skipLetter()" class="bg-orange-400 hover:bg-orange-500 text-white font-bold py-5 px-6 rounded-xl text-xl md:text-2xl shadow-lg transition flex items-center justify-center gap-2">
+                    ⬇️ Skip Letter
+                </button>
+                <button onclick="markCorrect()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-5 px-6 rounded-xl text-xl md:text-2xl shadow-lg transition flex items-center justify-center gap-2">
+                    ➡️ Correct!
+                </button>
+            </div>
+            
+            <div class="text-center mt-4">
+                <button onclick="endGame()" class="text-red-500 font-semibold underline hover:text-red-700">End Turn Early</button>
+            </div>
+        </div>
+
+        <!-- ================= END SCREEN ================= -->
+        <div id="end-screen" class="hidden bg-white rounded-2xl shadow-xl p-8 md:p-12 w-full text-center">
+            <h2 class="text-4xl md:text-5xl font-bold text-blue-600 mb-4">Time's Up!</h2>
+            <p class="text-xl text-gray-600 mb-8">Student's turn has finished.</p>
+            
+            <div class="bg-gray-100 rounded-full w-48 h-48 mx-auto flex flex-col items-center justify-center border-4 border-green-400 mb-8 shadow-inner">
+                <span class="text-gray-500 font-semibold">Total Score</span>
+                <span id="final-score" class="text-6xl font-bold text-gray-900 mt-2">15</span>
+            </div>
+
+            <p id="feedback-message" class="text-2xl font-bold text-gray-800 mb-8 tamil-text">
+                Great job! (நன்று)
+            </p>
+
+            <button onclick="resetToHome()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition">
+                Next Student 🔄
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Application Logic -->
+    <script>
+        // --- 1. Generation of the Standard 247 Tamil Letters ---
+        // Uyir Ezhuthukkal (Vowels) + Aytham
+        const UYIR = ["அ", "ஆ", "இ", "ஈ", "உ", "ஊ", "எ", "ஏ", "ஐ", "ஒ", "ஓ", "ஔ", "ஃ"];
+        
+        // Mei Ezhuthukkal (Consonants)
+        const MEI = ["க்", "ங்", "ச்", "ஞ்", "ட்", "ண்", "த்", "ந்", "ப்", "ம்", "ய்", "ர்", "ல்", "வ்", "ழ்", "ள்", "ற்", "ன்"];
+        
+        // Base consonants (without the dot/pulli)
+        const BASE = ["க", "ங", "ச", "ஞ", "ட", "ண", "த", "ந", "ப", "ம", "ய", "ர", "ல", "வ", "ழ", "ள", "ற", "ன"];
+        
+        // Vowel Modifiers in Tamil Unicode
+        // An empty string "" combined with a base letter produces the 'a' sound (e.g. க + "" = க)
+        const MODIFIERS = ["", "ா", "ி", "ீ", "ு", "ூ", "ெ", "ே", "ை", "ொ", "ோ", "ௌ"];
+        
+        // Generate Uyirmei Ezhuthukkal (Combinations)
+        const UYIR_MEI = [];
+        for (let b of BASE) {
+            for (let m of MODIFIERS) {
+                UYIR_MEI.push(b + m); // Unicode combining characters handle the visual rendering automatically
+            }
+        }
+        
+        const ALL_LETTERS = [...UYIR, ...MEI, ...UYIR_MEI];
+
+        // --- 2. Game State Variables ---
+        let state = 'start'; // 'start', 'playing', 'end'
+        let currentLettersPool = [];
+        let currentLetter = "";
+        
+        let score = 0;
+        let skipsLeft = 3;
+        let timeLeft = 60;
+        let timerId = null;
+
+        // --- 3. UI Elements ---
+        const screens = {
+            start: document.getElementById('start-screen'),
+            game: document.getElementById('game-screen'),
+            end: document.getElementById('end-screen')
+        };
+        const displays = {
+            time: document.getElementById('time-left'),
+            skips: document.getElementById('skips-left'),
+            score: document.getElementById('score-display'),
+            letter: document.getElementById('letter-display'),
+            finalScore: document.getElementById('final-score'),
+            feedback: document.getElementById('feedback-message')
+        };
+        const flashcard = document.getElementById('flashcard');
+        const skipBtn = document.getElementById('skip-btn');
+
+        // --- 4. Game Functions ---
+        function startGame() {
+            // Determine letter pool based on teacher's selection
+            const category = document.getElementById('category-select').value;
+            if (category === 'uyir') currentLettersPool = UYIR;
+            else if (category === 'mei') currentLettersPool = MEI;
+            else if (category === 'uyirmei') currentLettersPool = UYIR_MEI;
+            else currentLettersPool = ALL_LETTERS;
+
+            // Reset variables
+            score = 0;
+            skipsLeft = 3;
+            timeLeft = parseInt(document.getElementById('time-select').value) || 60;
+            state = 'playing';
+
+            // Switch screens
+            screens.start.classList.add('hidden');
+            screens.end.classList.add('hidden');
+            screens.game.classList.remove('hidden');
+
+            updateDashboard();
+            showNextLetter();
+
+            // Start Timer
+            timerId = setInterval(() => {
+                timeLeft--;
+                updateDashboard();
+                
+                // Visual warning for last 10 seconds
+                if (timeLeft <= 10) {
+                    displays.time.parentElement.classList.add('text-red-400');
+                }
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+
+        function showNextLetter() {
+            let next;
+            // Prevent showing the exact same letter twice in a row if possible
+            do {
+                next = currentLettersPool[Math.floor(Math.random() * currentLettersPool.length)];
+            } while (next === currentLetter && currentLettersPool.length > 1);
+            
+            currentLetter = next;
+            displays.letter.textContent = currentLetter;
+        }
+
+        function updateDashboard() {
+            displays.time.textContent = timeLeft;
+            displays.skips.textContent = skipsLeft;
+            displays.score.textContent = score;
+
+            // Disable/style skip button if no skips left
+            if (skipsLeft === 0) {
+                skipBtn.classList.replace('bg-orange-400', 'bg-gray-400');
+                skipBtn.classList.replace('hover:bg-orange-500', 'hover:bg-gray-500');
+                skipBtn.classList.add('opacity-70', 'cursor-not-allowed');
+            } else {
+                skipBtn.classList.replace('bg-gray-400', 'bg-orange-400');
+                skipBtn.classList.replace('hover:bg-gray-500', 'hover:bg-orange-500');
+                skipBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+            }
+        }
+
+        function triggerFlash(type) {
+            flashcard.classList.remove('flash-green', 'flash-orange');
+            void flashcard.offsetWidth; // Trigger reflow to restart animation
+            if (type === 'correct') flashcard.classList.add('flash-green');
+            if (type === 'skip') flashcard.classList.add('flash-orange');
+        }
+
+        function markCorrect() {
+            if (state !== 'playing') return;
+            score++;
+            triggerFlash('correct');
+            updateDashboard();
+            showNextLetter();
+        }
+
+        function skipLetter() {
+            if (state !== 'playing') return;
+            
+            if (skipsLeft > 0) {
+                skipsLeft--;
+                triggerFlash('skip');
+                updateDashboard();
+                showNextLetter();
+            } else {
+                // Visual feedback that skips are depleted
+                skipBtn.classList.remove('flash-red');
+                void skipBtn.offsetWidth;
+                skipBtn.classList.add('flash-red');
+            }
+        }
+
+        function endGame() {
+            clearInterval(timerId);
+            state = 'end';
+            displays.time.parentElement.classList.remove('text-red-400'); // reset timer color
+            
+            screens.game.classList.add('hidden');
+            screens.end.classList.remove('hidden');
+            
+            displays.finalScore.textContent = score;
+
+            // Construct feedback message based on performance
+            if (score >= 25) {
+                displays.feedback.textContent = "Outstanding! You are a Tamil letter master! (மிக நன்று - Miga Nandru) 🌟";
+            } else if (score >= 10) {
+                displays.feedback.textContent = "Great job! Keep practicing! (நன்று - Nandru) 👍";
+            } else {
+                displays.feedback.textContent = "Good effort! Let's keep trying! (முயற்சி செய் - Muyarchi Sei) 💪";
+            }
+        }
+
+        function resetToHome() {
+            state = 'start';
+            screens.end.classList.add('hidden');
+            screens.start.classList.remove('hidden');
+        }
+
+        // --- 5. Keyboard Event Listeners for the Teacher ---
+        document.addEventListener('keydown', (e) => {
+            if (state !== 'playing') return;
+
+            // Spacebar or Right Arrow for Correct
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault(); // Prevents page scrolling when hitting space
+                markCorrect();
+            } 
+            // Down Arrow for Skip
+            else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                skipLetter();
+            }
+        });
+
+    </script>
+</body>
+</html>
