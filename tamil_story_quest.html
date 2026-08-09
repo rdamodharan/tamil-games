@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tamil Story Quest - கதை உலகம்</title>
+    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, audio narration with slow mode, inline vocabulary hints, and comprehension challenges.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+Tamil:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+        .tamil-text {
+            font-family: 'Noto Sans Tamil', sans-serif;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.75);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .vocab-word {
+            color: #fbbf24;
+            font-weight: 700;
+            border-bottom: 2px dashed #f59e0b;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 6px;
+            background-color: rgba(245, 158, 11, 0.15);
+            transition: all 0.2s ease;
+            position: relative;
+            display: inline-block;
+        }
+        .vocab-word:hover {
+            background-color: rgba(245, 158, 11, 0.35);
+            color: #fef08a;
+            transform: translateY(-1px);
+        }
+        /* Inline Hint Tooltip on Hover */
+        .vocab-word::after {
+            content: attr(data-hint);
+            position: absolute;
+            bottom: 115%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #0284c7;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 6px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            z-index: 20;
+        }
+        .vocab-word:hover::after {
+            opacity: 1;
+            transform: translateX(-50%) translateY(-2px);
+        }
+        .choice-btn {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .choice-btn:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+        }
+        .animate-pop {
+            animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.92) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
+
+    <!-- Top Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-30 backdrop-blur-md">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition flex items-center gap-1.5 text-sm font-semibold" title="Back to Games">
+                    <span>⬅️</span> <span class="hidden sm:inline">முகப்பு (Home)</span>
+                </a>
+                <div class="h-6 w-px bg-slate-700"></div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold text-amber-400 tracking-tight flex items-center gap-2">
+                        📖 கதை உலகம் <span class="text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-full font-sans font-semibold">Story Quest</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Level Selector & Status Bar -->
+            <div class="flex items-center gap-3 text-sm font-bold">
+                <button onclick="openLevelSelectModal()" class="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 px-3 py-1.5 rounded-xl font-extrabold shadow-md transition active:scale-95 text-xs sm:text-sm">
+                    <span>🗺️</span> <span id="current-level-badge">நிலை 1</span> <span>▼</span>
+                </button>
+                <div class="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700" title="Player Health">
+                    <span>❤️</span> <span id="hp-display" class="text-rose-400">3/3</span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700" title="XP Points">
+                    <span>⭐</span> <span id="xp-display" class="text-amber-400">0 XP</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Game Container -->
+    <main class="flex-grow max-w-4xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
+        
+        <!-- Story Header Banner & Controls -->
+        <div class="glass-card rounded-2xl p-5 border border-slate-700/60 shadow-xl">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3">
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span id="story-chapter-tag" class="text-xs font-bold uppercase tracking-wider text-cyan-400 bg-cyan-950/60 border border-cyan-800/50 px-3 py-1 rounded-full">
+                            அத்தியாயம் 1 • Chapter 1
+                        </span>
+                        <span id="story-difficulty-tag" class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2.5 py-0.5 rounded-full">
+                            எளிது (Beginner)
+                        </span>
+                    </div>
+                    <h2 id="story-title" class="tamil-text text-2xl md:text-3xl font-extrabold text-white mt-2">
+                        ஆம்பல் அடவி ரகசியம் (The Secret of Aambal Jungle)
+                    </h2>
+                </div>
+                <!-- Action Controls: Narration + Slow Mode + Ambience -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Slow Reading Mode Toggle -->
+                    <button id="slow-speech-btn" onclick="toggleSlowSpeech()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 font-semibold px-3 py-2 rounded-xl transition text-xs sm:text-sm" title="Toggle Slow Narration Speed">
+                        <span>🐢</span> <span id="slow-speech-text">மெதுவான வாசிப்பு (Normal)</span>
+                    </button>
+                    <!-- Ambience Toggle -->
+                    <button id="ambience-btn" onclick="toggleAmbience()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-3 py-2 rounded-xl transition text-xs sm:text-sm">
+                        <span id="ambience-icon">🍃</span> <span id="ambience-text" class="hidden sm:inline">சூழ்நிலை ஒலி</span>
+                    </button>
+                    <!-- Audio Narration Trigger -->
+                    <button id="narration-btn" onclick="toggleNarration()" class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-xl transition shadow-lg shadow-indigo-600/30 active:scale-95 text-xs sm:text-sm">
+                        <span id="narration-icon">🔊</span> <span id="narration-text">கதை கேளுங்கள் (Listen)</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden border border-slate-700/50 mt-2">
+                <div id="progress-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full w-1/5 transition-all duration-500 rounded-full"></div>
+            </div>
+        </div>
+
+        <!-- Story Display Card -->
+        <div id="story-card" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-700/80 animate-pop flex flex-col gap-6 relative">
+            
+            <!-- Rich Scene Header / Illustration Container -->
+            <div class="relative rounded-2xl overflow-hidden h-56 md:h-72 bg-slate-900 border border-slate-800 flex items-center justify-center group">
+                <img id="scene-img" src="assets/aambal_jungle.jpg" alt="Scene Illustration" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700">
+                <div id="scene-bg-gradient" class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+                
+                <div id="scene-icon-badge" class="relative z-10 text-6xl md:text-7xl transition transform group-hover:scale-110 duration-300 drop-shadow-2xl bg-slate-900/60 p-4 rounded-3xl backdrop-blur-md border border-white/20">
+                    🌲
+                </div>
+
+                <button onclick="openSceneInspectModal()" class="absolute top-3 right-3 z-20 bg-amber-500/90 hover:bg-amber-400 text-slate-950 font-extrabold text-xs px-3 py-1.5 rounded-xl shadow-lg transition flex items-center gap-1.5 backdrop-blur-md border border-amber-300/40">
+                    <span>🎬</span> <span>காட்சி விளக்கம் (Inspect Scene)</span>
+                </button>
+
+                <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-center text-xs text-slate-200 bg-slate-950/80 backdrop-blur-md px-3.5 py-1.5 rounded-lg border border-white/10">
+                    <span id="location-name">📍 ஆம்பல் காட்டின் நுழைவு (Jungle Entrance)</span>
+                    <span class="text-amber-300 font-bold hidden sm:inline">💡 மஞ்சள் சொல்லைத் தொட்டு (Click/Hover) பொருள் அறியலாம்</span>
+                </div>
+            </div>
+
+            <!-- Vocabulary Helper Bar (Scene Key Words Quick Hints) -->
+            <div class="bg-slate-900/90 border border-amber-500/30 rounded-xl p-3 flex flex-wrap items-center gap-2 text-xs">
+                <span class="font-bold text-amber-400 flex items-center gap-1">
+                    <span>💡</span> <span>சொற்கள் குறிப்பு (Word Hints):</span>
+                </span>
+                <div id="scene-vocab-quickhints" class="flex flex-wrap gap-1.5">
+                    <!-- Quick hints injected dynamically -->
+                </div>
+            </div>
+
+            <!-- Paragraph Narrative Content with Inline Hints -->
+            <div class="bg-slate-900/60 rounded-2xl p-5 md:p-6 border border-slate-800 leading-relaxed text-lg md:text-xl text-slate-100">
+                <p id="story-text" class="tamil-text leading-loose">
+                    <!-- Text injected dynamically -->
+                </p>
+            </div>
+
+            <!-- Comprehension Gateway Section -->
+            <div id="comprehension-box" class="bg-gradient-to-r from-indigo-950/80 to-slate-900/90 border-2 border-indigo-500/40 rounded-2xl p-5 md:p-6 shadow-lg">
+                <div class="flex items-center gap-2 text-indigo-300 font-bold mb-3 text-base">
+                    <span>❓</span> <span>வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)</span>
+                </div>
+                <p id="comp-question" class="tamil-text text-lg md:text-xl font-bold text-white mb-4">
+                    <!-- Question injected dynamically -->
+                </p>
+                <div id="comp-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Option buttons injected dynamically -->
+                </div>
+                <div id="comp-feedback" class="mt-3 text-sm font-semibold hidden p-3 rounded-xl"></div>
+            </div>
+
+            <!-- Decision Pathways (Unlocked after comprehension) -->
+            <div id="choices-container" class="opacity-40 pointer-events-none transition-all duration-300 flex flex-col gap-3">
+                <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
+                    <span>🎯 உங்கள் அடுத்த நடவடிக்கை (Choose Your Path)</span>
+                    <span id="choices-lock-status" class="text-amber-400">🔒 வினாவிற்கு விடையளித்து வழியைத் திறக்கவும்</span>
+                </div>
+                <div id="choices-grid" class="flex flex-col gap-3">
+                    <!-- Choice buttons injected dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Inventory & Discovered Words HUD -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Inventory Bag -->
+            <div class="glass-card rounded-2xl p-4 border border-slate-700/60">
+                <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span>🎒</span> <span>உங்கள் பையின் பொருட்கள் (Inventory)</span>
+                </h3>
+                <div id="inventory-list" class="flex flex-wrap gap-2">
+                    <span class="text-xs text-slate-500 italic py-1">பொருட்கள் எதுவும் இல்லை (Empty)</span>
+                </div>
+            </div>
+
+            <!-- Learned Vocabulary Journal -->
+            <div class="glass-card rounded-2xl p-4 border border-slate-700/60">
+                <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                    <span>📚</span> <span>கற்ற புதிய சொற்கள் (Learned Words)</span>
+                </h3>
+                <div id="learned-words-list" class="flex flex-wrap gap-2">
+                    <span class="text-xs text-slate-500 italic py-1">சொற்கள் தொட்டுப் படிக்கவும்</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- INTERACTIVE SCENE INSPECT MODAL -->
+    <div id="scene-inspect-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl animate-pop relative">
+            <button onclick="closeSceneInspectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition z-10">
+                ✕
+            </button>
+
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-3xl">🎬</span>
+                <div>
+                    <h3 id="inspect-title" class="tamil-text text-2xl font-extrabold text-amber-400">
+                        காட்சி விளக்கம் (Scene Demonstration)
+                    </h3>
+                    <p class="text-slate-400 text-xs sm:text-sm">High-Resolution Visual Artwork & Interactive Elements</p>
+                </div>
+            </div>
+
+            <!-- Full Artwork Container -->
+            <div class="relative rounded-2xl overflow-hidden h-64 md:h-80 bg-slate-950 mb-4 border border-slate-700">
+                <img id="inspect-img" src="assets/aambal_jungle.jpg" alt="Inspect Artwork" class="w-full h-full object-cover">
+                <div class="absolute bottom-3 left-3 right-3 bg-slate-950/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-xs text-slate-300">
+                    <p id="inspect-caption" class="tamil-text font-semibold text-amber-300">
+                        காட்சியின் விவரங்கள்
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between gap-3">
+                <button onclick="toggleAmbience()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-3 px-4 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
+                    🔊 சூழ்நிலை ஒலி இயக்க (Ambience Sound)
+                </button>
+                <button onclick="closeSceneInspectModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 px-6 rounded-xl transition text-sm">
+                    திரும்பு (Back)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LEVEL SELECTION MODAL -->
+    <div id="level-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl animate-pop relative">
+            <button onclick="closeLevelSelectModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition">
+                ✕
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <span class="text-4xl">🗺️</span>
+                <div>
+                    <h3 class="tamil-text text-2xl md:text-3xl font-extrabold text-amber-400">
+                        கதைத் நிலையைத் தேர்ந்தெடுக்கவும்
+                    </h3>
+                    <p class="text-slate-400 text-xs sm:text-sm">Select a story adventure level based on difficulty</p>
+                </div>
+            </div>
+
+            <!-- Level Cards Grid -->
+            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
+                
+                <!-- Level 1 Card -->
+                <div onclick="selectLevel('level1')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-emerald-500/40 hover:border-emerald-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-4xl group-hover:scale-110 transition">🌲</span>
+                        <div>
+                            <span class="text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-800">
+                                நிலை 1 • 🟢 எளிது (Beginner)
+                            </span>
+                            <h4 class="tamil-text text-lg font-bold text-white mt-1">
+                                ஆம்பல் அடவி ரகசியம்
+                            </h4>
+                            <p class="text-xs text-slate-400">Explore the jungle, talk to the parrot, and discover the golden waterfall!</p>
+                        </div>
+                    </div>
+                    <span class="text-emerald-400 font-bold text-xl">▶️</span>
+                </div>
+
+                <!-- Level 2 Card -->
+                <div onclick="selectLevel('level2')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-amber-500/40 hover:border-amber-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-4xl group-hover:scale-110 transition">🏛️</span>
+                        <div>
+                            <span class="text-xs font-bold text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-800">
+                                நிலை 2 • 🟡 நடுத்தரம் (Intermediate)
+                            </span>
+                            <h4 class="tamil-text text-lg font-bold text-white mt-1">
+                                காலப் பயணம்: சோழ சாம்ராஜ்யம்
+                            </h4>
+                            <p class="text-xs text-slate-400">Time-travel to ancient Chola trade ports & solve palm leaf scroll riddles!</p>
+                        </div>
+                    </div>
+                    <span class="text-amber-400 font-bold text-xl">▶️</span>
+                </div>
+
+                <!-- Level 3 Card -->
+                <div onclick="selectLevel('level3')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-cyan-500/40 hover:border-cyan-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-4xl group-hover:scale-110 transition">🏴‍☠️</span>
+                        <div>
+                            <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2.5 py-0.5 rounded-full border border-cyan-800">
+                                நிலை 3 • 🔴 கடினம் (Advanced)
+                            </span>
+                            <h4 class="tamil-text text-lg font-bold text-white mt-1">
+                                மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்
+                            </h4>
+                            <p class="text-xs text-slate-400">Nautical sea adventure! Navigate ocean storms, compass riddles & coral caves!</p>
+                        </div>
+                    </div>
+                    <span class="text-cyan-400 font-bold text-xl">▶️</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Vocabulary Modal (Popup when word is clicked) -->
+    <div id="vocab-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl animate-pop relative">
+            <button onclick="closeVocabModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition">
+                ✕
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl">📖</span>
+                <div>
+                    <h3 id="modal-word-tamil" class="tamil-text text-3xl font-extrabold text-amber-400">
+                        சொல்
+                    </h3>
+                    <p id="modal-word-phonetic" class="text-slate-400 text-sm font-medium">
+                        Phonetic Spelling
+                    </p>
+                </div>
+            </div>
+
+            <div class="space-y-3 bg-slate-800/80 rounded-2xl p-4 border border-slate-700">
+                <div>
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">பொருள் (Meaning):</span>
+                    <p id="modal-word-meaning" class="tamil-text text-lg font-bold text-emerald-300 mt-0.5">
+                        பொருள் விளக்கம்
+                    </p>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 font-bold uppercase tracking-wider">உதாரண வாக்கியம் (Example):</span>
+                    <p id="modal-word-example" class="tamil-text text-sm text-slate-200 mt-0.5 italic">
+                        வாக்கிய உதாரணம்
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-6 flex items-center justify-between gap-3">
+                <button id="modal-speak-btn" onclick="speakCurrentWord()" class="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                    🔊 உச்சரிப்பைக் கேள் (Pronounce)
+                </button>
+                <button onclick="closeVocabModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold py-3 px-5 rounded-xl transition">
+                    மூடு (Close)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-slate-950 py-4 text-center text-xs text-slate-500">
+        Tamil Story Quest • தமிழ் கற்றல் விளையாட்டு உருவாக்கப்பட்டது
+    </footer>
+
+    <!-- Game Engine Logic -->
+    <script>
+        /* ================= EXTENSIVE VOCABULARY HINT DICTIONARY ================= */
+        const vocabularyDB = {
+            "அடர்ந்த": { hint: "Dense / Thick", phonetic: "Adarndha", meaning: "செழிப்பான / அடர்த்தியான (Dense / Thick)", example: "அடர்ந்த காட்டில் பல மரங்கள் இருந்தன." },
+            "காட்டிற்குள்": { hint: "Inside Forest", phonetic: "Kaattirkul", meaning: "காட்டின் உள்பகுதியில் (Inside the Forest)", example: "சிறுவன் காட்டிற்குள் நடந்து சென்றான்." },
+            "உயரமான": { hint: "Tall", phonetic: "Uyaramaana", meaning: "உயர்ந்த (Tall / High)", example: "காட்டில் உயரமான மரங்கள் இருந்தன." },
+            "மரங்களும்": { hint: "Trees", phonetic: "Marangalum", meaning: "விருட்சங்கள் (Trees)", example: "மரங்களும் செடிகளும் பச்சை நிறமாக இருந்தன." },
+            "பறவைகளின்": { hint: "Birds'", phonetic: "Paravaigalin", meaning: "பறவைகளுடைய (Birds')", example: "பறவைகளின் குரல் இனிமையாக இருந்தது." },
+            "பாதை": { hint: "Path", phonetic: "Paadhai", meaning: "வழி (Path / Trail)", example: "பாதை இரண்டாகப் பிரிந்தது." },
+            "மரப்பெட்டி": { hint: "Wooden Chest", phonetic: "Marappetti", meaning: "மரத்தால் ஆன பெட்டி (Wooden Chest)", example: "பழைய மரப்பெட்டி மரத்தின் அடியில் இருந்தது." },
+            "திறவுகோல்": { hint: "Key", phonetic: "Thiravukol", meaning: "சாவி (Key to open locks)", example: "மந்திர பெட்டியின் திறவுகோல் காணாமல் போனது." },
+            "குகையின்": { hint: "Cave's", phonetic: "Gugaiyin", meaning: "குகையினுடைய (Cave's)", example: "குகையின் வாசல் இருட்டாக இருந்தது." },
+            "வாசல்": { hint: "Entrance", phonetic: "Vaasal", meaning: "நுழைவாயில் (Entrance / Doorway)", example: "வீட்டின் வாசல் அழகாக இருந்தது." },
+            "பொக்கிஷம்": { hint: "Treasure", phonetic: "Pokkisham", meaning: "செல்வம் / புதையல் (Treasure)", example: "அறிவே சிறந்த பொக்கிஷம் ஆகும்." },
+            "நண்பன்": { hint: "Friend", phonetic: "Nanban", meaning: "தோழன் (Friend)", example: "கிளி சிறுவனுக்கு நல்ல நண்பனாக மாறியது." },
+            "ஒளி": { hint: "Light", phonetic: "Oli", meaning: "வெளிச்சம் (Light / Glow)", example: "மந்திர விளக்கு வெளிச்சம் தந்தது." },
+            "அருவி": { hint: "Waterfall", phonetic: "Aruvi", meaning: "நீர்வீழ்ச்சி (Waterfall)", example: "மலையிலிருந்து குளிர்ந்த அருவி கொட்டுகிறது." },
+            "பளிங்கு": { hint: "Crystal", phonetic: "Palingu", meaning: "தெளிவான கண்ணாடி / பளிங்குக்கல் (Crystal)", example: "பளிங்கு போன்ற தூய்மையான தண்ணீர் ஓடியது." },
+            
+            // Level 2 Words
+            "துறைமுகம்": { hint: "Harbor Port", phonetic: "Thuraimugam", meaning: "கப்பல்கள் வந்து நிற்கும் இடம் (Sea Port)", example: "பூம்புகார் சோழநாட்டின் துறைமுகம் ஆகும்." },
+            "கலங்கரை விளக்கம்": { hint: "Lighthouse", phonetic: "Kalangarai Vilakkam", meaning: "கப்பல்களுக்கு வழிகாட்டும் கலங்கரை கோபுரம் (Lighthouse)", example: "இரவில் கலங்கரை விளக்கம் வழிகாட்டியது." },
+            "பனை ஓலை": { hint: "Palm Scroll", phonetic: "Panai Olai", meaning: "பழங்கால எழுத்துச் சுவடி (Palm Leaf Scroll)", example: "பனை ஓலையில் இலக்கியங்களை எழுதினர்." },
+            "நாணயம்": { hint: "Coin", phonetic: "Naanayam", meaning: "பணம் / பொற்காசு (Coin / Currency)", example: "சோழர் காலத்து தங்க நாணயம் கிடைத்தது." },
+            "முத்திரை": { hint: "Royal Seal", phonetic: "Muthirai", meaning: "அரச அடையாளம் (Royal Seal / Emblem)", example: "புலி முத்திரை சோழ மன்னனின் அடையாளம்." },
+            "வணிகன்": { hint: "Merchant", phonetic: "Vanigan", meaning: "வியாபாரி (Merchant / Trader)", example: "வணிகன் கப்பலில் பொருட்களைக் கொண்டுவந்தான்." },
+            "நூலகம்": { hint: "Library", phonetic: "Noolagam", meaning: "புத்தகங்கள் உள்ள இடம் (Library)", example: "அரண்மனை நூலகத்தில் சுவடிகள் இருந்தன." },
+            "புலவர்": { hint: "Poet", phonetic: "Pulavar", meaning: "கவிஞர் / தமிழறிஞர் (Poet / Scholar)", example: "புலவர் புதிரான செய்யுளைப் பாடினார்." },
+
+            // Level 3 Words
+            "பெருங்கடல்": { hint: "Ocean", phonetic: "Perungadal", meaning: "பெரிய சமுத்திரம் (Ocean)", example: "பெருங்கடலில் அலைகள் உயரமாக எழும்பின." },
+            "புயல்": { hint: "Storm", phonetic: "Puyal", meaning: "கடும் காற்றுடன் கூடிய மழை (Storm)", example: "கடலில் வீசிய புயலை மாலுமி எதிர்கொண்டான்." },
+            "நங்கூரம்": { hint: "Anchor", phonetic: "Nangooram", meaning: "கப்பலை நிறுத்தும் இரும்புக் கருவி (Anchor)", example: "கப்பல் கரையை அடைந்ததும் நங்கூரம் பாய்ச்சப்பட்டது." },
+            "திசைகாட்டி": { hint: "Compass", phonetic: "Thisaikaatti", meaning: "திசைகளை அறிய உதவும் கருவி (Compass)", example: "கடல் பயணத்தில் திசைகாட்டி வழிகாட்டியது." },
+            "பவளம்": { hint: "Coral", phonetic: "Pavalam", meaning: "கடல் மணி (Red Coral)", example: "பவளப் பாறைகள் கடலுக்குள் அழகாக இருந்தன." },
+            "எரிமலை": { hint: "Volcano", phonetic: "Erimalai", meaning: "நெருப்பு மலை (Volcano)", example: "எரிமலை உச்சியில் கலங்கரை விளக்கம் இருந்தது." },
+            "மாலுமி": { hint: "Sailor", phonetic: "Maalumi", meaning: "கப்பல் ஓட்டுபவர் (Sailor / Captain)", example: "தைரியமான மாலுமி கப்பலை இயக்கினான்." },
+            "முத்து": { hint: "Pearl", phonetic: "Muthu", meaning: "கடல் ரத்தினம் (Pearl)", example: "பெட்டிக்குள் ஒளிரும் முத்துக்கள் இருந்தன." }
+        };
+
+        /* ================= MULTI-LEVEL STORY DATA ================= */
+        const levelStories = {
+            "level1": {
+                name: "ஆம்பல் அடவி ரகசியம்",
+                difficulty: "எளிது (Beginner)",
+                difficultyColor: "text-emerald-400 bg-emerald-950/60 border-emerald-800/50",
+                startNode: "l1_scene_1"
+            },
+            "level2": {
+                name: "காலப் பயணம்: சோழ சாம்ராஜ்யம்",
+                difficulty: "நடுத்தரம் (Intermediate)",
+                difficultyColor: "text-amber-400 bg-amber-950/60 border-amber-800/50",
+                startNode: "l2_scene_1"
+            },
+            "level3": {
+                name: "மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்",
+                difficulty: "கடினம் (Advanced)",
+                difficultyColor: "text-cyan-400 bg-cyan-950/60 border-cyan-800/50",
+                startNode: "l3_scene_1"
+            }
+        };
+
+        const storyNodes = {
+            /* ================= LEVEL 1: JUNGLE ADVENTURE ================= */
+            "l1_scene_1": {
+                chapter: "அத்தியாயம் 1 • Chapter 1",
+                title: "ஆம்பல் காட்டின் நுழைவு (Jungle Entrance)",
+                bgIcon: "🌲",
+                image: "assets/aambal_jungle.jpg",
+                inspectCaption: "செழிப்பான ஆம்பல் காட்டின் நுழைவு: மரங்களின் நிழலும், பழமையான மரப்பெட்டியும் காட்சி அளிக்கின்றன.",
+                location: "📍 அடர்ந்த காட்டுப் பாதை",
+                progress: 20,
+                ambienceType: "jungle",
+                vocabKeys: ["அடர்ந்த", "காட்டிற்குள்", "உயரமான", "மரங்களும்", "பறவைகளின்", "பாதை", "மரப்பெட்டி", "திறவுகோல்", "குகையின்", "வாசல்"],
+                text: "நீங்கள் ஒரு <span class='vocab-word' data-hint='Dense' onclick='openVocabModal(\"அடர்ந்த\")'>அடர்ந்த</span> ஆம்பல் <span class='vocab-word' data-hint='Inside Forest' onclick='openVocabModal(\"காட்டிற்குள்\")'>காட்டிற்குள்</span> நிற்கிறீர்கள். சுற்றிலும் <span class='vocab-word' data-hint='Tall' onclick='openVocabModal(\"உயரமான\")'>உயரமான</span> <span class='vocab-word' data-hint='Trees' onclick='openVocabModal(\"மரங்களும்\")'>மரங்களும்</span> <span class='vocab-word' data-hint='Birds&#39;' onclick='openVocabModal(\"பறவைகளின்\")'>பறவைகளின்</span> ஒலியும் கேட்கின்றன. <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> இரண்டாகப் பிரிகிறது. இடது புறத்தில் ஒரு பழைய <span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டி</span> உள்ளது. அதில் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> பற்றிய குறிப்பு உள்ளது. வலது புறத்தில் ஒரு <span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகையின்</span> <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> தெரிகிறது.",
+                compQuestion: "சிறுவன் நின்ற காட்டின் பெயர் என்ன?",
+                compOptions: [
+                    { text: "1. ஆம்பல் காடு", correct: true },
+                    { text: "2. சுந்தரவனம்", correct: false },
+                    { text: "3. சந்தனக் காடு", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "📦 மரப்பெட்டியைத் திறந்து பார் (Open Wooden Chest)",
+                        targetNode: "l1_scene_2a",
+                        itemReward: "📜 பழமையான வரைபடம் (Ancient Map)"
+                    },
+                    {
+                        text: "🚪 குகைக்குள் நேரடியாக நுழை (Enter Cave Directly)",
+                        targetNode: "l1_scene_2b",
+                        itemReward: "🏮 மந்திரித்த விளக்கு (Magic Lantern)"
+                    }
+                ]
+            },
+            "l1_scene_2a": {
+                chapter: "அத்தியாயம் 2 • Chapter 2A",
+                title: "பேசும் கிளியின் மரம் (The Talking Parrot Tree)",
+                bgIcon: "🦜",
+                image: "assets/aambal_jungle.jpg",
+                inspectCaption: "வண்ணக் கிளி மரத்திலிருந்து பேசி சிறுவனுக்கு வழிகாட்டுகிறது.",
+                location: "📍 ஆலமரத்துப் பாதை",
+                progress: 50,
+                ambienceType: "jungle",
+                vocabKeys: ["மரப்பெட்டி", "பொக்கிஷம்", "நண்பன்", "அருவி", "பாதை"],
+                text: "<span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டியைத்</span> திறந்ததும் அதற்குள் ஒரு <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> போன்ற வரைபடம் கிடைத்தது! அதை எடுத்தவுடன், மரத்தின் மேலிருந்து ஒரு வண்ணக் கிளி உங்களைப் பார்த்துப் பேசியது: 'என் அன்பு <span class='vocab-word' data-hint='Friend' onclick='openVocabModal(\"நண்பன்\")'>நண்பன்</span> நீ! காட்டு <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவிக்குப்</span> போக <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> உதவும்!' என்று கூறியது.",
+                compQuestion: "மரப்பெட்டிக்குள் சிறுவனுக்கு என்ன கிடைத்தது?",
+                compOptions: [
+                    { text: "1. ஒரு பழைய நாணயம்", correct: false },
+                    { text: "2. பழமையான வரைபடம்", correct: true },
+                    { text: "3. ஒரு தங்கக் மோதிரம்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🌊 வரைபடத்தைப் பின்பற்றி அருவிக்குச் செல் (Follow Map to Waterfall)",
+                        targetNode: "l1_scene_3a",
+                        itemReward: "💧 அமுத நீர் (Magic Water Drop)"
+                    },
+                    {
+                        text: "🦜 கிளியுடன் பேசி குகைப் பாதைக்குத் திரும்பு (Ask Parrot about Cave)",
+                        targetNode: "l1_scene_2b",
+                        itemReward: null
+                    }
+                ]
+            },
+            "l1_scene_2b": {
+                chapter: "அத்தியாயம் 2 • Chapter 2B",
+                title: "எதிர்ஒலி குகை (Cave of Echoes)",
+                bgIcon: "🦇",
+                image: "assets/aambal_jungle.jpg",
+                inspectCaption: "இருண்ட எதிர்ஒலி குகைக்குள் விளக்கு வெளிச்சம் தருகிறது.",
+                location: "📍 குகையின் உள்பகுதி",
+                progress: 50,
+                ambienceType: "jungle",
+                vocabKeys: ["குகையின்", "ஒளி", "திறவுகோல்", "வாசல்"],
+                text: "<span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகைக்குள்</span> இருட்டாக இருந்தது. உங்கள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தரும் விளக்கு வழியைக் காட்டியது! சுவரில் பழங்கால எழுத்துக்கள் செதுக்கப்பட்டிருந்தன. அந்த எழுத்துக்கள் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசலைத்</span> திறக்கச் சொன்னது.",
+                compQuestion: "குகையின் இருட்டைப் போக்க சிறுவனுக்கு எது உதவியது?",
+                compOptions: [
+                    { text: "1. தீப்பந்தம்", correct: false },
+                    { text: "2. மந்திர விளக்கு", correct: true },
+                    { text: "3. சூரிய ஒளி", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🔑 சுவரில் உள்ள புதிர் கதவைத் திற (Solve Riddle Door)",
+                        targetNode: "l1_scene_3b",
+                        itemReward: "🔑 அறிவுக் சாவி (Wisdom Key)"
+                    },
+                    {
+                        text: "🏃 வெளிச்சம் நோக்கி அருவிப் பாதைக்கு ஓடு (Run to Waterfall)",
+                        targetNode: "l1_scene_3a",
+                        itemReward: null
+                    }
+                ]
+            },
+            "l1_scene_3a": {
+                chapter: "அத்தியாயம் 3 • Final Chapter",
+                title: "பொன் அருவியும் நீர் தேவதையும் (Golden Waterfall)",
+                bgIcon: "🌊",
+                image: "assets/golden_waterfall.jpg",
+                inspectCaption: "பளிங்கு போல் மின்னும் பொன் அருவி: அமுத நீரூற்று காட்டின் தாகத்தைத் தீர்க்கிறது.",
+                location: "📍 ஆம்பல் பொன் அருவி",
+                progress: 100,
+                ambienceType: "waterfall",
+                vocabKeys: ["அருவி", "பளிங்கு", "ஒளி", "பொக்கிஷம்"],
+                text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத நீரூற்று என்ற மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷத்தைக்</span> கண்டுபிடித்து விட்டீர்கள்! நீங்கள் காட்டின் மாபெரும் கதாநாயகன் ஆனீர்கள்!",
+                compQuestion: "அருவி நீர் எவ்வாறு மின்னியது?",
+                compOptions: [
+                    { text: "1. பளிங்கு போல", correct: true },
+                    { text: "2. இருட்டாக", correct: false },
+                    { text: "3. சிவப்பு நிறமாக", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🏆 வெற்றி கொண்டாட்டம்! அடுத்த நிலைக்குச் செல் (Next Level)",
+                        targetLevel: "level2"
+                    }
+                ]
+            },
+            "l1_scene_3b": {
+                chapter: "அத்தியாயம் 3 • Final Chapter",
+                title: "பளிங்கு அறை & அறிவுக் பொக்கிஷம் (The Crystal Chamber)",
+                bgIcon: "💎",
+                image: "assets/golden_waterfall.jpg",
+                inspectCaption: "பளிங்குச் சிம்மாசனத்தில் அறிவுக் பொக்கிஷம் ஒளி வீசுகிறது.",
+                location: "📍 பளிங்குச் சிம்மாசனம்",
+                progress: 100,
+                ambienceType: "jungle",
+                vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பொக்கிஷம்"],
+                text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> மூலம் <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் அறிவுக் கருவூலம் என்ற <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> இருந்தது. உங்கள் கூரிய அறிவால் காட்டின் ரகசியத்தைக் கண்டுபிடித்தீர்கள்!",
+                compQuestion: "கதவைத் திறக்க சிறுவனுக்கு எது உதவியது?",
+                compOptions: [
+                    { text: "1. பெரிய கல்", correct: false },
+                    { text: "2. அறிவுக் சாவி", correct: true },
+                    { text: "3. மரக் குச்சி", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "👑 அறிவுக் பட்டம் வென்றாய்! அடுத்த நிலைக்குச் செல் (Next Level)",
+                        targetLevel: "level2"
+                    }
+                ]
+            },
+
+            /* ================= LEVEL 2: CHOLA TIME TRAVEL ================= */
+            "l2_scene_1": {
+                chapter: "அத்தியாயம் 1 • Chapter 1",
+                title: "பூம்புகார் துறைமுகம் (Port of Poompuhar)",
+                bgIcon: "🏛️",
+                image: "assets/chola_port.jpg",
+                inspectCaption: "பண்டைய சோழநாட்டின் பூம்புகார் துறைமுகம்: மரக் கப்பல்களும் கலங்கரை விளக்கமும் காட்சி அளிக்கின்றன.",
+                location: "📍 சங்க காலச் சோழ துறைமுகம்",
+                progress: 25,
+                ambienceType: "port",
+                vocabKeys: ["துறைமுகம்", "கலங்கரை விளக்கம்", "ஒளி", "வணிகன்", "நாணயம்"],
+                text: "நீங்கள் மந்திரக் கடிகாரம் மூலம் 2000 ஆண்டுகள் பின்னோக்கி சோழர் காலத்திற்கு வந்தீர்கள்! உங்களுக்கு முன்னால் பிரம்மாண்டமான <span class='vocab-word' data-hint='Harbor Port' onclick='openVocabModal(\"துறைமுகம்\")'>துறைமுகம்</span> உள்ளது. தூரத்தில் கம்பீரமான <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தருகிறது. ஒரு சோழ நாட்டு <span class='vocab-word' data-hint='Merchant' onclick='openVocabModal(\"வணிகன்\")'>வணிகன்</span> உங்களிடம் பழங்காலச் சோழர் <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> ஒன்றை அளிக்கிறான்.",
+                compQuestion: "சிறுவன் பயணம் செய்த வரலாற்று சாம்ராஜ்யம் எது?",
+                compOptions: [
+                    { text: "1. சேர சாம்ராஜ்யம்", correct: false },
+                    { text: "2. சோழ சாம்ராஜ்யம்", correct: true },
+                    { text: "3. பாண்டிய சாம்ராஜ்யம்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "⛵ சோழர் கப்பலில் ஏறிப் பயணம் செய் (Board the Chola Royal Ship)",
+                        targetNode: "l2_scene_2a",
+                        itemReward: "🪙 சோழர் தங்கக் காசு (Gold Coin)"
+                    },
+                    {
+                        text: "📜 அரண்மனை நூலகத்திற்குச் செல் (Go to Royal Library)",
+                        targetNode: "l2_scene_2b",
+                        itemReward: "📜 பனை ஓலைச் சுவடி (Palm Leaf Scroll)"
+                    }
+                ]
+            },
+            "l2_scene_2a": {
+                chapter: "அத்தியாயம் 2 • Chapter 2A",
+                title: "கடல் வணிகப் பயணம் (The Ocean Voyage)",
+                bgIcon: "⛵",
+                image: "assets/chola_port.jpg",
+                inspectCaption: "சோழர் கப்பல் வங்காள விரிகுடா கடலில் வணிகப் பயணம் மேற்கொள்கிறது.",
+                location: "📍 வங்காள விரிகுடா கடல்",
+                progress: 60,
+                ambienceType: "ocean",
+                vocabKeys: ["கப்பலில்", "பனை ஓலை", "முத்திரை", "மாலுமி"],
+                text: "சோழர் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>கப்பலில்</span> பயணம் செய்த போது <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> ஒரு <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடியைக் காட்டி: 'இதில் எழுதப்பட்டுள்ள புதிரை விடுவித்தால் சோழ மன்னனின் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> உனக்குக் கிடைக்கும்!' என்றான்.",
+                compQuestion: "மாலுமி சிறுவனுக்கு எதைக் காட்டினான்?",
+                compOptions: [
+                    { text: "1. பனை ஓலைச் சுவடி", correct: true },
+                    { text: "2. தங்கக் கிண்ணம்", correct: false },
+                    { text: "3. பழைய வரைபடம்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🗡️ கவிதைப் புதிரை விடுவித்து சோழ முத்திரை பெறு (Solve Scroll Riddle)",
+                        targetNode: "l2_scene_3a",
+                        itemReward: "🗡️ சோழர் புலி முத்திரை (Royal Tiger Seal)"
+                    }
+                ]
+            },
+            "l2_scene_2b": {
+                chapter: "அத்தியாயம் 2 • Chapter 2B",
+                title: "ஏட்டுச் சுவடி நூலகம் (Hall of Manuscripts)",
+                bgIcon: "📜",
+                image: "assets/chola_port.jpg",
+                inspectCaption: "அரண்மனை நூலகத்தில் பனை ஓலைச் சுவடிகள் அடுக்கி வைக்கப்பட்டுள்ளன.",
+                location: "📍 தஞ்சைக் கவிகள் நூலகம்",
+                progress: 60,
+                ambienceType: "port",
+                vocabKeys: ["நூலகம்", "பனை ஓலை", "புலவர்", "முத்திரை"],
+                text: "அரண்மனை <span class='vocab-word' data-hint='Library' onclick='openVocabModal(\"நூலகம்\")'>நூலகத்தில்</span> ஆயிரக்கணக்கான <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடிகள் அடுக்கி வைக்கப்பட்டிருந்தன. பெரிய <span class='vocab-word' data-hint='Poet / Scholar' onclick='openVocabModal(\"புலவர்\")'>புலவர்</span> ஒருவர் ஒரு புதிரைக் கேட்டார். சரியான விடை கூறினால் அரச <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> பெட்டியைத் திறக்கலாம்!",
+                compQuestion: "நூலகத்தில் எது அடுக்கி வைக்கப்பட்டிருந்தது?",
+                compOptions: [
+                    { text: "1. காகிதப் புத்தகங்கள்", correct: false },
+                    { text: "2. பனை ஓலைச் சுவடிகள்", correct: true },
+                    { text: "3. கல் பலகைகள்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🔑 புலவரின் புதிருக்கு விடையளி (Answer Scholar Riddle)",
+                        targetNode: "l2_scene_3b",
+                        itemReward: "👑 சங்கத் தமிழ் அறிஞர் விருது (Sangam Award)"
+                    }
+                ]
+            },
+            "l2_scene_3a": {
+                chapter: "அத்தியாயம் 3 • Final Chapter",
+                title: "கரிகாலச் சோழனின் பாராட்டு (Praise of King Karikala)",
+                bgIcon: "👑",
+                image: "assets/chola_port.jpg",
+                inspectCaption: "சோழ மன்னன் கரிகாலன் சிறுவனுக்கு அரச முத்திரை மோதிரத்தைப் பரிசளிக்கிறார்.",
+                location: "📍 சோழ அரியணை",
+                progress: 100,
+                ambienceType: "port",
+                vocabKeys: ["முத்திரை", "நாணயம்", "புலவர்"],
+                text: "உங்கள் தமிழ் அறிவைக் கண்டு மன்னன் கரிகாலச் சோழன் உங்களை மெச்சினான்! உங்களுக்குச் சோழர் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> மோதிரத்தையும் தங்க <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> பையையும் பரிசளித்தான்! நீங்கள் சோழ நாட்டின் தலைசிறந்த <span class='vocab-word' data-hint='Scholar' onclick='openVocabModal(\"புலவர்\")'>புலவர்</span> ஆனீர்கள்!",
+                compQuestion: "சிறுவனைப் பாராட்டிய சோழ மன்னன் யார்?",
+                compOptions: [
+                    { text: "1. கரிகாலச் சோழன்", correct: true },
+                    { text: "2. முதலாம் ராஜராஜன்", correct: false },
+                    { text: "3. நரசிம்மவர்மன்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🌟 மாபெரும் வெற்றி! அடுத்த நிலைக்குச் செல் (Play Level 3)",
+                        targetLevel: "level3"
+                    }
+                ]
+            },
+            "l2_scene_3b": {
+                chapter: "அத்தியாயம் 3 • Final Chapter",
+                title: "சங்கத் தமிழ் பொக்கிஷம் (Sangam Literary Treasure)",
+                bgIcon: "📜",
+                image: "assets/chola_port.jpg",
+                inspectCaption: "சங்கத் தமிழ் பொக்கிஷம் திறக்கப்பட்டு விருது வழங்கப்படுகிறது.",
+                location: "📍 தமிழ்ச் சங்கம்",
+                progress: 100,
+                ambienceType: "port",
+                vocabKeys: ["பொக்கிஷம்", "புலவர்"],
+                text: "நீங்கள் புதிரை வென்று சங்கத் தமிழின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> நிறைந்த பெட்டியைத் திறந்தீர்கள்! தமிழ் மொழி <span class='vocab-word' data-hint='Scholarship' onclick='openVocabModal(\"புலவர்\")'>புலமைக்கான</span> விருதைப் பெற்றீர்கள்!",
+                compQuestion: "சிறுவனுக்கு என்ன விருது கிடைத்தது?",
+                compOptions: [
+                    { text: "1. வீரப் பட்டம்", correct: false },
+                    { text: "2. சங்கத் தமிழ் அறிஞர் விருது", correct: true },
+                    { text: "3. சிறந்த மாலுமி விருது", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🌟 மாபெரும் வெற்றி! அடுத்த நிலைக்குச் செல் (Play Level 3)",
+                        targetLevel: "level3"
+                    }
+                ]
+            },
+
+            /* ================= LEVEL 3: MAYA ISLAND NAUTICAL ADVENTURE ================= */
+            "l3_scene_1": {
+                chapter: "அத்தியாயம் 1 • Chapter 1",
+                title: "மாயாவி தீவின் கரை (Shore of Maya Island)",
+                bgIcon: "🏴‍☠️",
+                image: "assets/maya_island.jpg",
+                inspectCaption: "மாயாவி தீவின் நங்கூரக் கரை: புயலுக்குப் பின் ஒதுங்கிய கப்பலும் திசைகாட்டியும் மணலில் உள்ளன.",
+                location: "📍 மாயாவி தீவின் நங்கூரக் கரை",
+                progress: 30,
+                ambienceType: "ocean",
+                vocabKeys: ["பெருங்கடல்", "புயல்", "நங்கூரம்", "திசைகாட்டி"],
+                text: "நீங்கள் <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடல்</span> வழியே பயணம் செய்தபோது ஒரு பெரிய <span class='vocab-word' data-hint='Storm' onclick='openVocabModal(\"புயல்\")'>புயல்</span> வீசியது. உங்கள் கப்பல் மாயாவி தீவின் கரையில் ஒதுங்கியது. கப்பலின் <span class='vocab-word' data-hint='Anchor' onclick='openVocabModal(\"நங்கூரம்\")'>நங்கூரம்</span> மணலில் புதைந்துள்ளது. உங்கள் கையிலுள்ள <span class='vocab-word' data-hint='Compass' onclick='openVocabModal(\"திசைகாட்டி\")'>திசைகாட்டி</span> வடக்கு நோக்கிப் பயணிக்கச் சொல்கிறது.",
+                compQuestion: "கப்பல் எந்தத் தீவின் கரையில் ஒதுங்கியது?",
+                compOptions: [
+                    { text: "1. மாயாவி தீவு", correct: true },
+                    { text: "2. அந்தமான் தீவு", correct: false },
+                    { text: "3. பவளத் தீவு", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🧭 திசைகாட்டியைப் பின்பற்றி பவளக் குகைக்குச் செல் (Follow Compass to Coral Cave)",
+                        targetNode: "l3_scene_2a",
+                        itemReward: "🧭 மாயா திசைகாட்டி (Mariner Compass)"
+                    },
+                    {
+                        text: "⛰️ தீவின் எரிமலை உச்சியை நோக்கி ஏறு (Climb Volcano Peak)",
+                        targetNode: "l3_scene_2b",
+                        itemReward: "⚓ இரும்பு நங்கூரம் (Iron Anchor)"
+                    }
+                ]
+            },
+            "l3_scene_2a": {
+                chapter: "அத்தியாயம் 2 • Chapter 2A",
+                title: "பவளக் குகை ரகசியம் (Secret of Coral Cave)",
+                bgIcon: "🪸",
+                image: "assets/maya_island.jpg",
+                inspectCaption: "பவளப் பாறைகள் சோதி போல மின்னும் குகைக்குள் முத்து பொக்கிஷம் உள்ளது.",
+                location: "📍 பவளப் பாறை குகை",
+                progress: 70,
+                ambienceType: "ocean",
+                vocabKeys: ["பவளம்", "ஒளி", "பொக்கிஷம்", "முத்து"],
+                text: "குகைக்குள் சிவப்பான <span class='vocab-word' data-hint='Coral' onclick='openVocabModal(\"பவளம்\")'>பவளப்</span> பாறைகள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> போல மின்னின! குகையின் நடுவில் ஒரு பெரிய <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> பெட்டி இருந்தது. அதில் பெருங்கடலின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்துக்கள்</span> இருந்தன.",
+                compQuestion: "குகைக்குள் பாறைகள் எவ்வாறு மின்னின?",
+                compOptions: [
+                    { text: "1. பவளம் போலச் சிவப்பாக", correct: true },
+                    { text: "2. நீல நிறமாக", correct: false },
+                    { text: "3. கறுப்பாக", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "💎 முத்து பொக்கிஷத்தைத் திறந்து வெல் (Unlock Pearl Chest)",
+                        targetNode: "l3_scene_3a",
+                        itemReward: "💎 மாபெரும் முத்து பொக்கிஷம் (Ocean Pearl)"
+                    }
+                ]
+            },
+            "l3_scene_2b": {
+                chapter: "அத்தியாயம் 2 • Chapter 2B",
+                title: "எரிமலை கலங்கரை உச்சி (Volcano Lighthouse)",
+                bgIcon: "🌋",
+                image: "assets/maya_island.jpg",
+                inspectCaption: "எரிமலை உச்சியிலிருந்த கலங்கரை விளக்கம் பெருங்கடலுக்கு வழிகாட்டுகிறது.",
+                location: "📍 எரிமலை உச்சி கலங்கரை",
+                progress: 70,
+                ambienceType: "ocean",
+                vocabKeys: ["எரிமலை", "கலங்கரை விளக்கம்", "பெருங்கடல்", "மாலுமி", "திசைகாட்டி"],
+                text: "<span class='vocab-word' data-hint='Volcano' onclick='openVocabModal(\"எரிமலை\")'>எரிமலை</span> உச்சியிலிருந்த <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடல்</span> முழுவதும் வெளிச்சம் சிந்தியது. அங்குள்ள பழைய <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> உங்கள் <span class='vocab-word' data-hint='Compass' onclick='openVocabModal(\"திசைகாட்டி\")'>திசைகாட்டி</span> திறமையைப் பாராட்டி சாவியைக் கொடுத்தான்!",
+                compQuestion: "எரிமலை உச்சியில் எது இருந்தது?",
+                compOptions: [
+                    { text: "1. கலங்கரை விளக்கம்", correct: true },
+                    { text: "2. பழைய அரண்மனை", correct: false },
+                    { text: "3. பெரிய மரம்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "⛵ தங்கக் கப்பலேறி வீட்டிற்குத் திரும்பு (Board Golden Ship)",
+                        targetNode: "l3_scene_3b",
+                        itemReward: "⛵ பொன் கப்பல் சாமர்த்திய விருது (Golden Ship Captain)"
+                    }
+                ]
+            },
+            "l3_scene_3a": {
+                chapter: "அத்தியாயம் 3 • Grand Finale",
+                title: "பெருங்கடல் மாலுமி கதாநாயகன் (Hero of the Ocean)",
+                bgIcon: "🏆",
+                image: "assets/maya_island.jpg",
+                inspectCaption: "பெருங்கடலின் மாபெரும் கேப்டன் என்ற பட்டத்தைப் பெறுகிறீர்கள்!",
+                location: "📍 பெருங்கடல் பொக்கிஷ சிம்மாசனம்",
+                progress: 100,
+                ambienceType: "ocean",
+                vocabKeys: ["முத்து", "பொக்கிஷம்", "பெருங்கடல்", "மாலுமி"],
+                text: "வாழ்த்துக்கள்! மாயாவி தீவின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்து</span> <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷத்தைக்</span> கண்டுபிடித்து, <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடலின்</span> மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> என்ற பட்டத்தை வென்றீர்கள்! உங்கள் தமிழ் வாசிப்புத் திறன் உச்சத்தை அடைந்தது!",
+                compQuestion: "சிறுவன் வென்ற கேப்டன் பட்டம் எது?",
+                compOptions: [
+                    { text: "1. பெருங்கடல் மாபெரும் கேப்டன்", correct: true },
+                    { text: "2. காட்டு மாலுமி", correct: false },
+                    { text: "3. குகைக் காவலன்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🎉 அனைத்து நிலைகளையும் வென்றாய்! முதல் நிலைக்குச் செல் (Play Level 1)",
+                        targetLevel: "level1"
+                    }
+                ]
+            },
+            "l3_scene_3b": {
+                chapter: "அத்தியாயம் 3 • Grand Finale",
+                title: "தங்கக் கப்பல் கேப்டன் (Captain of the Golden Ship)",
+                bgIcon: "👑",
+                image: "assets/maya_island.jpg",
+                inspectCaption: "தங்கக் கப்பலை இயக்கி வெற்றிப் பயணம் பூர்த்தியடைகிறது.",
+                location: "📍 தங்கக் கப்பல் தளபதி",
+                progress: 100,
+                ambienceType: "ocean",
+                vocabKeys: ["கப்பலில்", "மாலுமி", "பொக்கிஷம்"],
+                text: "அற்புதம்! உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமியாக வெற்றிப் பயணத்தை முடித்தீர்கள்! நீங்கள் கதை உலகத்தின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> ஆனீர்கள்!",
+                compQuestion: "சிறுவன் இயக்கிய கப்பலின் பெயர் என்ன?",
+                compOptions: [
+                    { text: "1. தங்கக் கப்பல்", correct: true },
+                    { text: "2. மரப் படகு", correct: false },
+                    { text: "3. பழைய கப்பல்", correct: false }
+                ],
+                choices: [
+                    {
+                        text: "🎉 அனைத்து நிலைகளையும் வென்றாய்! முதல் நிலைக்குச் செல் (Play Level 1)",
+                        targetLevel: "level1"
+                    }
+                ]
+            }
+        };
+
+        /* ================= GAME STATE ================= */
+        let gameState = {
+            currentLevel: "level1",
+            currentNode: "l1_scene_1",
+            hp: 3,
+            xp: 0,
+            inventory: [],
+            learnedWords: new Set(),
+            comprehensionPassed: false,
+            speechRate: 0.9
+        };
+
+        let currentModalWordKey = "";
+
+        /* ================= SOUND ENGINE (WEB AUDIO API) ================= */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let activeAmbienceOsc = null;
+        let activeAmbienceGain = null;
+        let isAmbiencePlaying = false;
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            if (type === 'success') {
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            } else if (type === 'click') {
+                osc.frequency.setValueAtTime(400, now);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(180, now + 0.15);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'item') {
+                osc.frequency.setValueAtTime(587.33, now);
+                osc.frequency.setValueAtTime(880, now + 0.1);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+        }
+
+        /* Ambient Environment Sound Synthesizer */
+        function toggleAmbience() {
+            if (isAmbiencePlaying) {
+                stopAmbience();
+            } else {
+                startAmbience();
+            }
+        }
+
+        function startAmbience() {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            stopAmbience();
+
+            const node = storyNodes[gameState.currentNode];
+            const type = node ? (node.ambienceType || 'jungle') : 'jungle';
+
+            activeAmbienceOsc = audioCtx.createOscillator();
+            activeAmbienceGain = audioCtx.createGain();
+
+            if (type === 'jungle') {
+                activeAmbienceOsc.type = 'sine';
+                activeAmbienceOsc.frequency.setValueAtTime(320, audioCtx.currentTime);
+                activeAmbienceGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            } else if (type === 'ocean' || type === 'waterfall') {
+                activeAmbienceOsc.type = 'triangle';
+                activeAmbienceOsc.frequency.setValueAtTime(180, audioCtx.currentTime);
+                activeAmbienceGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            } else {
+                activeAmbienceOsc.type = 'sine';
+                activeAmbienceOsc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                activeAmbienceGain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+            }
+
+            activeAmbienceOsc.connect(activeAmbienceGain);
+            activeAmbienceGain.connect(audioCtx.destination);
+            activeAmbienceOsc.start();
+
+            isAmbiencePlaying = true;
+            document.getElementById('ambience-icon').textContent = '🔊';
+            document.getElementById('ambience-btn').classList.add('border-amber-500', 'text-amber-400');
+        }
+
+        function stopAmbience() {
+            if (activeAmbienceOsc) {
+                try { activeAmbienceOsc.stop(); } catch(e){}
+                activeAmbienceOsc = null;
+            }
+            isAmbiencePlaying = false;
+            document.getElementById('ambience-icon').textContent = '🍃';
+            document.getElementById('ambience-btn').classList.remove('border-amber-500', 'text-amber-400');
+        }
+
+        /* ================= SPEECH SYNTHESIS ENGINE ================= */
+        let ttsSynth = window.speechSynthesis;
+        let isNarrating = false;
+
+        function toggleSlowSpeech() {
+            if (gameState.speechRate === 0.9) {
+                gameState.speechRate = 0.65;
+                document.getElementById('slow-speech-text').textContent = 'மெதுவான வாசிப்பு (Slow 0.65x)';
+                document.getElementById('slow-speech-btn').classList.add('bg-sky-950', 'border-sky-400', 'text-sky-200');
+            } else {
+                gameState.speechRate = 0.9;
+                document.getElementById('slow-speech-text').textContent = 'மெதுவான வாசிப்பு (Normal)';
+                document.getElementById('slow-speech-btn').classList.remove('bg-sky-950', 'border-sky-400', 'text-sky-200');
+            }
+            if (isNarrating) {
+                startNarration(); // restart speech with new speed
+            }
+        }
+
+        function toggleNarration() {
+            if (isNarrating) {
+                stopNarration();
+            } else {
+                startNarration();
+            }
+        }
+
+        function startNarration() {
+            if (!ttsSynth) return;
+            ttsSynth.cancel();
+            
+            const node = storyNodes[gameState.currentNode];
+            if (!node) return;
+            const cleanText = node.text.replace(/<[^>]*>/g, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'ta-IN';
+            utterance.rate = gameState.speechRate;
+
+            utterance.onstart = () => {
+                isNarrating = true;
+                document.getElementById('narration-icon').textContent = '⏹️';
+                document.getElementById('narration-text').textContent = 'நிறுத்து (Stop)';
+                document.getElementById('narration-btn').classList.replace('bg-indigo-600', 'bg-rose-600');
+            };
+
+            utterance.onend = utterance.onerror = () => {
+                stopNarration();
+            };
+
+            ttsSynth.speak(utterance);
+        }
+
+        function stopNarration() {
+            if (ttsSynth) ttsSynth.cancel();
+            isNarrating = false;
+            document.getElementById('narration-icon').textContent = '🔊';
+            document.getElementById('narration-text').textContent = 'கதை கேளுங்கள் (Listen)';
+            document.getElementById('narration-btn').classList.replace('bg-rose-600', 'bg-indigo-600');
+        }
+
+        function speakCurrentWord() {
+            if (!ttsSynth || !currentModalWordKey) return;
+            ttsSynth.cancel();
+            const utterance = new SpeechSynthesisUtterance(currentModalWordKey);
+            utterance.lang = 'ta-IN';
+            utterance.rate = 0.75;
+            ttsSynth.speak(utterance);
+        }
+
+        /* ================= SCENE INSPECT MODAL ================= */
+        function openSceneInspectModal() {
+            playSound('click');
+            const node = storyNodes[gameState.currentNode];
+            if (!node) return;
+
+            document.getElementById('inspect-title').textContent = `${node.title} - காட்சி விளக்கம்`;
+            document.getElementById('inspect-img').src = node.image || "assets/aambal_jungle.jpg";
+            document.getElementById('inspect-caption').textContent = node.inspectCaption || "காட்சியின் விவரங்கள்";
+
+            const modal = document.getElementById('scene-inspect-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeSceneInspectModal() {
+            playSound('click');
+            const modal = document.getElementById('scene-inspect-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        /* ================= LEVEL SELECTION MODAL LOGIC ================= */
+        function openLevelSelectModal() {
+            playSound('click');
+            const modal = document.getElementById('level-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeLevelSelectModal() {
+            playSound('click');
+            const modal = document.getElementById('level-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function selectLevel(levelKey) {
+            closeLevelSelectModal();
+            const lvl = levelStories[levelKey];
+            if (!lvl) return;
+
+            gameState.currentLevel = levelKey;
+            document.getElementById('current-level-badge').textContent = levelKey === 'level1' ? 'நிலை 1' : (levelKey === 'level2' ? 'நிலை 2' : 'நிலை 3');
+            renderScene(lvl.startNode);
+        }
+
+        /* ================= VOCABULARY MODAL ================= */
+        function openVocabModal(wordKey) {
+            playSound('click');
+            const vocab = vocabularyDB[wordKey];
+            if (!vocab) return;
+
+            currentModalWordKey = wordKey;
+            document.getElementById('modal-word-tamil').textContent = wordKey;
+            document.getElementById('modal-word-phonetic').textContent = `Phonetic: ${vocab.phonetic}`;
+            document.getElementById('modal-word-meaning').textContent = vocab.meaning;
+            document.getElementById('modal-word-example').textContent = `"${vocab.example}"`;
+
+            // Add to learned words
+            gameState.learnedWords.add(wordKey);
+            updateLearnedWordsHUD();
+
+            const modal = document.getElementById('vocab-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeVocabModal() {
+            playSound('click');
+            const modal = document.getElementById('vocab-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function updateLearnedWordsHUD() {
+            const container = document.getElementById('learned-words-list');
+            if (gameState.learnedWords.size === 0) {
+                container.innerHTML = `<span class="text-xs text-slate-500 italic py-1">சொற்கள் தொட்டுப் படிக்கவும்</span>`;
+                return;
+            }
+            container.innerHTML = Array.from(gameState.learnedWords).map(word => 
+                `<span onclick="openVocabModal('${word}')" class="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-xs px-2.5 py-1 rounded-lg font-bold hover:bg-amber-500/40 cursor-pointer transition">
+                    📖 ${word}
+                </span>`
+            ).join('');
+        }
+
+        /* ================= SCENE RENDERER ================= */
+        function renderScene(nodeId) {
+            stopNarration();
+            if (isAmbiencePlaying) {
+                startAmbience();
+            }
+
+            const node = storyNodes[nodeId];
+            if (!node) return;
+
+            gameState.currentNode = nodeId;
+            gameState.comprehensionPassed = false;
+
+            // Update UI Chapter, Difficulty & Progress
+            document.getElementById('story-chapter-tag').textContent = node.chapter;
+            document.getElementById('story-title').textContent = node.title;
+            
+            const lvlInfo = levelStories[gameState.currentLevel];
+            if (lvlInfo) {
+                const diffTag = document.getElementById('story-difficulty-tag');
+                diffTag.textContent = lvlInfo.difficulty;
+                diffTag.className = `text-xs font-bold px-2.5 py-0.5 rounded-full border ${lvlInfo.difficultyColor}`;
+            }
+
+            // Update Scene Image & Icon
+            const sceneImg = document.getElementById('scene-img');
+            sceneImg.src = node.image || "assets/aambal_jungle.jpg";
+
+            document.getElementById('scene-icon-badge').textContent = node.bgIcon;
+            document.getElementById('location-name').textContent = node.location;
+            document.getElementById('progress-bar').style.width = `${node.progress}%`;
+
+            // Inject Story Text
+            document.getElementById('story-text').innerHTML = node.text;
+
+            // Inject Scene Vocabulary Quick Hints Bar
+            const hintsContainer = document.getElementById('scene-vocab-quickhints');
+            hintsContainer.innerHTML = '';
+            if (node.vocabKeys && node.vocabKeys.length > 0) {
+                node.vocabKeys.forEach(wKey => {
+                    const info = vocabularyDB[wKey];
+                    if (info) {
+                        const chip = document.createElement('span');
+                        chip.className = 'bg-slate-800 hover:bg-amber-950 text-slate-200 border border-amber-500/30 px-2 py-0.5 rounded-md cursor-pointer transition';
+                        chip.innerHTML = `<strong class="text-amber-400">${wKey}</strong>: ${info.hint}`;
+                        chip.onclick = () => openVocabModal(wKey);
+                        hintsContainer.appendChild(chip);
+                    }
+                });
+            } else {
+                hintsContainer.innerHTML = '<span class="text-slate-500 italic">சொற்கள் இல்லை</span>';
+            }
+
+            // Render Comprehension Question
+            document.getElementById('comp-question').textContent = node.compQuestion;
+            const compOptionsContainer = document.getElementById('comp-options');
+            compOptionsContainer.innerHTML = '';
+            
+            node.compOptions.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98';
+                btn.innerHTML = `<span>${opt.text}</span> <span class="opt-status text-xs"></span>`;
+                btn.onclick = () => handleComprehensionAnswer(opt.correct, btn);
+                compOptionsContainer.appendChild(btn);
+            });
+
+            // Hide feedback box
+            const compFeedback = document.getElementById('comp-feedback');
+            compFeedback.className = 'mt-3 text-sm font-semibold hidden p-3 rounded-xl';
+            compFeedback.textContent = '';
+
+            // Lock Choices initially
+            const choicesContainer = document.getElementById('choices-container');
+            choicesContainer.classList.add('opacity-40', 'pointer-events-none');
+            document.getElementById('choices-lock-status').textContent = '🔒 வினாவிற்கு விடையளித்து வழியைத் திறக்கவும்';
+
+            // Render Choice Buttons
+            const choicesGrid = document.getElementById('choices-grid');
+            choicesGrid.innerHTML = '';
+
+            node.choices.forEach(ch => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold p-4 rounded-2xl shadow-lg border border-blue-400/30 text-left transition flex items-center justify-between text-base md:text-lg tamil-text';
+                btn.innerHTML = `<span>${ch.text}</span> <span>➡️</span>`;
+                btn.onclick = () => makeChoice(ch);
+                choicesGrid.appendChild(btn);
+            });
+
+            // Trigger Pop Animation
+            const storyCard = document.getElementById('story-card');
+            storyCard.classList.remove('animate-pop');
+            void storyCard.offsetWidth;
+            storyCard.classList.add('animate-pop');
+        }
+
+        function handleComprehensionAnswer(isCorrect, btnElement) {
+            const compFeedback = document.getElementById('comp-feedback');
+            compFeedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                playSound('success');
+                btnElement.classList.replace('bg-slate-800', 'bg-emerald-600/40');
+                btnElement.classList.add('border-emerald-500');
+                btnElement.querySelector('.opt-status').textContent = '✅';
+
+                compFeedback.className = 'mt-3 text-sm font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 p-3.5 rounded-xl animate-pop';
+                compFeedback.textContent = '🎉 சரியான விடை! வழிகள் திறக்கப்பட்டன (+50 XP)';
+
+                if (!gameState.comprehensionPassed) {
+                    gameState.xp += 50;
+                    document.getElementById('xp-display').textContent = `${gameState.xp} XP`;
+                    gameState.comprehensionPassed = true;
+                }
+
+                // Unlock Choices
+                const choicesContainer = document.getElementById('choices-container');
+                choicesContainer.classList.remove('opacity-40', 'pointer-events-none');
+                document.getElementById('choices-lock-status').textContent = '🔓 வழி திறக்கப்பட்டது!';
+                document.getElementById('choices-lock-status').classList.replace('text-amber-400', 'text-emerald-400');
+            } else {
+                playSound('error');
+                btnElement.classList.replace('bg-slate-800', 'bg-rose-600/30');
+                btnElement.classList.add('border-rose-500');
+                btnElement.querySelector('.opt-status').textContent = '❌';
+
+                compFeedback.className = 'mt-3 text-sm font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40 p-3.5 rounded-xl animate-pop';
+                compFeedback.textContent = '❌ தவறான விடை. மீண்டும் கதையைப் படித்து முயற்சி செய்யுங்கள்!';
+            }
+        }
+
+        function makeChoice(choiceObj) {
+            playSound('click');
+
+            // Item Reward
+            if (choiceObj.itemReward && !gameState.inventory.includes(choiceObj.itemReward)) {
+                gameState.inventory.push(choiceObj.itemReward);
+                playSound('item');
+                updateInventoryHUD();
+            }
+
+            // Level Transition Choice
+            if (choiceObj.targetLevel) {
+                selectLevel(choiceObj.targetLevel);
+                return;
+            }
+
+            renderScene(choiceObj.targetNode);
+        }
+
+        function updateInventoryHUD() {
+            const container = document.getElementById('inventory-list');
+            if (gameState.inventory.length === 0) {
+                container.innerHTML = `<span class="text-xs text-slate-500 italic py-1">பொருட்கள் எதுவும் இல்லை (Empty)</span>`;
+                return;
+            }
+            container.innerHTML = gameState.inventory.map(item => 
+                `<span class="bg-indigo-950/80 text-indigo-200 border border-indigo-500/40 text-xs px-2.5 py-1 rounded-lg font-bold animate-pop">
+                    ${item}
+                </span>`
+            ).join('');
+        }
+
+        // Initialize Game on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderScene('l1_scene_1');
+        });
+    </script>
+</body>
+</html>
