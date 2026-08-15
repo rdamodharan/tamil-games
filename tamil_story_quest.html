@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamil Story Quest - கதை உலகம்</title>
-    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, audio narration with slow mode, inline vocabulary hints, and comprehension challenges.">
+    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, victory status titles, interactive confetti celebrations, audio narration, and vocabulary tools.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -79,6 +79,13 @@
             0% { opacity: 0; transform: scale(0.92) translateY(10px); }
             100% { opacity: 1; transform: scale(1) translateY(0); }
         }
+        .pulse-glow {
+            animation: pulseGlow 2s infinite ease-in-out;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.4), 0 0 40px rgba(245, 158, 11, 0.2); }
+            50% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.8), 0 0 60px rgba(245, 158, 11, 0.5); }
+        }
         /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #0f172a; }
@@ -86,7 +93,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #475569; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900">
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-900 overflow-x-hidden">
 
     <!-- Top Header Navigation -->
     <header class="border-b border-slate-800 bg-slate-900/90 sticky top-0 z-30 backdrop-blur-md">
@@ -137,17 +144,14 @@
                         ஆம்பல் அடவி ரகசியம் (The Secret of Aambal Jungle)
                     </h2>
                 </div>
-                <!-- Action Controls: Narration + Slow Mode + Ambience -->
+                <!-- Action Controls -->
                 <div class="flex flex-wrap items-center gap-2">
-                    <!-- Slow Reading Mode Toggle -->
                     <button id="slow-speech-btn" onclick="toggleSlowSpeech()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 font-semibold px-3 py-2 rounded-xl transition text-xs sm:text-sm" title="Toggle Slow Narration Speed">
                         <span>🐢</span> <span id="slow-speech-text">மெதுவான வாசிப்பு (Normal)</span>
                     </button>
-                    <!-- Ambience Toggle -->
                     <button id="ambience-btn" onclick="toggleAmbience()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-3 py-2 rounded-xl transition text-xs sm:text-sm">
                         <span id="ambience-icon">🍃</span> <span id="ambience-text" class="hidden sm:inline">சூழ்நிலை ஒலி</span>
                     </button>
-                    <!-- Audio Narration Trigger -->
                     <button id="narration-btn" onclick="toggleNarration()" class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-xl transition shadow-lg shadow-indigo-600/30 active:scale-95 text-xs sm:text-sm">
                         <span id="narration-icon">🔊</span> <span id="narration-text">கதை கேளுங்கள் (Listen)</span>
                     </button>
@@ -163,7 +167,7 @@
         <!-- Story Display Card -->
         <div id="story-card" class="glass-card rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-700/80 animate-pop flex flex-col gap-6 relative">
             
-            <!-- Rich Scene Header / Illustration Container -->
+            <!-- Rich Scene Header Container -->
             <div class="relative rounded-2xl overflow-hidden h-56 md:h-72 bg-slate-900 border border-slate-800 flex items-center justify-center group">
                 <img id="scene-img" src="assets/aambal_jungle.jpg" alt="Scene Illustration" class="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700">
                 <div id="scene-bg-gradient" class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
@@ -182,7 +186,7 @@
                 </div>
             </div>
 
-            <!-- Vocabulary Helper Bar (Scene Key Words Quick Hints) -->
+            <!-- Vocabulary Helper Bar -->
             <div class="bg-slate-900/90 border border-amber-500/30 rounded-xl p-3 flex flex-wrap items-center gap-2 text-xs">
                 <span class="font-bold text-amber-400 flex items-center gap-1">
                     <span>💡</span> <span>சொற்கள் குறிப்பு (Word Hints):</span>
@@ -192,17 +196,17 @@
                 </div>
             </div>
 
-            <!-- Paragraph Narrative Content with Inline Hints -->
+            <!-- Paragraph Narrative Content -->
             <div class="bg-slate-900/60 rounded-2xl p-5 md:p-6 border border-slate-800 leading-relaxed text-lg md:text-xl text-slate-100">
                 <p id="story-text" class="tamil-text leading-loose">
                     <!-- Text injected dynamically -->
                 </p>
             </div>
 
-            <!-- Comprehension Gateway Section -->
+            <!-- Final Comprehension Gateway Section -->
             <div id="comprehension-box" class="bg-gradient-to-r from-indigo-950/80 to-slate-900/90 border-2 border-indigo-500/40 rounded-2xl p-5 md:p-6 shadow-lg">
                 <div class="flex items-center gap-2 text-indigo-300 font-bold mb-3 text-base">
-                    <span>❓</span> <span>வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)</span>
+                    <span>❓</span> <span id="comp-header-label">வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)</span>
                 </div>
                 <p id="comp-question" class="tamil-text text-lg md:text-xl font-bold text-white mb-4">
                     <!-- Question injected dynamically -->
@@ -213,7 +217,7 @@
                 <div id="comp-feedback" class="mt-3 text-sm font-semibold hidden p-3 rounded-xl"></div>
             </div>
 
-            <!-- Decision Pathways (Unlocked after comprehension) -->
+            <!-- Decision Pathways -->
             <div id="choices-container" class="opacity-40 pointer-events-none transition-all duration-300 flex flex-col gap-3">
                 <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
                     <span>🎯 உங்கள் அடுத்த நடவடிக்கை (Choose Your Path)</span>
@@ -249,6 +253,60 @@
             </div>
         </div>
     </main>
+
+    <!-- GRAND VICTORY TITLE STATUS CEREMONY MODAL -->
+    <div id="victory-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-lg z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
+        <div class="glass-card bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-2 border-amber-400/80 rounded-3xl p-6 md:p-10 max-w-xl w-full shadow-2xl animate-pop relative z-20 text-center">
+            
+            <!-- Glowing Trophy Badge -->
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-amber-500/20 border-2 border-amber-400 text-6xl mb-4 pulse-glow">
+                <span id="victory-trophy-icon">🏆</span>
+            </div>
+
+            <span class="block text-xs font-extrabold uppercase tracking-widest text-amber-400 bg-amber-950/80 border border-amber-500/40 px-4 py-1.5 rounded-full w-max mx-auto mb-2">
+                வெற்றி மகுடம் • Victory Status Unlocked
+            </span>
+
+            <h3 class="text-slate-300 text-sm font-bold uppercase tracking-wider">
+                உங்கள் அதிகாரப்பூர்வ பட்டப் பெயர் (Your Official Status Title):
+            </h3>
+
+            <h2 id="victory-title-name" class="tamil-text text-3xl sm:text-4xl font-extrabold text-amber-300 my-3 leading-tight drop-shadow-md">
+                காட்டின் மாபெரும் கதாநாயகன்
+            </h2>
+
+            <p id="victory-description" class="tamil-text text-slate-200 text-base md:text-lg mb-6 leading-relaxed bg-slate-900/70 p-4 rounded-2xl border border-slate-700/80">
+                வாழ்த்துக்கள்! உங்கள் கூரிய வாசிப்புப் புரிதலால் காட்டின் அரிய நீரூற்றைக் கண்டுபிடித்து வெற்றி பெற்றீர்கள்!
+            </p>
+
+            <!-- Summary Stats Grid -->
+            <div class="grid grid-cols-3 gap-3 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 mb-6 text-center">
+                <div>
+                    <span class="block text-xs text-slate-400">மொத்த XP:</span>
+                    <span id="victory-xp-val" class="text-amber-400 text-xl font-extrabold">150 XP</span>
+                </div>
+                <div>
+                    <span class="block text-xs text-slate-400">கற்ற சொற்கள்:</span>
+                    <span id="victory-words-val" class="text-emerald-400 text-xl font-extrabold">8</span>
+                </div>
+                <div>
+                    <span class="block text-xs text-slate-400">பொருட்கள்:</span>
+                    <span id="victory-items-val" class="text-cyan-400 text-xl font-extrabold">3</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="victory-next-btn" onclick="closeVictoryModalAndProceed()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold py-3.5 px-6 rounded-2xl shadow-xl transition transform hover:scale-105 active:scale-95 text-base sm:text-lg">
+                    🌟 அடுத்த நிலைக்குச் செல் (Next Level)
+                </button>
+                <button onclick="closeVictoryModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3.5 px-6 rounded-2xl transition">
+                    மூடு (Close)
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- INTERACTIVE SCENE INSPECT MODAL -->
     <div id="scene-inspect-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
@@ -567,49 +625,59 @@
                 ]
             },
             "l1_scene_3a": {
-                chapter: "அத்தியாயம் 3 • Final Chapter",
+                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
                 title: "பொன் அருவியும் நீர் தேவதையும் (Golden Waterfall)",
-                bgIcon: "🌊",
+                bgIcon: "🏆",
                 image: "assets/golden_waterfall.jpg",
                 inspectCaption: "பளிங்கு போல் மின்னும் பொன் அருவி: அமுத நீரூற்று காட்டின் தாகத்தைத் தீர்க்கிறது.",
                 location: "📍 ஆம்பல் பொன் அருவி",
                 progress: 100,
                 ambienceType: "waterfall",
+                isEndingNode: true,
+                statusTitle: "🏆 காட்டின் மாபெரும் கதாநாயகன் (Grand Hero of Aambal Jungle)",
+                statusDesc: "வாழ்த்துக்கள்! உங்கள் கூரிய வாசிப்புப் புரிதலால் ஆம்பல் காட்டின் அரிய அமுத நீரூற்றைக் கண்டுபிடித்து மாபெரும் கதாநாயகன் பட்டம் பெற்றீர்கள்!",
+                trophyIcon: "🏆",
+                targetNextLevel: "level2",
                 vocabKeys: ["அருவி", "பளிங்கு", "ஒளி", "பொக்கிஷம்"],
-                text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத நீரூற்று என்ற மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷத்தைக்</span> கண்டுபிடித்து விட்டீர்கள்! நீங்கள் காட்டின் மாபெரும் கதாநாயகன் ஆனீர்கள்!",
-                compQuestion: "அருவி நீர் எவ்வாறு மின்னியது?",
+                text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத நீரூற்று உங்கள் கண் முன்னே குளிர்ந்த நீரைப் பொழிகிறது.",
+                compQuestion: "இறுதிச் சவால்: காட்டின் தாகத்தைத் தீர்க்கும் நீரூற்றை அடைய நீங்கள் கண்ட நீர்வீழ்ச்சி எவ்வாறு மின்னியது?",
                 compOptions: [
-                    { text: "1. பளிங்கு போல", correct: true },
+                    { text: "1. பளிங்கு போல (Like Crystal)", correct: true },
                     { text: "2. இருட்டாக", correct: false },
                     { text: "3. சிவப்பு நிறமாக", correct: false }
                 ],
                 choices: [
                     {
-                        text: "🏆 வெற்றி கொண்டாட்டம்! அடுத்த நிலைக்குச் செல் (Next Level)",
+                        text: "🌟 மகுடம் பெறு & அடுத்த நிலைக்குச் செல் (Claim Status & Play Level 2)",
                         targetLevel: "level2"
                     }
                 ]
             },
             "l1_scene_3b": {
-                chapter: "அத்தியாயம் 3 • Final Chapter",
+                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
                 title: "பளிங்கு அறை & அறிவுக் பொக்கிஷம் (The Crystal Chamber)",
-                bgIcon: "💎",
+                bgIcon: "👑",
                 image: "assets/golden_waterfall.jpg",
                 inspectCaption: "பளிங்குச் சிம்மாசனத்தில் அறிவுக் பொக்கிஷம் ஒளி வீசுகிறது.",
                 location: "📍 பளிங்குச் சிம்மாசனம்",
                 progress: 100,
                 ambienceType: "jungle",
+                isEndingNode: true,
+                statusTitle: "👑 அறிவுக் சக்ரவர்த்தி (Emperor of Wisdom)",
+                statusDesc: "அற்புதமான அறிவுத்திறன்! திறவுகோல் புதிரை விடுவித்து பளிங்கு அறையின் மாபெரும் அறிவுக் கருவூலத்தைக் கைப்பற்றி அறிவுக் சக்ரவர்த்தி ஆனீர்கள்!",
+                trophyIcon: "👑",
+                targetNextLevel: "level2",
                 vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பொக்கிஷம்"],
-                text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> மூலம் <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் அறிவுக் கருவூலம் என்ற <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> இருந்தது. உங்கள் கூரிய அறிவால் காட்டின் ரகசியத்தைக் கண்டுபிடித்தீர்கள்!",
-                compQuestion: "கதவைத் திறக்க சிறுவனுக்கு எது உதவியது?",
+                text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் பழமையான அறிவுக் கருவூலம் ஒளி வீசுகிறது.",
+                compQuestion: "இறுதிச் சவால்: பளிங்கு அறையின் நடுவே ஒளிரும் காட்டின் மாபெரும் பொக்கிஷம் எது?",
                 compOptions: [
-                    { text: "1. பெரிய கல்", correct: false },
-                    { text: "2. அறிவுக் சாவி", correct: true },
-                    { text: "3. மரக் குச்சி", correct: false }
+                    { text: "1. அறிவுக் கருவூலம் (Treasury of Wisdom)", correct: true },
+                    { text: "2. பழைய கல்", correct: false },
+                    { text: "3. இரும்பு நாணயம்", correct: false }
                 ],
                 choices: [
                     {
-                        text: "👑 அறிவுக் பட்டம் வென்றாய்! அடுத்த நிலைக்குச் செல் (Next Level)",
+                        text: "🌟 மகுடம் பெறு & அடுத்த நிலைக்குச் செல் (Claim Status & Play Level 2)",
                         targetLevel: "level2"
                     }
                 ]
@@ -697,31 +765,36 @@
                 ]
             },
             "l2_scene_3a": {
-                chapter: "அத்தியாயம் 3 • Final Chapter",
+                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
                 title: "கரிகாலச் சோழனின் பாராட்டு (Praise of King Karikala)",
-                bgIcon: "👑",
+                bgIcon: "🗡️",
                 image: "assets/chola_port.jpg",
                 inspectCaption: "சோழ மன்னன் கரிகாலன் சிறுவனுக்கு அரச முத்திரை மோதிரத்தைப் பரிசளிக்கிறார்.",
                 location: "📍 சோழ அரியணை",
                 progress: 100,
                 ambienceType: "port",
+                isEndingNode: true,
+                statusTitle: "🗡️ சோழநாட்டின் தலைசிறந்த அறிஞர் (Master Scholar of Chola Empire)",
+                statusDesc: "வரலாற்று வெற்றி! கரிகாலச் சோழ மன்னனின் அரச அவையில் உங்கள் கவிப் புலமையை நிரூபித்து சோழநாட்டின் தலைசிறந்த அறிஞர் மகுடம் வென்றீர்கள்!",
+                trophyIcon: "🗡️",
+                targetNextLevel: "level3",
                 vocabKeys: ["முத்திரை", "நாணயம்", "புலவர்"],
-                text: "உங்கள் தமிழ் அறிவைக் கண்டு மன்னன் கரிகாலச் சோழன் உங்களை மெச்சினான்! உங்களுக்குச் சோழர் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> மோதிரத்தையும் தங்க <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> பையையும் பரிசளித்தான்! நீங்கள் சோழ நாட்டின் தலைசிறந்த <span class='vocab-word' data-hint='Scholar' onclick='openVocabModal(\"புலவர்\")'>புலவர்</span> ஆனீர்கள்!",
-                compQuestion: "சிறுவனைப் பாராட்டிய சோழ மன்னன் யார்?",
+                text: "உங்கள் தமிழ் அறிவைக் கண்டு மன்னன் கரிகாலச் சோழன் உங்களை மெச்சினான்! உங்களுக்குச் சோழர் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> மோதிரத்தையும் தங்க <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> பையையும் பரிசளிக்கத் தயார் செய்கிறான்.",
+                compQuestion: "இறுதிச் சவால்: அரண்மனை அவையில் சிறுவனின் தமிழ் அறிவைப் பாராட்டிய சோழ மன்னன் யார்?",
                 compOptions: [
-                    { text: "1. கரிகாலச் சோழன்", correct: true },
+                    { text: "1. கரிகாலச் சோழன் (King Karikala Chola)", correct: true },
                     { text: "2. முதலாம் ராஜராஜன்", correct: false },
                     { text: "3. நரசிம்மவர்மன்", correct: false }
                 ],
                 choices: [
                     {
-                        text: "🌟 மாபெரும் வெற்றி! அடுத்த நிலைக்குச் செல் (Play Level 3)",
+                        text: "🌟 மகுடம் பெறு & அடுத்த நிலைக்குச் செல் (Claim Status & Play Level 3)",
                         targetLevel: "level3"
                     }
                 ]
             },
             "l2_scene_3b": {
-                chapter: "அத்தியாயம் 3 • Final Chapter",
+                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
                 title: "சங்கத் தமிழ் பொக்கிஷம் (Sangam Literary Treasure)",
                 bgIcon: "📜",
                 image: "assets/chola_port.jpg",
@@ -729,17 +802,22 @@
                 location: "📍 தமிழ்ச் சங்கம்",
                 progress: 100,
                 ambienceType: "port",
+                isEndingNode: true,
+                statusTitle: "📜 சங்கத் தமிழ் அறிஞர் (Sangam Tamil Laureate)",
+                statusDesc: "மாபெரும் சாதனை! சங்கப் புலவரின் புதிரை வென்று சங்கத் தமிழ் பொக்கிஷத்தைக் கைப்பற்றி சங்கத் தமிழ் அறிஞர் மகுடம் பெற்றீர்கள்!",
+                trophyIcon: "📜",
+                targetNextLevel: "level3",
                 vocabKeys: ["பொக்கிஷம்", "புலவர்"],
-                text: "நீங்கள் புதிரை வென்று சங்கத் தமிழின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> நிறைந்த பெட்டியைத் திறந்தீர்கள்! தமிழ் மொழி <span class='vocab-word' data-hint='Scholarship' onclick='openVocabModal(\"புலவர்\")'>புலமைக்கான</span> விருதைப் பெற்றீர்கள்!",
-                compQuestion: "சிறுவனுக்கு என்ன விருது கிடைத்தது?",
+                text: "நீங்கள் புதிரை வென்று சங்கத் தமிழின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> நிறைந்த பெட்டியைத் திறந்தீர்கள்! தமிழ் மொழிப் <span class='vocab-word' data-hint='Scholarship' onclick='openVocabModal(\"புலவர்\")'>புலமைக்கான</span> விருது உங்கள் கைகளில் உள்ளது.",
+                compQuestion: "இறுதிச் சவால்: புதிரை வென்ற சிறுவனுக்குச் சங்கச் சபையில் வழங்கப்பட்ட உயரிய விருது எது?",
                 compOptions: [
-                    { text: "1. வீரப் பட்டம்", correct: false },
-                    { text: "2. சங்கத் தமிழ் அறிஞர் விருது", correct: true },
+                    { text: "1. சங்கத் தமிழ் அறிஞர் விருது (Sangam Tamil Laureate)", correct: true },
+                    { text: "2. வீரப் பட்டம்", correct: false },
                     { text: "3. சிறந்த மாலுமி விருது", correct: false }
                 ],
                 choices: [
                     {
-                        text: "🌟 மாபெரும் வெற்றி! அடுத்த நிலைக்குச் செல் (Play Level 3)",
+                        text: "🌟 மகுடம் பெறு & அடுத்த நிலைக்குச் செல் (Claim Status & Play Level 3)",
                         targetLevel: "level3"
                     }
                 ]
@@ -827,49 +905,59 @@
                 ]
             },
             "l3_scene_3a": {
-                chapter: "அத்தியாயம் 3 • Grand Finale",
+                chapter: "அத்தியாயம் 3 • Grand Finale & Victory Challenge",
                 title: "பெருங்கடல் மாலுமி கதாநாயகன் (Hero of the Ocean)",
-                bgIcon: "🏆",
+                bgIcon: "⚓",
                 image: "assets/maya_island.jpg",
                 inspectCaption: "பெருங்கடலின் மாபெரும் கேப்டன் என்ற பட்டத்தைப் பெறுகிறீர்கள்!",
                 location: "📍 பெருங்கடல் பொக்கிஷ சிம்மாசனம்",
                 progress: 100,
                 ambienceType: "ocean",
+                isEndingNode: true,
+                statusTitle: "⚓ பெருங்கடல் மாபெரும் கேப்டன் (Grand Captain of the Ocean)",
+                statusDesc: "அதிசய சாதனை! மாயாவி தீவின் அரிய முத்து பொக்கிஷத்தைக் கண்டுபிடித்து பெருங்கடலின் மாபெரும் கேப்டன் என்ற உயரிய பட்டத்தை வென்றீர்கள்!",
+                trophyIcon: "⚓",
+                targetNextLevel: "level1",
                 vocabKeys: ["முத்து", "பொக்கிஷம்", "பெருங்கடல்", "மாலுமி"],
-                text: "வாழ்த்துக்கள்! மாயாவி தீவின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்து</span> <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷத்தைக்</span> கண்டுபிடித்து, <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடலின்</span> மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> என்ற பட்டத்தை வென்றீர்கள்! உங்கள் தமிழ் வாசிப்புத் திறன் உச்சத்தை அடைந்தது!",
-                compQuestion: "சிறுவன் வென்ற கேப்டன் பட்டம் எது?",
+                text: "மாயாவி தீவின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்து</span> <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> உங்கள் கண் முன்னே ஒளிர்கிறது. <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடலின்</span> மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> பட்டம் உங்களை நோக்கி வருகிறது.",
+                compQuestion: "இறுதிச் சவால்: மாயாவி தீவின் குகையில் நீங்கள் கண்டெடுத்த அரிய பெருங்கடல் பொக்கிஷம் எது?",
                 compOptions: [
-                    { text: "1. பெருங்கடல் மாபெரும் கேப்டன்", correct: true },
-                    { text: "2. காட்டு மாலுமி", correct: false },
-                    { text: "3. குகைக் காவலன்", correct: false }
+                    { text: "1. மாபெரும் முத்து பொக்கிஷம் (Ocean Pearl Chest)", correct: true },
+                    { text: "2. பழைய மரப் பெட்டி", correct: false },
+                    { text: "3. இரும்பு நங்கூரம்", correct: false }
                 ],
                 choices: [
                     {
-                        text: "🎉 அனைத்து நிலைகளையும் வென்றாய்! முதல் நிலைக்குச் செல் (Play Level 1)",
+                        text: "🎉 மகுடம் பெறு & முதல் நிலைக்குச் செல் (Claim Status & Play Level 1)",
                         targetLevel: "level1"
                     }
                 ]
             },
             "l3_scene_3b": {
-                chapter: "அத்தியாயம் 3 • Grand Finale",
+                chapter: "அத்தியாயம் 3 • Grand Finale & Victory Challenge",
                 title: "தங்கக் கப்பல் கேப்டன் (Captain of the Golden Ship)",
-                bgIcon: "👑",
+                bgIcon: "⛵",
                 image: "assets/maya_island.jpg",
                 inspectCaption: "தங்கக் கப்பலை இயக்கி வெற்றிப் பயணம் பூர்த்தியடைகிறது.",
                 location: "📍 தங்கக் கப்பல் தளபதி",
                 progress: 100,
                 ambienceType: "ocean",
+                isEndingNode: true,
+                statusTitle: "⛵ தங்கக் கப்பல் சக்ரவர்த்தி (Emperor of the Golden Fleet)",
+                statusDesc: "பிரமாண்டமான வெற்றி! உங்கள் கூரிய மாலுமி திறமையால் தங்கக் கப்பலை இயக்கி கதை உலகத்தின் தங்கக் கப்பல் சக்ரவர்த்தி ஆனீர்கள்!",
+                trophyIcon: "⛵",
+                targetNextLevel: "level1",
                 vocabKeys: ["கப்பலில்", "மாலுமி", "பொக்கிஷம்"],
-                text: "அற்புதம்! உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமியாக வெற்றிப் பயணத்தை முடித்தீர்கள்! நீங்கள் கதை உலகத்தின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> ஆனீர்கள்!",
-                compQuestion: "சிறுவன் இயக்கிய கப்பலின் பெயர் என்ன?",
+                text: "உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமியாக</span> கரை தொடுகிறீர்கள்.",
+                compQuestion: "இறுதிச் சவால்: புயலைக் கடந்து வெற்றிப் பயணத்தை முடித்த சிறுவன் இயக்கிய கப்பலின் பெயர் என்ன?",
                 compOptions: [
-                    { text: "1. தங்கக் கப்பல்", correct: true },
+                    { text: "1. தங்கக் கப்பல் (Golden Ship)", correct: true },
                     { text: "2. மரப் படகு", correct: false },
-                    { text: "3. பழைய கப்பல்", correct: false }
+                    { text: "3. பழைய படகு", correct: false }
                 ],
                 choices: [
                     {
-                        text: "🎉 அனைத்து நிலைகளையும் வென்றாய்! முதல் நிலைக்குச் செல் (Play Level 1)",
+                        text: "🎉 மகுடம் பெறு & முதல் நிலைக்குச் செல் (Claim Status & Play Level 1)",
                         targetLevel: "level1"
                     }
                 ]
@@ -889,6 +977,7 @@
         };
 
         let currentModalWordKey = "";
+        let pendingVictoryData = null;
 
         /* ================= SOUND ENGINE (WEB AUDIO API) ================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -913,6 +1002,21 @@
                 gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
                 osc.start(now);
                 osc.stop(now + 0.25);
+            } else if (type === 'fanfare') {
+                // Victory Fanfare Melody (C5 -> E5 -> G5 -> C6)
+                const notes = [523.25, 659.25, 783.99, 1046.50];
+                notes.forEach((freq, idx) => {
+                    const noteOsc = audioCtx.createOscillator();
+                    const noteGain = audioCtx.createGain();
+                    noteOsc.connect(noteGain);
+                    noteGain.connect(audioCtx.destination);
+                    const noteTime = now + (idx * 0.12);
+                    noteOsc.frequency.setValueAtTime(freq, noteTime);
+                    noteGain.gain.setValueAtTime(0.2, noteTime);
+                    noteGain.gain.exponentialRampToValueAtTime(0.01, noteTime + 0.35);
+                    noteOsc.start(noteTime);
+                    noteOsc.stop(noteTime + 0.35);
+                });
             } else if (type === 'click') {
                 osc.frequency.setValueAtTime(400, now);
                 gain.gain.setValueAtTime(0.08, now);
@@ -1006,7 +1110,7 @@
                 document.getElementById('slow-speech-btn').classList.remove('bg-sky-950', 'border-sky-400', 'text-sky-200');
             }
             if (isNarrating) {
-                startNarration(); // restart speech with new speed
+                startNarration();
             }
         }
 
@@ -1148,6 +1252,110 @@
             ).join('');
         }
 
+        /* ================= VICTORY STATUS TITLE CEREMONY & CONFETTI ================= */
+        function triggerVictoryCeremony(node) {
+            playSound('fanfare');
+            startConfetti();
+
+            pendingVictoryData = node;
+            document.getElementById('victory-trophy-icon').textContent = node.trophyIcon || "🏆";
+            document.getElementById('victory-title-name').textContent = node.statusTitle || "மாபெரும் வெற்றியாளர்";
+            document.getElementById('victory-description').textContent = node.statusDesc || "வாழ்த்துக்கள்! உங்கள் கூரிய வாசிப்புப் புரிதலால் வெற்றியை அடைந்தீர்கள்!";
+
+            document.getElementById('victory-xp-val').textContent = `${gameState.xp} XP`;
+            document.getElementById('victory-words-val').textContent = `${gameState.learnedWords.size}`;
+            document.getElementById('victory-items-val').textContent = `${gameState.inventory.length}`;
+
+            const modal = document.getElementById('victory-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeVictoryModal() {
+            playSound('click');
+            stopConfetti();
+            const modal = document.getElementById('victory-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function closeVictoryModalAndProceed() {
+            closeVictoryModal();
+            if (pendingVictoryData && pendingVictoryData.targetNextLevel) {
+                selectLevel(pendingVictoryData.targetNextLevel);
+            }
+        }
+
+        /* Canvas Confetti Animation */
+        let confettiInterval = null;
+        function startConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#f59e0b', '#10b981', '#3b82f6', '#ec4899', '#8b5cf6', '#38bdf8'];
+
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 4,
+                    d: Math.random() * 120,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    tilt: Math.floor(Math.random() * 10) - 10,
+                    tiltAngleIncremental: Math.random() * 0.07 + 0.05,
+                    tiltAngle: 0
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    p.tiltAngle += p.tiltAngleIncremental;
+                    p.y += (Math.cos(p.d) + 3 + p.r / 2) / 2;
+                    p.tilt = Math.sin(p.tiltAngle) * 15;
+
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+                    ctx.stroke();
+
+                    if (p.y > canvas.height) {
+                        particles[i] = {
+                            x: Math.random() * canvas.width,
+                            y: -20,
+                            r: p.r,
+                            d: p.d,
+                            color: p.color,
+                            tilt: p.tilt,
+                            tiltAngleIncremental: p.tiltAngleIncremental,
+                            tiltAngle: p.tiltAngle
+                        };
+                    }
+                });
+            }
+
+            if (confettiInterval) clearInterval(confettiInterval);
+            confettiInterval = setInterval(draw, 20);
+        }
+
+        function stopConfetti() {
+            if (confettiInterval) {
+                clearInterval(confettiInterval);
+                confettiInterval = null;
+            }
+            const canvas = document.getElementById('confetti-canvas');
+            if (canvas) {
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        }
+
         /* ================= SCENE RENDERER ================= */
         function renderScene(nodeId) {
             stopNarration();
@@ -1164,6 +1372,16 @@
             // Update UI Chapter, Difficulty & Progress
             document.getElementById('story-chapter-tag').textContent = node.chapter;
             document.getElementById('story-title').textContent = node.title;
+
+            // Header label for comprehension box
+            const compLabel = document.getElementById('comp-header-label');
+            if (node.isEndingNode) {
+                compLabel.textContent = '🏆 இறுதிச் சவால் (Final Victory Challenge)';
+                compLabel.className = 'text-amber-400 font-extrabold';
+            } else {
+                compLabel.textContent = 'வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)';
+                compLabel.className = 'text-indigo-300 font-bold';
+            }
             
             const lvlInfo = levelStories[gameState.currentLevel];
             if (lvlInfo) {
@@ -1210,7 +1428,7 @@
                 const btn = document.createElement('button');
                 btn.className = 'bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98';
                 btn.innerHTML = `<span>${opt.text}</span> <span class="opt-status text-xs"></span>`;
-                btn.onclick = () => handleComprehensionAnswer(opt.correct, btn);
+                btn.onclick = () => handleComprehensionAnswer(opt.correct, btn, node);
                 compOptionsContainer.appendChild(btn);
             });
 
@@ -1243,12 +1461,11 @@
             storyCard.classList.add('animate-pop');
         }
 
-        function handleComprehensionAnswer(isCorrect, btnElement) {
+        function handleComprehensionAnswer(isCorrect, btnElement, currentNodeObj) {
             const compFeedback = document.getElementById('comp-feedback');
             compFeedback.classList.remove('hidden');
 
             if (isCorrect) {
-                playSound('success');
                 btnElement.classList.replace('bg-slate-800', 'bg-emerald-600/40');
                 btnElement.classList.add('border-emerald-500');
                 btnElement.querySelector('.opt-status').textContent = '✅';
@@ -1267,6 +1484,15 @@
                 choicesContainer.classList.remove('opacity-40', 'pointer-events-none');
                 document.getElementById('choices-lock-status').textContent = '🔓 வழி திறக்கப்பட்டது!';
                 document.getElementById('choices-lock-status').classList.replace('text-amber-400', 'text-emerald-400');
+
+                // If this is an ending node, trigger Victory Ceremony!
+                if (currentNodeObj && currentNodeObj.isEndingNode) {
+                    setTimeout(() => {
+                        triggerVictoryCeremony(currentNodeObj);
+                    }, 400);
+                } else {
+                    playSound('success');
+                }
             } else {
                 playSound('error');
                 btnElement.classList.replace('bg-slate-800', 'bg-rose-600/30');
