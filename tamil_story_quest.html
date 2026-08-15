@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamil Story Quest - கதை உலகம்</title>
-    <meta name="description" content="An interactive multi-level Tamil reading adventure game with level-based question progression, vocabulary puzzles, procedural soundtracks, and status title celebrations.">
+    <meta name="description" content="An interactive multi-level Tamil reading adventure game with intra-level escalating question density, vocabulary puzzles, procedural soundtracks, and status title celebrations.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -138,7 +138,7 @@
                             அத்தியாயம் 1 • Chapter 1
                         </span>
                         <span id="story-difficulty-tag" class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2.5 py-0.5 rounded-full">
-                            எளிது (1 Question/Scene)
+                            எளிது (1 ➔ 2 ➔ 3 Questions)
                         </span>
                     </div>
                     <h2 id="story-title" class="tamil-text text-2xl md:text-3xl font-extrabold text-white mt-2">
@@ -204,7 +204,7 @@
                 </p>
             </div>
 
-            <!-- Multi-Question Challenge Section -->
+            <!-- Multi-Question Challenge Section with Intra-Level Progression -->
             <div id="comprehension-box" class="bg-gradient-to-r from-indigo-950/80 to-slate-900/90 border-2 border-indigo-500/40 rounded-2xl p-5 md:p-6 shadow-lg">
                 <div class="flex items-center justify-between text-indigo-300 font-bold mb-3 text-base">
                     <div class="flex items-center gap-2">
@@ -366,7 +366,7 @@
                     <h3 class="tamil-text text-2xl md:text-3xl font-extrabold text-amber-400">
                         கதைத் நிலையைத் தேர்ந்தெடுக்கவும்
                     </h3>
-                    <p class="text-slate-400 text-xs sm:text-sm">Select a story adventure level based on difficulty & question density</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Select a story adventure level with escalating scene questions</p>
                 </div>
             </div>
 
@@ -376,12 +376,12 @@
                         <span class="text-4xl group-hover:scale-110 transition">🌲</span>
                         <div>
                             <span class="text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-800">
-                                நிலை 1 • 🟢 எளிது (1 Question / Scene)
+                                நிலை 1 • 🟢 எளிது (1 ➔ 2 ➔ 3 Questions)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 ஆம்பல் அடவி ரகசியம்
                             </h4>
-                            <p class="text-xs text-slate-400">Explore the jungle, talk to the parrot, and discover the golden waterfall!</p>
+                            <p class="text-xs text-slate-400">Explore the jungle! Questions escalate from 1 to 3 as you reach the waterfall!</p>
                         </div>
                     </div>
                     <span class="text-emerald-400 font-bold text-xl">▶️</span>
@@ -392,12 +392,12 @@
                         <span class="text-4xl group-hover:scale-110 transition">🏛️</span>
                         <div>
                             <span class="text-xs font-bold text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-800">
-                                நிலை 2 • 🟡 நடுத்தரம் (2 Questions / Scene)
+                                நிலை 2 • 🟡 நடுத்தரம் (2 ➔ 3 ➔ 4 Questions)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 காலப் பயணம்: சோழ சாம்ராஜ்யம்
                             </h4>
-                            <p class="text-xs text-slate-400">Time-travel to Chola ports & solve vocabulary meaning & usage puzzles!</p>
+                            <p class="text-xs text-slate-400">Time-travel to Chola ports! Questions escalate from 2 to 4 as you enter royal court!</p>
                         </div>
                     </div>
                     <span class="text-amber-400 font-bold text-xl">▶️</span>
@@ -408,12 +408,12 @@
                         <span class="text-4xl group-hover:scale-110 transition">🏴‍☠️</span>
                         <div>
                             <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2.5 py-0.5 rounded-full border border-cyan-800">
-                                நிலை 3 • 🔴 கடினம் (3 Questions / Scene)
+                                நிலை 3 • 🔴 கடினம் (3 ➔ 4 ➔ 5 Questions)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்
                             </h4>
-                            <p class="text-xs text-slate-400">Nautical sea adventure! Solve comprehension, word meanings & usage riddles!</p>
+                            <p class="text-xs text-slate-400">Nautical sea adventure! Questions escalate from 3 to 5 in final climax!</p>
                         </div>
                     </div>
                     <span class="text-cyan-400 font-bold text-xl">▶️</span>
@@ -495,7 +495,8 @@
             "அருவி": { hint: "Waterfall", phonetic: "Aruvi", meaning: "நீர்வீழ்ச்சி (Waterfall)", example: "மலையிலிருந்து குளிர்ந்த அருவி கொட்டுகிறது." },
             "பளிங்கு": { hint: "Crystal", phonetic: "Palingu", meaning: "தெளிவான கண்ணாடி / பளிங்குக்கல் (Crystal)", example: "பளிங்கு போன்ற தூய்மையான தண்ணீர் ஓடியது." },
             "நீரூற்று": { hint: "Water Spring", phonetic: "Neerootru", meaning: "இயற்கை நீரூற்று (Natural Spring)", example: "காட்டின் அமுத நீரூற்று குளிர்ந்த நீரைப் பொழிகிறது." },
-            
+            "கருவூலம்": { hint: "Treasury", phonetic: "Karuvoolam", meaning: "அறிவுக் களஞ்சியம் (Repository / Treasury)", example: "அறையில் அறிவுக் கருவூலம் இருந்தது." },
+
             // Level 2 Words
             "துறைமுகம்": { hint: "Harbor Port", phonetic: "Thuraimugam", meaning: "கப்பல்கள் வந்து நிற்கும் இடம் (Sea Port)", example: "பூம்புகார் சோழநாட்டின் துறைமுகம் ஆகும்." },
             "கலங்கரை விளக்கம்": { hint: "Lighthouse", phonetic: "Kalangarai Vilakkam", meaning: "கப்பல்களுக்கு வழிகாட்டும் கலங்கரை கோபுரம் (Lighthouse)", example: "இரவில் கலங்கரை விளக்கம் வழிகாட்டியது." },
@@ -506,6 +507,7 @@
             "நூலகம்": { hint: "Library", phonetic: "Noolagam", meaning: "புத்தகங்கள் உள்ள இடம் (Library)", example: "அரண்மனை நூலகத்தில் சுவடிகள் இருந்தன." },
             "புலவர்": { hint: "Poet / Scholar", phonetic: "Pulavar", meaning: "கவிஞர் / தமிழறிஞர் (Poet / Scholar)", example: "புலவர் புதிரான செய்யுளைப் பாடினார்." },
             "அரண்மனை": { hint: "Royal Palace", phonetic: "Aranmanai", meaning: "மன்னரின் மாளிகை (Royal Palace)", example: "சோழ அரண்மனை கம்பீரமாக இருந்தது." },
+            "அரியணை": { hint: "Throne", phonetic: "Ariyanaai", meaning: "மன்னரின் சிம்மாசனம் (Royal Throne)", example: "மன்னன் அரியணையில் வீற்றிருந்தான்." },
 
             // Level 3 Words
             "பெருங்கடல்": { hint: "Ocean", phonetic: "Perungadal", meaning: "பெரிய சமுத்திரம் (Ocean)", example: "பெருங்கடலில் அலைகள் உயரமாக எழும்பின." },
@@ -515,35 +517,36 @@
             "பவளம்": { hint: "Coral", phonetic: "Pavalam", meaning: "கடல் மணி (Red Coral)", example: "பவளப் பாறைகள் கடலுக்குள் அழகாக இருந்தன." },
             "எரிமலை": { hint: "Volcano", phonetic: "Erimalai", meaning: "நெருப்பு மலை (Volcano)", example: "எரிமலை உச்சியில் கலங்கரை விளக்கம் இருந்தது." },
             "மாலுமி": { hint: "Sailor", phonetic: "Maalumi", meaning: "கப்பல் ஓட்டுபவர் (Sailor / Captain)", example: "தைரியமான மாலுமி கப்பலை இயக்கினான்." },
-            "முத்து": { hint: "Pearl", phonetic: "Muthu", meaning: "கடல் ரத்தினம் (Pearl)", example: "பெட்டிக்குள் ஒளிரும் முத்துக்கள் இருந்தன." }
+            "முத்து": { hint: "Pearl", phonetic: "Muthu", meaning: "கடல் ரத்தினம் (Pearl)", example: "பெட்டிக்குள் ஒளிரும் முத்துக்கள் இருந்தன." },
+            "தளபதி": { hint: "Captain", phonetic: "Thalapathi", meaning: "கப்பல் கேப்டன் / தளபதி (Captain / Commander)", example: "நீங்கள் கப்பல் தளபதி ஆனீர்கள்." }
         };
 
-        /* ================= MULTI-LEVEL STORY DATA WITH PROGRESSIVE QUESTION COUNTS ================= */
+        /* ================= MULTI-LEVEL STORY DATA WITH ESCALATING INTRA-LEVEL QUESTIONS ================= */
         const levelStories = {
             "level1": {
                 name: "ஆம்பல் அடவி ரகசியம்",
-                difficulty: "எளிது (1 Question / Scene)",
+                difficulty: "எளிது (1 ➔ 2 ➔ 3 Questions)",
                 difficultyColor: "text-emerald-400 bg-emerald-950/60 border-emerald-800/50",
                 startNode: "l1_scene_1"
             },
             "level2": {
                 name: "காலப் பயணம்: சோழ சாம்ராஜ்யம்",
-                difficulty: "நடுத்தரம் (2 Questions / Scene)",
+                difficulty: "நடுத்தரம் (2 ➔ 3 ➔ 4 Questions)",
                 difficultyColor: "text-amber-400 bg-amber-950/60 border-amber-800/50",
                 startNode: "l2_scene_1"
             },
             "level3": {
                 name: "மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்",
-                difficulty: "கடினம் (3 Questions / Scene)",
+                difficulty: "கடினம் (3 ➔ 4 ➔ 5 Questions)",
                 difficultyColor: "text-cyan-400 bg-cyan-950/60 border-cyan-800/50",
                 startNode: "l3_scene_1"
             }
         };
 
         const storyNodes = {
-            /* ================= LEVEL 1: JUNGLE ADVENTURE (1 QUESTION PER SCENE) ================= */
+            /* ================= LEVEL 1: JUNGLE ADVENTURE (ESC: 1 ➔ 2 ➔ 3 QUESTIONS) ================= */
             "l1_scene_1": {
-                chapter: "அத்தியாயம் 1 • Chapter 1",
+                chapter: "அத்தியாயம் 1 • Chapter 1 (1 Question)",
                 title: "ஆம்பல் காட்டின் நுழைவு (Jungle Entrance)",
                 bgIcon: "🌲",
                 image: "assets/aambal_jungle.jpg",
@@ -555,7 +558,7 @@
                 text: "நீங்கள் ஒரு <span class='vocab-word' data-hint='Dense' onclick='openVocabModal(\"அடர்ந்த\")'>அடர்ந்த</span> ஆம்பல் <span class='vocab-word' data-hint='Inside Forest' onclick='openVocabModal(\"காட்டிற்குள்\")'>காட்டிற்குள்</span> நிற்கிறீர்கள். சுற்றிலும் <span class='vocab-word' data-hint='Tall' onclick='openVocabModal(\"உயரமான\")'>உயரமான</span> <span class='vocab-word' data-hint='Trees' onclick='openVocabModal(\"மரங்களும்\")'>மரங்களும்</span> <span class='vocab-word' data-hint='Birds&#39;' onclick='openVocabModal(\"பறவைகளின்\")'>பறவைகளின்</span> ஒலியும் கேட்கின்றன. <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> இரண்டாகப் பிரிகிறது. இடது புறத்தில் ஒரு பழைய <span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டி</span> உள்ளது. அதில் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> பற்றிய குறிப்பு உள்ளது. வலது புறத்தில் ஒரு <span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகையின்</span> <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> தெரிகிறது.",
                 questions: [
                     {
-                        question: "சிறுவன் நின்ற காட்டின் பெயர் என்ன?",
+                        question: "1. வாசிப்புப் புதிர்: சிறுவன் நின்ற காட்டின் பெயர் என்ன?",
                         options: [
                             { text: "1. ஆம்பல் காடு", correct: true },
                             { text: "2. சுந்தரவனம்", correct: false },
@@ -577,7 +580,7 @@
                 ]
             },
             "l1_scene_2a": {
-                chapter: "அத்தியாயம் 2 • Chapter 2A",
+                chapter: "அத்தியாயம் 2 • Chapter 2A (2 Questions)",
                 title: "பேசும் கிளியின் மரம் (The Talking Parrot Tree)",
                 bgIcon: "🦜",
                 image: "assets/aambal_jungle.jpg",
@@ -589,11 +592,19 @@
                 text: "<span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டியைத்</span> திறந்ததும் அதற்குள் ஒரு <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> போன்ற வரைபடம் கிடைத்தது! அதை எடுத்தவுடன், மரத்தின் மேலிருந்து ஒரு வண்ணக் கிளி உங்களைப் பார்த்துப் பேசியது: 'என் அன்பு <span class='vocab-word' data-hint='Friend' onclick='openVocabModal(\"நண்பன்\")'>நண்பன்</span> நீ! காட்டு <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவிக்குப்</span> போக <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> உதவும்!' என்று கூறியது.",
                 questions: [
                     {
-                        question: "மரப்பெட்டிக்குள் சிறுவனுக்கு என்ன கிடைத்தது?",
+                        question: "1. வாசிப்புப் புதிர்: மரப்பெட்டிக்குள் சிறுவனுக்கு என்ன கிடைத்தது?",
                         options: [
-                            { text: "1. ஒரு பழைய நாணயம்", correct: false },
-                            { text: "2. பழமையான வரைபடம்", correct: true },
+                            { text: "1. பழமையான வரைபடம்", correct: true },
+                            { text: "2. ஒரு பழைய நாணயம்", correct: false },
                             { text: "3. ஒரு தங்கக் மோதிரம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'மரப்பெட்டி' என்பதன் சரியான பொருள் என்ன?",
+                        options: [
+                            { text: "1. மரத்தால் ஆன பெட்டி (Wooden Chest)", correct: true },
+                            { text: "2. கல் பலகை", correct: false },
+                            { text: "3. இரும்பு வாள்", correct: false }
                         ]
                     }
                 ],
@@ -611,7 +622,7 @@
                 ]
             },
             "l1_scene_2b": {
-                chapter: "அத்தியாயம் 2 • Chapter 2B",
+                chapter: "அத்தியாயம் 2 • Chapter 2B (2 Questions)",
                 title: "எதிர்ஒலி குகை (Cave of Echoes)",
                 bgIcon: "🦇",
                 image: "assets/aambal_jungle.jpg",
@@ -623,11 +634,19 @@
                 text: "<span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகைக்குள்</span> இருட்டாக இருந்தது. உங்கள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தரும் <span class='vocab-word' data-hint='Lamp / Lantern' onclick='openVocabModal(\"விளக்கு\")'>விளக்கு</span> வழியைக் காட்டியது! சுவரில் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழங்கால</span> <span class='vocab-word' data-hint='Letters / Scripts' onclick='openVocabModal(\"எழுத்துக்கள்\")'>எழுத்துக்கள்</span> செதுக்கப்பட்டிருந்தன. அந்த எழுத்துக்கள் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசலைத்</span> திறக்கச் சொன்னது.",
                 questions: [
                     {
-                        question: "குகையின் இருட்டைப் போக்க சிறுவனுக்கு எது உதவியது?",
+                        question: "1. வாசிப்புப் புதிர்: குகையின் இருட்டைப் போக்க சிறுவனுக்கு எது உதவியது?",
                         options: [
-                            { text: "1. தீப்பந்தம்", correct: false },
-                            { text: "2. மந்திர விளக்கு", correct: true },
+                            { text: "1. மந்திர விளக்கு", correct: true },
+                            { text: "2. தீப்பந்தம்", correct: false },
                             { text: "3. சூரிய ஒளி", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. பயன்பாட்டுப் புதிர்: 'விளக்கு' எதற்குப் பயன்படுகிறது?",
+                        options: [
+                            { text: "1. இருளைப் போக்கி வெளிச்சம் தர (To Give Light)", correct: true },
+                            { text: "2. நீரைக் குடிக்க", correct: false },
+                            { text: "3. கதவைத் திறக்க", correct: false }
                         ]
                     }
                 ],
@@ -645,7 +664,7 @@
                 ]
             },
             "l1_scene_3a": {
-                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
+                chapter: "அத்தியாயம் 3 • Final Climax (3 Questions)",
                 title: "பொன் அருவியும் நீர் தேவதையும் (Golden Waterfall)",
                 bgIcon: "🏆",
                 image: "assets/golden_waterfall.jpg",
@@ -662,11 +681,27 @@
                 text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத <span class='vocab-word' data-hint='Water Spring' onclick='openVocabModal(\"நீரூற்று\")'>நீரூற்று</span> உங்கள் கண் முன்னே குளிர்ந்த நீரைப் பொழிகிறது.",
                 questions: [
                     {
-                        question: "இறுதிச் சவால்: காட்டின் தாகத்தைத் தீர்க்கும் நீரூற்றை அடைய நீங்கள் கண்ட நீர்வீழ்ச்சி எவ்வாறு மின்னியது?",
+                        question: "1. வாசிப்புப் புதிர்: காட்டின் தாகத்தைத் தீர்க்கும் நீரூற்றை அடைய நீங்கள் கண்ட நீர்வீழ்ச்சி எவ்வாறு மின்னியது?",
                         options: [
                             { text: "1. பளிங்கு போல (Like Crystal)", correct: true },
                             { text: "2. இருட்டாக", correct: false },
                             { text: "3. சிவப்பு நிறமாக", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'நீரூற்று' என்பதன் சரியான விளக்கம் என்ன?",
+                        options: [
+                            { text: "1. இயற்கையாகப் பொழியும் நீர் ஊற்று (Natural Spring)", correct: true },
+                            { text: "2. சுடு தண்ணீர்", correct: false },
+                            { text: "3. நிலக்கரி", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. வாக்கியப் பயன்பாடு: 'அருவி' என்ற சொல்லுக்குப் பொருத்தமான வாக்கியம் எது?",
+                        options: [
+                            { text: "1. மலையிலிருந்து குளிர்ந்த அருவி கொட்டுகிறது", correct: true },
+                            { text: "2. அருவி வானத்தில் பறந்தது", correct: false },
+                            { text: "3. அருவி பையில் இருந்தது", correct: false }
                         ]
                     }
                 ],
@@ -678,7 +713,7 @@
                 ]
             },
             "l1_scene_3b": {
-                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
+                chapter: "அத்தியாயம் 3 • Final Climax (3 Questions)",
                 title: "பளிங்கு அறை & அறிவுக் பொக்கிஷம் (The Crystal Chamber)",
                 bgIcon: "👑",
                 image: "assets/golden_waterfall.jpg",
@@ -691,15 +726,31 @@
                 statusDesc: "அற்புதமான அறிவுத்திறன்! திறவுகோல் புதிரை விடுவித்து பளிங்கு அறையின் மாபெரும் அறிவுக் கருவூலத்தைக் கைப்பற்றி அறிவுக் சக்ரவர்த்தி ஆனீர்கள்!",
                 trophyIcon: "👑",
                 targetNextLevel: "level2",
-                vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பழங்காலம்", "பொக்கிஷம்"],
+                vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பழங்காலம்", "கருவூலம்", "பொக்கிஷம்"],
                 text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழமையான</span> அறிவுக் கருவூலம் என்ற <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> ஒளி வீசுகிறது.",
                 questions: [
                     {
-                        question: "இறுதிச் சவால்: பளிங்கு அறையின் நடுவே ஒளிரும் காட்டின் மாபெரும் பொக்கிஷம் எது?",
+                        question: "1. வாசிப்புப் புதிர்: பளிங்கு அறையின் நடுவே ஒளிரும் காட்டின் மாபெரும் பொக்கிஷம் எது?",
                         options: [
                             { text: "1. அறிவுக் கருவூலம் (Treasury of Wisdom)", correct: true },
                             { text: "2. பழைய கல்", correct: false },
                             { text: "3. இரும்பு நாணயம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'கருவூலம்' என்ற சொல்லின் பொருள் என்ன?",
+                        options: [
+                            { text: "1. அறிவுக் களஞ்சியம் / பொக்கிஷம் (Treasury)", correct: true },
+                            { text: "2. பழைய பெட்டி", correct: false },
+                            { text: "3. இரும்பு கதவு", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. சொல் விளக்கம்: 'பளிங்கு' என்பதன் பொருள் என்ன?",
+                        options: [
+                            { text: "1. தெளிவான கண்ணாடி / பளிங்குக் கல் (Crystal)", correct: true },
+                            { text: "2. கருப்பு மண்", correct: false },
+                            { text: "3. மரப்பட்டை", correct: false }
                         ]
                     }
                 ],
@@ -711,9 +762,9 @@
                 ]
             },
 
-            /* ================= LEVEL 2: CHOLA TIME TRAVEL (2 QUESTIONS PER SCENE) ================= */
+            /* ================= LEVEL 2: CHOLA TIME TRAVEL (ESC: 2 ➔ 3 ➔ 4 QUESTIONS) ================= */
             "l2_scene_1": {
-                chapter: "அத்தியாயம் 1 • Chapter 1",
+                chapter: "அத்தியாயம் 1 • Chapter 1 (2 Questions)",
                 title: "பூம்புகார் துறைமுகம் (Port of Poompuhar)",
                 bgIcon: "🏛️",
                 image: "assets/chola_port.jpg",
@@ -736,8 +787,8 @@
                         question: "2. அருஞ்சொல் புதிர்: 'துறைமுகம்' என்பதன் சரியான பொருள் என்ன?",
                         options: [
                             { text: "1. கப்பல்கள் வந்து நிற்கும் கடல் பகுதி (Sea Port)", correct: true },
-                            { text: "2. பெரிய மலை உச்சி (Mountain Peak)", correct: false },
-                            { text: "3. காட்டின் அடர்ந்த பாதை (Jungle Path)", correct: false }
+                            { text: "2. பெரிய மலை உச்சி", correct: false },
+                            { text: "3. காட்டின் அடர்ந்த பாதை", correct: false }
                         ]
                     }
                 ],
@@ -755,7 +806,7 @@
                 ]
             },
             "l2_scene_2a": {
-                chapter: "அத்தியாயம் 2 • Chapter 2A",
+                chapter: "அத்தியாயம் 2 • Chapter 2A (3 Questions)",
                 title: "கடல் வணிகப் பயணம் (The Ocean Voyage)",
                 bgIcon: "⛵",
                 image: "assets/chola_port.jpg",
@@ -767,7 +818,7 @@
                 text: "சோழர் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>கப்பலில்</span> பயணம் செய்த போது <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> ஒரு <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடியைக் காட்டி: 'இதில் எழுதப்பட்டுள்ள புதிரை விடுவித்தால் சோழ மன்னனின் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> உனக்குக் கிடைக்கும்!' என்றான்.",
                 questions: [
                     {
-                        question: "1. கதையின் படி: சோழர் கப்பலில் மாலுமி சிறுவனுக்கு எதைக் காட்டினான்?",
+                        question: "1. வாசிப்புப் புதிர்: சோழர் கப்பலில் மாலுமி சிறுவனுக்கு எதைக் காட்டினான்?",
                         options: [
                             { text: "1. பனை ஓலைச் சுவடி", correct: true },
                             { text: "2. தங்கக் கிண்ணம்", correct: false },
@@ -775,11 +826,19 @@
                         ]
                     },
                     {
-                        question: "2. வாக்கியப் பயன்பாடு: 'கலங்கரை விளக்கம்' என்ற சொல்லைச் சரியான இடத்தில் அமைப்பது எது?",
+                        question: "2. அருஞ்சொல் புதிர்: 'பனை ஓலை' பழங்காலத்தில் எதற்குப் பயன்பட்டது?",
                         options: [
-                            { text: "1. இரவில் கப்பல்களுக்கு வழிகாட்ட கலங்கரை விளக்கம் ஒளிர்கிறது", correct: true },
-                            { text: "2. சிறுவன் கலங்கரை விளக்கத்தைச் சாப்பிட்டான்", correct: false },
-                            { text: "3. கலங்கரை விளக்கம் மரத்தில் பூத்தது", correct: false }
+                            { text: "1. இலக்கியங்களை எழுதிச் சேமிக்க (Palm Leaf Scroll)", correct: true },
+                            { text: "2. உணவு சமைக்க", correct: false },
+                            { text: "3. கப்பல் செய்ய", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. வாக்கியப் பயன்பாடு: 'கலங்கரை விளக்கம்' எங்கு அமைக்கப்படும்?",
+                        options: [
+                            { text: "1. இரவில் கடற்கரையில் கப்பல்களுக்கு வழிகாட்ட", correct: true },
+                            { text: "2. காட்டின் நடுவே", correct: false },
+                            { text: "3. வீட்டு சமையலறையில்", correct: false }
                         ]
                     }
                 ],
@@ -792,7 +851,7 @@
                 ]
             },
             "l2_scene_2b": {
-                chapter: "அத்தியாயம் 2 • Chapter 2B",
+                chapter: "அத்தியாயம் 2 • Chapter 2B (3 Questions)",
                 title: "ஏட்டுச் சுவடி நூலகம் (Hall of Manuscripts)",
                 bgIcon: "📜",
                 image: "assets/chola_port.jpg",
@@ -815,8 +874,16 @@
                         question: "2. அருஞ்சொல் புதிர்: 'புலவர்' என்ற சொல்லின் விளக்கம் என்ன?",
                         options: [
                             { text: "1. கவிஞர் / தமிழறிஞர் (Poet / Scholar)", correct: true },
-                            { text: "2. கப்பல் மாலுமி (Ship Captain)", correct: false },
-                            { text: "3. காட்டின் மிருகம் (Wild Animal)", correct: false }
+                            { text: "2. கப்பல் மாலுமி", correct: false },
+                            { text: "3. காட்டின் மிருகம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. இடப் பொருள்: 'நூலகம்' என்பதன் பொருள் என்ன?",
+                        options: [
+                            { text: "1. சுவடிகளும் புத்தகங்களும் நிறைந்த இடம் (Library)", correct: true },
+                            { text: "2. சமையல் கூடம்", correct: false },
+                            { text: "3. குதிரை கொட்டகை", correct: false }
                         ]
                     }
                 ],
@@ -829,7 +896,7 @@
                 ]
             },
             "l2_scene_3a": {
-                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
+                chapter: "அத்தியாயம் 3 • Final Climax (4 Questions)",
                 title: "கரிகாலச் சோழனின் பாராட்டு (Praise of King Karikala)",
                 bgIcon: "🗡️",
                 image: "assets/chola_port.jpg",
@@ -846,7 +913,7 @@
                 text: "உங்கள் தமிழ் அறிவைக் கண்டு மன்னன் கரிகாலச் சோழன் உங்களை மெச்சினான்! உங்களுக்குச் சோழர் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> மோதிரத்தையும் தங்க <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> பையையும் பரிசளிக்கத் தயார் செய்கிறான்.",
                 questions: [
                     {
-                        question: "1. இறுதிச் சவால்: அரண்மனை அவையில் சிறுவனின் தமிழ் அறிவைப் பாராட்டிய சோழ மன்னன் யார்?",
+                        question: "1. வாசிப்புப் புதிர்: அரண்மனை அவையில் சிறுவனின் தமிழ் அறிவைப் பாராட்டிய சோழ மன்னன் யார்?",
                         options: [
                             { text: "1. கரிகாலச் சோழன் (King Karikala Chola)", correct: true },
                             { text: "2. முதலாம் ராஜராஜன்", correct: false },
@@ -854,11 +921,27 @@
                         ]
                     },
                     {
-                        question: "2. சொல் பயன்பாடு: 'அரியணை' என்பதன் பொருள் என்ன?",
+                        question: "2. சொல் விளக்கம்: 'அரியணை' என்பதன் பொருள் என்ன?",
                         options: [
                             { text: "1. மன்னரின் அரச சிம்மாசனம் (Royal Throne)", correct: true },
                             { text: "2. மரப் படகு", correct: false },
                             { text: "3. பழைய நாணயம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. அருஞ்சொல் புதிர்: 'முத்திரை' என்ற சொல் எதனைக் குறிக்கிறது?",
+                        options: [
+                            { text: "1. அரச அடையாளம் / சின்னம் (Royal Seal)", correct: true },
+                            { text: "2. உணவுப் பொருள்", correct: false },
+                            { text: "3. கடல் அலை", correct: false }
+                        ]
+                    },
+                    {
+                        question: "4. பயன்பாட்டுப் புதிர்: 'நாணயம்' எதற்குப் பயன்படும்?",
+                        options: [
+                            { text: "1. பொருட்களை வாங்க உதவும் பணம் (Coin Currency)", correct: true },
+                            { text: "2. விளக்கேற்ற", correct: false },
+                            { text: "3. எழுத", correct: false }
                         ]
                     }
                 ],
@@ -870,7 +953,7 @@
                 ]
             },
             "l2_scene_3b": {
-                chapter: "அத்தியாயம் 3 • Final Chapter & Victory Challenge",
+                chapter: "அத்தியாயம் 3 • Final Climax (4 Questions)",
                 title: "சங்கத் தமிழ் பொக்கிஷம் (Sangam Literary Treasure)",
                 bgIcon: "📜",
                 image: "assets/chola_port.jpg",
@@ -887,19 +970,35 @@
                 text: "நீங்கள் புதிரை வென்று சங்கத் தமிழின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> நிறைந்த பெட்டியைத் திறந்தீர்கள்! தமிழ் மொழிப் <span class='vocab-word' data-hint='Scholarship' onclick='openVocabModal(\"புலவர்\")'>புலமைக்கான</span> விருது உங்கள் கைகளில் உள்ளது.",
                 questions: [
                     {
-                        question: "1. இறுதிச் சவால்: புதிரை வென்ற சிறுவனுக்குச் சங்கச் சபையில் வழங்கப்பட்ட உயரிய விருது எது?",
+                        question: "1. வாசிப்புப் புதிர்: புதிரை வென்ற சிறுவனுக்குச் சங்கச் சபையில் வழங்கப்பட்ட உயரிய விருது எது?",
                         options: [
-                            { text: "1. சங்கத் தமிழ் அறிஞர் விருது (Sangam Tamil Laureate)", correct: true },
+                            { text: "1. சங்கத் தமிழ் அறிஞர் விருது", correct: true },
                             { text: "2. வீரப் பட்டம்", correct: false },
                             { text: "3. சிறந்த மாலுமி விருது", correct: false }
                         ]
                     },
                     {
-                        question: "2. அருஞ்சொல் புதிர்: 'முத்திரை' என்பதன் விளக்கம் என்ன?",
+                        question: "2. அருஞ்சொல் புதிர்: 'பொக்கிஷம்' என்பதன் பொருள் என்ன?",
                         options: [
-                            { text: "1. அரச அடையாளம் / சின்னம் (Royal Seal / Emblem)", correct: true },
-                            { text: "2. உணவுப் பொருள்", correct: false },
-                            { text: "3. கடல் அலை", correct: false }
+                            { text: "1. அரிய செல்வம் / கருவூலம் (Treasure)", correct: true },
+                            { text: "2. பழைய கல்", correct: false },
+                            { text: "3. மண்பாண்டம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. வரலாற்றுப் புதிர்: 'தமிழ்ச் சங்கம்' எதற்கு அமைக்கப்பட்டது?",
+                        options: [
+                            { text: "1. தமிழ் மொழியையும் இலக்கியத்தையும் வளர்க்க", correct: true },
+                            { text: "2. போர் செய்ய", correct: false },
+                            { text: "3. வியாபாரம் செய்ய", correct: false }
+                        ]
+                    },
+                    {
+                        question: "4. பேரவை விளக்கம்: 'சங்கம்' என்ற சொல்லின் சிறப்பு என்ன?",
+                        options: [
+                            { text: "1. புலவர்கள் கூடும் தமிழ்ப் பேரவை (Assembly of Scholars)", correct: true },
+                            { text: "2. கப்பல் கூட்டம்", correct: false },
+                            { text: "3. சந்தை", correct: false }
                         ]
                     }
                 ],
@@ -911,9 +1010,9 @@
                 ]
             },
 
-            /* ================= LEVEL 3: MAYA ISLAND NAUTICAL ADVENTURE (3 QUESTIONS PER SCENE) ================= */
+            /* ================= LEVEL 3: MAYA ISLAND NAUTICAL ADVENTURE (ESC: 3 ➔ 4 ➔ 5 QUESTIONS) ================= */
             "l3_scene_1": {
-                chapter: "அத்தியாயம் 1 • Chapter 1",
+                chapter: "அத்தியாயம் 1 • Chapter 1 (3 Questions)",
                 title: "மாயாவி தீவின் கரை (Shore of Maya Island)",
                 bgIcon: "🏴‍☠️",
                 image: "assets/maya_island.jpg",
@@ -963,7 +1062,7 @@
                 ]
             },
             "l3_scene_2a": {
-                chapter: "அத்தியாயம் 2 • Chapter 2A",
+                chapter: "அத்தியாயம் 2 • Chapter 2A (4 Questions)",
                 title: "பவளக் குகை ரகசியம் (Secret of Coral Cave)",
                 bgIcon: "🪸",
                 image: "assets/maya_island.jpg",
@@ -975,7 +1074,7 @@
                 text: "குகைக்குள் சிவப்பான <span class='vocab-word' data-hint='Coral' onclick='openVocabModal(\"பவளம்\")'>பவளப்</span> பாறைகள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> போல மின்னின! குகையின் நடுவில் ஒரு பெரிய <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> பெட்டி இருந்தது. அதில் பெருங்கடலின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்துக்கள்</span> இருந்தன.",
                 questions: [
                     {
-                        question: "1. கதையின் படி: குகைக்குள் பாறைகள் எவ்வாறு மின்னின?",
+                        question: "1. வாசிப்புப் புதிர்: குகைக்குள் பாறைகள் எவ்வாறு மின்னின?",
                         options: [
                             { text: "1. பவளம் போலச் சிவப்பாக", correct: true },
                             { text: "2. நீல நிறமாக", correct: false },
@@ -997,6 +1096,14 @@
                             { text: "2. மரத்தின் கிளையில்", correct: false },
                             { text: "3. குகை சுவரில்", correct: false }
                         ]
+                    },
+                    {
+                        question: "4. பண்புச் சொல்: 'அரிய' என்ற சொல்லின் பொருள் என்ன?",
+                        options: [
+                            { text: "1. கிடைப்பதற்கு அரிய / மதிப்புமிக்க (Rare / Precious)", correct: true },
+                            { text: "2. சாதாரணமான", correct: false },
+                            { text: "3. பயனற்ற", correct: false }
+                        ]
                     }
                 ],
                 choices: [
@@ -1008,7 +1115,7 @@
                 ]
             },
             "l3_scene_2b": {
-                chapter: "அத்தியாயம் 2 • Chapter 2B",
+                chapter: "அத்தியாயம் 2 • Chapter 2B (4 Questions)",
                 title: "எரிமலை கலங்கரை உச்சி (Volcano Lighthouse)",
                 bgIcon: "🌋",
                 image: "assets/maya_island.jpg",
@@ -1020,7 +1127,7 @@
                 text: "<span class='vocab-word' data-hint='Volcano' onclick='openVocabModal(\"எரிமலை\")'>எரிமலை</span> உச்சியிலிருந்த <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடல்</span> முழுவதும் வெளிச்சம் சிந்தியது. அங்குள்ள பழைய <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> உங்கள் <span class='vocab-word' data-hint='Compass' onclick='openVocabModal(\"திசைகாட்டி\")'>திசைகாட்டி</span> திறமையைப் பாராட்டி சாவியைக் கொடுத்தான்!",
                 questions: [
                     {
-                        question: "1. கதையின் படி: எரிமலை உச்சியில் பெருங்கடலுக்கு வெளிச்சம் தந்தது எது?",
+                        question: "1. வாசிப்புப் புதிர்: எரிமலை உச்சியில் பெருங்கடலுக்கு வெளிச்சம் தந்தது எது?",
                         options: [
                             { text: "1. கலங்கரை விளக்கம்", correct: true },
                             { text: "2. பழைய அரண்மனை", correct: false },
@@ -1042,6 +1149,14 @@
                             { text: "2. தோட்டத்தில் நீர் பாய்ச்சுபவர்", correct: false },
                             { text: "3. கவிதை எழுதுபவர்", correct: false }
                         ]
+                    },
+                    {
+                        question: "4. பண்புச் சொல்: 'வெளிச்சம்' என்பதன் பொருள் என்ன?",
+                        options: [
+                            { text: "1. இருளைப் போக்கும் ஒளி (Brightness / Light)", correct: true },
+                            { text: "2. காரிருள்", correct: false },
+                            { text: "3. புகைகூண்டு", correct: false }
+                        ]
                     }
                 ],
                 choices: [
@@ -1053,7 +1168,7 @@
                 ]
             },
             "l3_scene_3a": {
-                chapter: "அத்தியாயம் 3 • Grand Finale & Victory Challenge",
+                chapter: "அத்தியாயம் 3 • Final Climax (5 Questions)",
                 title: "பெருங்கடல் மாலுமி கதாநாயகன் (Hero of the Ocean)",
                 bgIcon: "⚓",
                 image: "assets/maya_island.jpg",
@@ -1070,7 +1185,7 @@
                 text: "மாயாவி தீவின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்து</span> <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> உங்கள் கண் முன்னே ஒளிர்கிறது. <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடலின்</span> மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> பட்டம் உங்களை நோக்கி வருகிறது.",
                 questions: [
                     {
-                        question: "1. இறுதிச் சவால்: மாயாவி தீவின் குகையில் கண்டெடுத்த பெருங்கடல் பொக்கிஷம் எது?",
+                        question: "1. வாசிப்புப் புதிர்: மாயாவி தீவின் குகையில் கண்டெடுத்த பெருங்கடல் பொக்கிஷம் எது?",
                         options: [
                             { text: "1. மாபெரும் முத்து பொக்கிஷம்", correct: true },
                             { text: "2. பழைய மரப் பெட்டி", correct: false },
@@ -1086,11 +1201,27 @@
                         ]
                     },
                     {
-                        question: "3. பட்டச் சிறப்பு: 'கேப்டன்' என்பவருக்குரிய தமிழ் சொல் எது?",
+                        question: "3. ரத்தினப் புதிர்: 'முத்து' எவ்வகை அரிய பொருள்?",
+                        options: [
+                            { text: "1. கடல் சிப்பியில் உருவாகும் ஒளிமிக்க ரத்தினம் (Ocean Pearl)", correct: true },
+                            { text: "2. மரத்துப் பழம்", correct: false },
+                            { text: "3. குகைக் கல்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "4. பட்டச் சிறப்பு: 'கேப்டன்' என்பவருக்குரிய தமிழ் சொல் எது?",
                         options: [
                             { text: "1. மாலுமி / கப்பல் தளபதி (Captain)", correct: true },
                             { text: "2. விவசாயி", correct: false },
                             { text: "3. வணிகன்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "5. பொக்கிஷ விளக்கம்: 'பொக்கிஷம்' என்ற சொல்லின் கருத்து என்ன?",
+                        options: [
+                            { text: "1. மதிப்பற்ற அரிய கருவூலம் (Treasure / Wealth)", correct: true },
+                            { text: "2. உடைந்த குடம்", correct: false },
+                            { text: "3. பழைய இலை", correct: false }
                         ]
                     }
                 ],
@@ -1102,7 +1233,7 @@
                 ]
             },
             "l3_scene_3b": {
-                chapter: "அத்தியாயம் 3 • Grand Finale & Victory Challenge",
+                chapter: "அத்தியாயம் 3 • Final Climax (5 Questions)",
                 title: "தங்கக் கப்பல் கேப்டன் (Captain of the Golden Ship)",
                 bgIcon: "⛵",
                 image: "assets/maya_island.jpg",
@@ -1119,7 +1250,7 @@
                 text: "உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமியாக</span> கரை தொடுகிறீர்கள்.",
                 questions: [
                     {
-                        question: "1. இறுதிச் சவால்: வெற்றிப் பயணத்தை முடித்த சிறுவன் இயக்கிய கப்பல் எது?",
+                        question: "1. வாசிப்புப் புதிர்: வெற்றிப் பயணத்தை முடித்த சிறுவன் இயக்கிய கப்பல் எது?",
                         options: [
                             { text: "1. தங்கக் கப்பல்", correct: true },
                             { text: "2. மரப் படகு", correct: false },
@@ -1135,11 +1266,27 @@
                         ]
                     },
                     {
-                        question: "3. சொல் பயன்பாடு: 'சக்ரவர்த்தி' என்ற பட்டம் எதனைக் குறிக்கும்?",
+                        question: "3. பட்டம் புதிர்: 'சக்ரவர்த்தி' என்ற உயரிய பட்டம் எதனைக் குறிக்கும்?",
                         options: [
                             { text: "1. மாபெரும் பேரரசன் (Emperor)", correct: true },
                             { text: "2. சிறிய வேலைக்காரன்", correct: false },
                             { text: "3. வணிகன்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "4. ஊர்தி இயக்கம்: 'கப்பல்' கடலில் எவ்வாறு செல்லும்?",
+                        options: [
+                            { text: "1. நீரின் மேல் மிதந்து செல்லும் (Floats & Sails)", correct: true },
+                            { text: "2. வானத்தில் பறக்கும்", correct: false },
+                            { text: "3. தரை வழியே ஓடும்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "5. பண்புப் புதிர்: 'சாமர்த்தியம்' என்பதன் பொருள் என்ன?",
+                        options: [
+                            { text: "1. கூரிய புத்தி கூர்மை / திறமை (Wisdom & Skill)", correct: true },
+                            { text: "2. சோம்பேறித்தனம்", correct: false },
+                            { text: "3. பயம்", correct: false }
                         ]
                     }
                 ],
