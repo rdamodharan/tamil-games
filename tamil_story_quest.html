@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamil Story Quest - கதை உலகம்</title>
-    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, maximum inline vocabulary hints, procedural soundtracks, and dynamic XP penalties for retries.">
+    <meta name="description" content="An interactive multi-level Tamil reading adventure game with level-based question progression, vocabulary puzzles, procedural soundtracks, and status title celebrations.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -138,7 +138,7 @@
                             அத்தியாயம் 1 • Chapter 1
                         </span>
                         <span id="story-difficulty-tag" class="text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/50 px-2.5 py-0.5 rounded-full">
-                            எளிது (Beginner)
+                            எளிது (1 Question/Scene)
                         </span>
                     </div>
                     <h2 id="story-title" class="tamil-text text-2xl md:text-3xl font-extrabold text-white mt-2">
@@ -204,15 +204,20 @@
                 </p>
             </div>
 
-            <!-- Final Comprehension Gateway Section -->
+            <!-- Multi-Question Challenge Section -->
             <div id="comprehension-box" class="bg-gradient-to-r from-indigo-950/80 to-slate-900/90 border-2 border-indigo-500/40 rounded-2xl p-5 md:p-6 shadow-lg">
                 <div class="flex items-center justify-between text-indigo-300 font-bold mb-3 text-base">
                     <div class="flex items-center gap-2">
-                        <span>❓</span> <span id="comp-header-label">வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)</span>
+                        <span>❓</span> <span id="comp-header-label">வாசிப்பு & அரும்பொருள் புதிர் சவால்</span>
                     </div>
-                    <span id="xp-potential-badge" class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold">
-                        +50 XP 1-st Try
-                    </span>
+                    <div class="flex items-center gap-2">
+                        <span id="q-counter-badge" class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full font-extrabold">
+                            வினா 1 / 1
+                        </span>
+                        <span id="xp-potential-badge" class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold">
+                            +50 XP 1st Try
+                        </span>
+                    </div>
                 </div>
                 <p id="comp-question" class="tamil-text text-lg md:text-xl font-bold text-white mb-4">
                     <!-- Question injected dynamically -->
@@ -227,7 +232,7 @@
             <div id="choices-container" class="opacity-40 pointer-events-none transition-all duration-300 flex flex-col gap-3">
                 <div class="flex items-center justify-between text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
                     <span>🎯 உங்கள் அடுத்த நடவடிக்கை (Choose Your Path)</span>
-                    <span id="choices-lock-status" class="text-amber-400">🔒 வினாவிற்கு விடையளித்து வழியைத் திறக்கவும்</span>
+                    <span id="choices-lock-status" class="text-amber-400">🔒 வினாக்களுக்கு விடையளித்து வழியைத் திறக்கவும்</span>
                 </div>
                 <div id="choices-grid" class="flex flex-col gap-3">
                     <!-- Choice buttons injected dynamically -->
@@ -361,7 +366,7 @@
                     <h3 class="tamil-text text-2xl md:text-3xl font-extrabold text-amber-400">
                         கதைத் நிலையைத் தேர்ந்தெடுக்கவும்
                     </h3>
-                    <p class="text-slate-400 text-xs sm:text-sm">Select a story adventure level based on difficulty</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Select a story adventure level based on difficulty & question density</p>
                 </div>
             </div>
 
@@ -371,7 +376,7 @@
                         <span class="text-4xl group-hover:scale-110 transition">🌲</span>
                         <div>
                             <span class="text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-800">
-                                நிலை 1 • 🟢 எளிது (Beginner)
+                                நிலை 1 • 🟢 எளிது (1 Question / Scene)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 ஆம்பல் அடவி ரகசியம்
@@ -387,12 +392,12 @@
                         <span class="text-4xl group-hover:scale-110 transition">🏛️</span>
                         <div>
                             <span class="text-xs font-bold text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-800">
-                                நிலை 2 • 🟡 நடுத்தரம் (Intermediate)
+                                நிலை 2 • 🟡 நடுத்தரம் (2 Questions / Scene)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 காலப் பயணம்: சோழ சாம்ராஜ்யம்
                             </h4>
-                            <p class="text-xs text-slate-400">Time-travel to ancient Chola trade ports & solve palm leaf scroll riddles!</p>
+                            <p class="text-xs text-slate-400">Time-travel to Chola ports & solve vocabulary meaning & usage puzzles!</p>
                         </div>
                     </div>
                     <span class="text-amber-400 font-bold text-xl">▶️</span>
@@ -403,12 +408,12 @@
                         <span class="text-4xl group-hover:scale-110 transition">🏴‍☠️</span>
                         <div>
                             <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2.5 py-0.5 rounded-full border border-cyan-800">
-                                நிலை 3 • 🔴 கடினம் (Advanced)
+                                நிலை 3 • 🔴 கடினம் (3 Questions / Scene)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்
                             </h4>
-                            <p class="text-xs text-slate-400">Nautical sea adventure! Navigate ocean storms, compass riddles & coral caves!</p>
+                            <p class="text-xs text-slate-400">Nautical sea adventure! Solve comprehension, word meanings & usage riddles!</p>
                         </div>
                     </div>
                     <span class="text-cyan-400 font-bold text-xl">▶️</span>
@@ -490,20 +495,8 @@
             "அருவி": { hint: "Waterfall", phonetic: "Aruvi", meaning: "நீர்வீழ்ச்சி (Waterfall)", example: "மலையிலிருந்து குளிர்ந்த அருவி கொட்டுகிறது." },
             "பளிங்கு": { hint: "Crystal", phonetic: "Palingu", meaning: "தெளிவான கண்ணாடி / பளிங்குக்கல் (Crystal)", example: "பளிங்கு போன்ற தூய்மையான தண்ணீர் ஓடியது." },
             "நீரூற்று": { hint: "Water Spring", phonetic: "Neerootru", meaning: "இயற்கை நீரூற்று (Natural Spring)", example: "காட்டின் அமுத நீரூற்று குளிர்ந்த நீரைப் பொழிகிறது." },
-            "நிற்கிறீர்கள்": { hint: "Standing", phonetic: "Nirkireergal", meaning: "ஒரு இடத்தில் இருத்தல் (Standing)", example: "நீங்கள் காட்டின் நுழைவில் நிற்கிறீர்கள்." },
-            "சுற்றிலும்": { hint: "All Around", phonetic: "Sutrilum", meaning: "நாலாபுறமும் (All Around / Surrounding)", example: "சுற்றிலும் மரங்கள் இருந்தன." },
-            "ஒலியும்": { hint: "Sound", phonetic: "Oliyum", meaning: "சத்தம் (Sound / Audio)", example: "பறவைகளின் ஒலி கேட்டது." },
-            "பிரிகிறது": { hint: "Splits", phonetic: "Pirigiradhu", meaning: "இரண்டாகப் பிரிவது (Splits into paths)", example: "பாதை இரண்டாகப் பிரிகிறது." },
-            "குறிப்பு": { hint: "Note / Clue", phonetic: "Kurippu", meaning: "அடையாளக் குறிப்பு (Note / Hint / Clue)", example: "பெட்டியில் திறவுகோல் பற்றிய குறிப்பு உள்ளது." },
-            "தெரிகிறது": { hint: "Visible / Appears", phonetic: "Therigiradhu", meaning: "கண்ணுக்குத் தெரிவது (Is Visible)", example: "குகையின் வாசல் தெரிகிறது." },
-            "வண்ணக் கிளி": { hint: "Colorful Parrot", phonetic: "Vannak Kili", meaning: "அழகிய கிளி (Colorful Parrot)", example: "மரத்தின் மேல் வண்ணக் கிளி இருந்தது." },
-            "இருட்டாக": { hint: "Dark", phonetic: "Iruttaaga", meaning: "வெளிச்சம் இல்லாமல் இருத்தல் (Dark / Pitch Black)", example: "குகைக்குள் இருட்டாக இருந்தது." },
-            "செதுக்கப்பட்டிருந்தன": { hint: "Engraved / Carved", phonetic: "Sedhukkappattirundhana", meaning: "கல்லில் செதுக்கிய எழுத்துக்கள் (Engraved / Carved)", example: "சுவரில் எழுத்துக்கள் செதுக்கப்பட்டிருந்தன." },
-            "குளிர்ந்த": { hint: "Cool / Cold", phonetic: "Kulirndha", meaning: "ஜில்லென்ற (Cool / Refreshing)", example: "அருவி குளிர்ந்த நீரைப் பொழிகிறது." },
-            "கருவூலம்": { hint: "Treasury", phonetic: "Karuvoolam", meaning: "அறிவுக் களஞ்சியம் (Repository / Treasury)", example: "அறையில் அறிவுக் கருவூலம் இருந்தது." },
             
             // Level 2 Words
-            "மந்திரக் கடிகாரம்": { hint: "Magic Clock", phonetic: "Mandhira Kadigaaram", meaning: "காலப் பயணம் செய்யும் கடிகாரம் (Time Travel Clock)", example: "மந்திரக் கடிகாரம் பழங்காலத்திற்கு அழைத்துச் சென்றது." },
             "துறைமுகம்": { hint: "Harbor Port", phonetic: "Thuraimugam", meaning: "கப்பல்கள் வந்து நிற்கும் இடம் (Sea Port)", example: "பூம்புகார் சோழநாட்டின் துறைமுகம் ஆகும்." },
             "கலங்கரை விளக்கம்": { hint: "Lighthouse", phonetic: "Kalangarai Vilakkam", meaning: "கப்பல்களுக்கு வழிகாட்டும் கலங்கரை கோபுரம் (Lighthouse)", example: "இரவில் கலங்கரை விளக்கம் வழிகாட்டியது." },
             "பனை ஓலை": { hint: "Palm Scroll", phonetic: "Panai Olai", meaning: "பழங்கால எழுத்துச் சுவடி (Palm Leaf Scroll)", example: "பனை ஓலையில் இலக்கியங்களை எழுதினர்." },
@@ -513,14 +506,6 @@
             "நூலகம்": { hint: "Library", phonetic: "Noolagam", meaning: "புத்தகங்கள் உள்ள இடம் (Library)", example: "அரண்மனை நூலகத்தில் சுவடிகள் இருந்தன." },
             "புலவர்": { hint: "Poet / Scholar", phonetic: "Pulavar", meaning: "கவிஞர் / தமிழறிஞர் (Poet / Scholar)", example: "புலவர் புதிரான செய்யுளைப் பாடினார்." },
             "அரண்மனை": { hint: "Royal Palace", phonetic: "Aranmanai", meaning: "மன்னரின் மாளிகை (Royal Palace)", example: "சோழ அரண்மனை கம்பீரமாக இருந்தது." },
-            "பின்னோக்கி": { hint: "Backward in Time", phonetic: "Pinnokki", meaning: "கடந்த காலத்தை நோக்கி (Backward)", example: "2000 ஆண்டுகள் பின்னோக்கிப் பயணம் செய்தீர்கள்." },
-            "பிரம்மாண்டமான": { hint: "Grand / Huge", phonetic: "Prammaandamaana", meaning: "மிகப்பெரிய (Grand / Massive)", example: "பிரம்மாண்டமான துறைமுகம் இருந்தது." },
-            "தூரத்தில்": { hint: "In Distance", phonetic: "Thoorathil", meaning: "தொலைவில் (In the Distance)", example: "தூரத்தில் கலங்கரை விளக்கம் தெரிந்தது." },
-            "கம்பீரமான": { hint: "Majestic", phonetic: "Kambeeramaana", meaning: "அழகும் பெருமையும் கொண்ட (Majestic / Proud)", example: "கம்பீரமான கப்பல் கடலில் மிதந்தது." },
-            "மிதந்தது": { hint: "Floated / Sailed", phonetic: "Midhandhadhu", meaning: "நீரின் மேல் செல்வது (Floated / Sailed)", example: "கப்பல் தண்ணீரில் மிதந்தது." },
-            "செய்யுள்": { hint: "Poem / Verse", phonetic: "Seyyul", meaning: "கவிதை பாட்டு (Poem / Verse)", example: "புலவர் கவிதைச் செய்யுளைப் பாடினார்." },
-            "அரியணை": { hint: "Throne", phonetic: "Ariyanaai", meaning: "மன்னரின் சிம்மாசனம் (Royal Throne)", example: "மன்னன் அரியணையில் வீற்றிருந்தான்." },
-            "பரிசளித்தான்": { hint: "Awarded / Gifted", phonetic: "Parisalithan", meaning: "பரிசு கொடுப்பது (Gifted / Awarded)", example: "மன்னன் தங்க நாணயத்தைப் பரிசளித்தான்." },
 
             // Level 3 Words
             "பெருங்கடல்": { hint: "Ocean", phonetic: "Perungadal", meaning: "பெரிய சமுத்திரம் (Ocean)", example: "பெருங்கடலில் அலைகள் உயரமாக எழும்பின." },
@@ -530,43 +515,33 @@
             "பவளம்": { hint: "Coral", phonetic: "Pavalam", meaning: "கடல் மணி (Red Coral)", example: "பவளப் பாறைகள் கடலுக்குள் அழகாக இருந்தன." },
             "எரிமலை": { hint: "Volcano", phonetic: "Erimalai", meaning: "நெருப்பு மலை (Volcano)", example: "எரிமலை உச்சியில் கலங்கரை விளக்கம் இருந்தது." },
             "மாலுமி": { hint: "Sailor", phonetic: "Maalumi", meaning: "கப்பல் ஓட்டுபவர் (Sailor / Captain)", example: "தைரியமான மாலுமி கப்பலை இயக்கினான்." },
-            "முத்து": { hint: "Pearl", phonetic: "Muthu", meaning: "கடல் ரத்தினம் (Pearl)", example: "பெட்டிக்குள் ஒளிரும் முத்துக்கள் இருந்தன." },
-            "பயணம்": { hint: "Journey", phonetic: "Payanam", meaning: "பிரயாணம் (Journey / Voyage)", example: "கடல் பயணம் தொடங்கியது." },
-            "ஒதுங்கியது": { hint: "Washed Ashore", phonetic: "Odhungiyadhu", meaning: "கரையை அடைந்தது (Washed Ashore)", example: "கப்பல் கரையில் ஒதுங்கியது." },
-            "மணலில்": { hint: "In Sand", phonetic: "Manalil", meaning: "கடற்கரை மணலில் (In the Sand)", example: "நங்கூரம் மணலில் புதைந்தது." },
-            "புதைந்துள்ளது": { hint: "Buried", phonetic: "Pudhaiyundhulladhu", meaning: "மறைந்து இருத்தல் (Buried)", example: "நங்கூரம் மணலில் புதைந்துள்ளது." },
-            "வடக்கு": { hint: "North Direction", phonetic: "Vadakku", meaning: "வட திசை (North Direction)", example: "திசைகாட்டி வடக்கு நோக்கி காட்டியது." },
-            "பாறைகள்": { hint: "Rocks / Reefs", phonetic: "Paaraigal", meaning: "கடல் பாறைகள் (Rocks / Coral Reefs)", example: "பவளப் பாறைகள் மின்னின." },
-            "சோதி": { hint: "Glow / Flame", phonetic: "Sodhi", meaning: "ஒளிச்சுடர் (Glow / Flame)", example: "பாறைகள் சோதி போல மின்னின." },
-            "அரிய": { hint: "Rare / Precious", phonetic: "Ariya", meaning: "கிடைப்பதற்கு அரிய (Rare / Precious)", example: "அரிய முத்துக்கள் பெட்டியில் இருந்தன." },
-            "வெளிச்சம்": { hint: "Brightness", phonetic: "Velicham", meaning: "ஒளி (Brightness / Light)", example: "கலங்கரை விளக்கம் வெளிச்சம் சிந்தியது." },
-            "தளபதி": { hint: "Captain", phonetic: "Thalapathi", meaning: "கப்பல் கேப்டன் / தளபதி (Captain / Commander)", example: "நீங்கள் கப்பல் தளபதி ஆனீர்கள்." }
+            "முத்து": { hint: "Pearl", phonetic: "Muthu", meaning: "கடல் ரத்தினம் (Pearl)", example: "பெட்டிக்குள் ஒளிரும் முத்துக்கள் இருந்தன." }
         };
 
-        /* ================= MULTI-LEVEL STORY DATA ================= */
+        /* ================= MULTI-LEVEL STORY DATA WITH PROGRESSIVE QUESTION COUNTS ================= */
         const levelStories = {
             "level1": {
                 name: "ஆம்பல் அடவி ரகசியம்",
-                difficulty: "எளிது (Beginner)",
+                difficulty: "எளிது (1 Question / Scene)",
                 difficultyColor: "text-emerald-400 bg-emerald-950/60 border-emerald-800/50",
                 startNode: "l1_scene_1"
             },
             "level2": {
                 name: "காலப் பயணம்: சோழ சாம்ராஜ்யம்",
-                difficulty: "நடுத்தரம் (Intermediate)",
+                difficulty: "நடுத்தரம் (2 Questions / Scene)",
                 difficultyColor: "text-amber-400 bg-amber-950/60 border-amber-800/50",
                 startNode: "l2_scene_1"
             },
             "level3": {
                 name: "மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்",
-                difficulty: "கடினம் (Advanced)",
+                difficulty: "கடினம் (3 Questions / Scene)",
                 difficultyColor: "text-cyan-400 bg-cyan-950/60 border-cyan-800/50",
                 startNode: "l3_scene_1"
             }
         };
 
         const storyNodes = {
-            /* ================= LEVEL 1: JUNGLE ADVENTURE ================= */
+            /* ================= LEVEL 1: JUNGLE ADVENTURE (1 QUESTION PER SCENE) ================= */
             "l1_scene_1": {
                 chapter: "அத்தியாயம் 1 • Chapter 1",
                 title: "ஆம்பல் காட்டின் நுழைவு (Jungle Entrance)",
@@ -576,13 +551,17 @@
                 location: "📍 அடர்ந்த காட்டுப் பாதை",
                 progress: 20,
                 ambienceType: "jungle",
-                vocabKeys: ["அடர்ந்த", "காட்டிற்குள்", "நிற்கிறீர்கள்", "சுற்றிலும்", "உயரமான", "மரங்களும்", "பறவைகளின்", "ஒலியும்", "பாதை", "பிரிகிறது", "மரப்பெட்டி", "திறவுகோல்", "குறிப்பு", "குகையின்", "வாசல்", "தெரிகிறது"],
-                text: "நீங்கள் ஒரு <span class='vocab-word' data-hint='Dense' onclick='openVocabModal(\"அடர்ந்த\")'>அடர்ந்த</span> ஆம்பல் <span class='vocab-word' data-hint='Inside Forest' onclick='openVocabModal(\"காட்டிற்குள்\")'>காட்டிற்குள்</span> <span class='vocab-word' data-hint='Standing' onclick='openVocabModal(\"நிற்கிறீர்கள்\")'>நிற்கிறீர்கள்</span>. <span class='vocab-word' data-hint='All Around' onclick='openVocabModal(\"சுற்றிலும்\")'>சுற்றிலும்</span> <span class='vocab-word' data-hint='Tall' onclick='openVocabModal(\"உயரமான\")'>உயரமான</span> <span class='vocab-word' data-hint='Trees' onclick='openVocabModal(\"மரங்களும்\")'>மரங்களும்</span> <span class='vocab-word' data-hint='Birds&#39;' onclick='openVocabModal(\"பறவைகளின்\")'>பறவைகளின்</span> <span class='vocab-word' data-hint='Sound' onclick='openVocabModal(\"ஒலியும்\")'>ஒலியும்</span> கேட்கின்றன. <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> இரண்டாகப் <span class='vocab-word' data-hint='Splits' onclick='openVocabModal(\"பிரிகிறது\")'>பிரிகிறது</span>. இடது புறத்தில் ஒரு பழைய <span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டி</span> உள்ளது. அதில் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> பற்றிய <span class='vocab-word' data-hint='Note / Clue' onclick='openVocabModal(\"குறிப்பு\")'>குறிப்பு</span> உள்ளது. வலது புறத்தில் ஒரு <span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகையின்</span> <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> <span class='vocab-word' data-hint='Visible / Appears' onclick='openVocabModal(\"தெரிகிறது\")'>தெரிகிறது</span>.",
-                compQuestion: "சிறுவன் நின்ற காட்டின் பெயர் என்ன?",
-                compOptions: [
-                    { text: "1. ஆம்பல் காடு", correct: true },
-                    { text: "2. சுந்தரவனம்", correct: false },
-                    { text: "3. சந்தனக் காடு", correct: false }
+                vocabKeys: ["அடர்ந்த", "காட்டிற்குள்", "உயரமான", "மரங்களும்", "பறவைகளின்", "பாதை", "மரப்பெட்டி", "திறவுகோல்", "குகையின்", "வாசல்"],
+                text: "நீங்கள் ஒரு <span class='vocab-word' data-hint='Dense' onclick='openVocabModal(\"அடர்ந்த\")'>அடர்ந்த</span> ஆம்பல் <span class='vocab-word' data-hint='Inside Forest' onclick='openVocabModal(\"காட்டிற்குள்\")'>காட்டிற்குள்</span> நிற்கிறீர்கள். சுற்றிலும் <span class='vocab-word' data-hint='Tall' onclick='openVocabModal(\"உயரமான\")'>உயரமான</span> <span class='vocab-word' data-hint='Trees' onclick='openVocabModal(\"மரங்களும்\")'>மரங்களும்</span> <span class='vocab-word' data-hint='Birds&#39;' onclick='openVocabModal(\"பறவைகளின்\")'>பறவைகளின்</span> ஒலியும் கேட்கின்றன. <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> இரண்டாகப் பிரிகிறது. இடது புறத்தில் ஒரு பழைய <span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டி</span> உள்ளது. அதில் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> பற்றிய குறிப்பு உள்ளது. வலது புறத்தில் ஒரு <span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகையின்</span> <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> தெரிகிறது.",
+                questions: [
+                    {
+                        question: "சிறுவன் நின்ற காட்டின் பெயர் என்ன?",
+                        options: [
+                            { text: "1. ஆம்பல் காடு", correct: true },
+                            { text: "2. சுந்தரவனம்", correct: false },
+                            { text: "3. சந்தனக் காடு", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -606,13 +585,17 @@
                 location: "📍 ஆலமரத்துப் பாதை",
                 progress: 50,
                 ambienceType: "jungle",
-                vocabKeys: ["மரப்பெட்டி", "பொக்கிஷம்", "வண்ணக் கிளி", "நண்பன்", "அருவி", "பாதை"],
-                text: "<span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டியைத்</span> திறந்ததும் அதற்குள் ஒரு <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> போன்ற வரைபடம் கிடைத்தது! அதை எடுத்தவுடன், மரத்தின் மேலிருந்து ஒரு <span class='vocab-word' data-hint='Colorful Parrot' onclick='openVocabModal(\"வண்ணக் கிளி\")'>வண்ணக் கிளி</span> உங்களைப் பார்த்துப் பேசியது: 'என் அன்பு <span class='vocab-word' data-hint='Friend' onclick='openVocabModal(\"நண்பன்\")'>நண்பன்</span> நீ! காட்டு <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவிக்குப்</span> போக <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> உதவும்!' என்று கூறியது.",
-                compQuestion: "மரப்பெட்டிக்குள் சிறுவனுக்கு என்ன கிடைத்தது?",
-                compOptions: [
-                    { text: "1. ஒரு பழைய நாணயம்", correct: false },
-                    { text: "2. பழமையான வரைபடம்", correct: true },
-                    { text: "3. ஒரு தங்கக் மோதிரம்", correct: false }
+                vocabKeys: ["மரப்பெட்டி", "பொக்கிஷம்", "நண்பன்", "அருவி", "பாதை"],
+                text: "<span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal(\"மரப்பெட்டி\")'>மரப்பெட்டியைத்</span> திறந்ததும் அதற்குள் ஒரு <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> போன்ற வரைபடம் கிடைத்தது! அதை எடுத்தவுடன், மரத்தின் மேலிருந்து ஒரு வண்ணக் கிளி உங்களைப் பார்த்துப் பேசியது: 'என் அன்பு <span class='vocab-word' data-hint='Friend' onclick='openVocabModal(\"நண்பன்\")'>நண்பன்</span> நீ! காட்டு <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவிக்குப்</span> போக <span class='vocab-word' data-hint='Path' onclick='openVocabModal(\"பாதை\")'>பாதை</span> உதவும்!' என்று கூறியது.",
+                questions: [
+                    {
+                        question: "மரப்பெட்டிக்குள் சிறுவனுக்கு என்ன கிடைத்தது?",
+                        options: [
+                            { text: "1. ஒரு பழைய நாணயம்", correct: false },
+                            { text: "2. பழமையான வரைபடம்", correct: true },
+                            { text: "3. ஒரு தங்கக் மோதிரம்", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -636,13 +619,17 @@
                 location: "📍 குகையின் உள்பகுதி",
                 progress: 50,
                 ambienceType: "jungle",
-                vocabKeys: ["குகையின்", "இருட்டாக", "ஒளி", "விளக்கு", "பழங்காலம்", "எழுத்துக்கள்", "செதுக்கப்பட்டிருந்தன", "திறவுகோல்", "வாசல்"],
-                text: "<span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகைக்குள்</span> <span class='vocab-word' data-hint='Dark' onclick='openVocabModal(\"இருட்டாக\")'>இருட்டாக</span> இருந்தது. உங்கள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தரும் <span class='vocab-word' data-hint='Lamp / Lantern' onclick='openVocabModal(\"விளக்கு\")'>விளக்கு</span> வழியைக் காட்டியது! சுவரில் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழங்கால</span> <span class='vocab-word' data-hint='Letters / Scripts' onclick='openVocabModal(\"எழுத்துக்கள்\")'>எழுத்துக்கள்</span> <span class='vocab-word' data-hint='Engraved / Carved' onclick='openVocabModal(\"செதுக்கப்பட்டிருந்தன\")'>செதுக்கப்பட்டிருந்தன</span>. அந்த எழுத்துக்கள் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசலைத்</span> திறக்கச் சொன்னது.",
-                compQuestion: "குகையின் இருட்டைப் போக்க சிறுவனுக்கு எது உதவியது?",
-                compOptions: [
-                    { text: "1. தீப்பந்தம்", correct: false },
-                    { text: "2. மந்திர விளக்கு", correct: true },
-                    { text: "3. சூரிய ஒளி", correct: false }
+                vocabKeys: ["குகையின்", "ஒளி", "விளக்கு", "பழங்காலம்", "எழுத்துக்கள்", "திறவுகோல்", "வாசல்"],
+                text: "<span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகைக்குள்</span> இருட்டாக இருந்தது. உங்கள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தரும் <span class='vocab-word' data-hint='Lamp / Lantern' onclick='openVocabModal(\"விளக்கு\")'>விளக்கு</span> வழியைக் காட்டியது! சுவரில் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழங்கால</span> <span class='vocab-word' data-hint='Letters / Scripts' onclick='openVocabModal(\"எழுத்துக்கள்\")'>எழுத்துக்கள்</span> செதுக்கப்பட்டிருந்தன. அந்த எழுத்துக்கள் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசலைத்</span> திறக்கச் சொன்னது.",
+                questions: [
+                    {
+                        question: "குகையின் இருட்டைப் போக்க சிறுவனுக்கு எது உதவியது?",
+                        options: [
+                            { text: "1. தீப்பந்தம்", correct: false },
+                            { text: "2. மந்திர விளக்கு", correct: true },
+                            { text: "3. சூரிய ஒளி", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -671,13 +658,17 @@
                 statusDesc: "வாழ்த்துக்கள்! உங்கள் கூரிய வாசிப்புப் புரிதலால் ஆம்பல் காட்டின் அரிய அமுத நீரூற்றைக் கண்டுபிடித்து மாபெரும் கதாநாயகன் பட்டம் பெற்றீர்கள்!",
                 trophyIcon: "🏆",
                 targetNextLevel: "level2",
-                vocabKeys: ["அருவி", "பளிங்கு", "ஒளி", "நீரூற்று", "குளிர்ந்த", "பொக்கிஷம்"],
-                text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத <span class='vocab-word' data-hint='Water Spring' onclick='openVocabModal(\"நீரூற்று\")'>நீரூற்று</span> உங்கள் கண் முன்னே <span class='vocab-word' data-hint='Cool / Cold' onclick='openVocabModal(\"குளிர்ந்த\")'>குளிர்ந்த</span> நீரைப் பொழிகிறது.",
-                compQuestion: "இறுதிச் சவால்: காட்டின் தாகத்தைத் தீர்க்கும் நீரூற்றை அடைய நீங்கள் கண்ட நீர்வீழ்ச்சி எவ்வாறு மின்னியது?",
-                compOptions: [
-                    { text: "1. பளிங்கு போல (Like Crystal)", correct: true },
-                    { text: "2. இருட்டாக", correct: false },
-                    { text: "3. சிவப்பு நிறமாக", correct: false }
+                vocabKeys: ["அருவி", "பளிங்கு", "ஒளி", "நீரூற்று", "பொக்கிஷம்"],
+                text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத <span class='vocab-word' data-hint='Water Spring' onclick='openVocabModal(\"நீரூற்று\")'>நீரூற்று</span> உங்கள் கண் முன்னே குளிர்ந்த நீரைப் பொழிகிறது.",
+                questions: [
+                    {
+                        question: "இறுதிச் சவால்: காட்டின் தாகத்தைத் தீர்க்கும் நீரூற்றை அடைய நீங்கள் கண்ட நீர்வீழ்ச்சி எவ்வாறு மின்னியது?",
+                        options: [
+                            { text: "1. பளிங்கு போல (Like Crystal)", correct: true },
+                            { text: "2. இருட்டாக", correct: false },
+                            { text: "3. சிவப்பு நிறமாக", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -700,13 +691,17 @@
                 statusDesc: "அற்புதமான அறிவுத்திறன்! திறவுகோல் புதிரை விடுவித்து பளிங்கு அறையின் மாபெரும் அறிவுக் கருவூலத்தைக் கைப்பற்றி அறிவுக் சக்ரவர்த்தி ஆனீர்கள்!",
                 trophyIcon: "👑",
                 targetNextLevel: "level2",
-                vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பழங்காலம்", "கருவூலம்", "பொக்கிஷம்"],
-                text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழமையான</span> அறிவுக் <span class='vocab-word' data-hint='Treasury' onclick='openVocabModal(\"கருவூலம்\")'>கருவூலம்</span> என்ற <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> ஒளி வீசுகிறது.",
-                compQuestion: "இறுதிச் சவால்: பளிங்கு அறையின் நடுவே ஒளிரும் காட்டின் மாபெரும் பொக்கிஷம் எது?",
-                compOptions: [
-                    { text: "1. அறிவுக் கருவூலம் (Treasury of Wisdom)", correct: true },
-                    { text: "2. பழைய கல்", correct: false },
-                    { text: "3. இரும்பு நாணயம்", correct: false }
+                vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பழங்காலம்", "பொக்கிஷம்"],
+                text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழமையான</span> அறிவுக் கருவூலம் என்ற <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> ஒளி வீசுகிறது.",
+                questions: [
+                    {
+                        question: "இறுதிச் சவால்: பளிங்கு அறையின் நடுவே ஒளிரும் காட்டின் மாபெரும் பொக்கிஷம் எது?",
+                        options: [
+                            { text: "1. அறிவுக் கருவூலம் (Treasury of Wisdom)", correct: true },
+                            { text: "2. பழைய கல்", correct: false },
+                            { text: "3. இரும்பு நாணயம்", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -716,7 +711,7 @@
                 ]
             },
 
-            /* ================= LEVEL 2: CHOLA TIME TRAVEL ================= */
+            /* ================= LEVEL 2: CHOLA TIME TRAVEL (2 QUESTIONS PER SCENE) ================= */
             "l2_scene_1": {
                 chapter: "அத்தியாயம் 1 • Chapter 1",
                 title: "பூம்புகார் துறைமுகம் (Port of Poompuhar)",
@@ -726,13 +721,25 @@
                 location: "📍 சங்க காலச் சோழ துறைமுகம்",
                 progress: 25,
                 ambienceType: "port",
-                vocabKeys: ["மந்திரக் கடிகாரம்", "பின்னோக்கி", "பழங்காலம்", "பிரம்மாண்டமான", "துறைமுகம்", "தூரத்தில்", "கம்பீரமான", "கலங்கரை விளக்கம்", "ஒளி", "வணிகன்", "நாணயம்"],
-                text: "நீங்கள் <span class='vocab-word' data-hint='Magic Clock' onclick='openVocabModal(\"மந்திரக் கடிகாரம்\")'>மந்திரக் கடிகாரம்</span> மூலம் 2000 ஆண்டுகள் <span class='vocab-word' data-hint='Backward in Time' onclick='openVocabModal(\"பின்னோக்கி\")'>பின்னோக்கி</span> <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழங்காலச்</span> சோழர் காலத்திற்கு வந்தீர்கள்! உங்களுக்கு முன்னால் <span class='vocab-word' data-hint='Grand / Massive' onclick='openVocabModal(\"பிரம்மாண்டமான\")'>பிரம்மாண்டமான</span> <span class='vocab-word' data-hint='Harbor Port' onclick='openVocabModal(\"துறைமுகம்\")'>துறைமுகம்</span> உள்ளது. <span class='vocab-word' data-hint='In Distance' onclick='openVocabModal(\"தூரத்தில்\")'>தூரத்தில்</span> <span class='vocab-word' data-hint='Majestic' onclick='openVocabModal(\"கம்பீரமான\")'>கம்பீரமான</span> <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தருகிறது. ஒரு சோழ நாட்டு <span class='vocab-word' data-hint='Merchant' onclick='openVocabModal(\"வணிகன்\")'>வணிகன்</span> உங்களிடம் பழங்காலச் சோழர் <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> ஒன்றை அளிக்கிறான்.",
-                compQuestion: "சிறுவன் பயணம் செய்த வரலாற்று சாம்ராஜ்யம் எது?",
-                compOptions: [
-                    { text: "1. சேர சாம்ராஜ்யம்", correct: false },
-                    { text: "2. சோழ சாம்ராஜ்யம்", correct: true },
-                    { text: "3. பாண்டிய சாம்ராஜ்யம்", correct: false }
+                vocabKeys: ["மந்திரக் கடிகாரம்", "பழங்காலம்", "துறைமுகம்", "கலங்கரை விளக்கம்", "ஒளி", "வணிகன்", "நாணயம்"],
+                text: "நீங்கள் <span class='vocab-word' data-hint='Magic Clock' onclick='openVocabModal(\"மந்திரக் கடிகாரம்\")'>மந்திரக் கடிகாரம்</span> மூலம் 2000 ஆண்டுகள் பின்னோக்கி <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழங்காலச்</span> சோழர் காலத்திற்கு வந்தீர்கள்! உங்களுக்கு முன்னால் பிரம்மாண்டமான <span class='vocab-word' data-hint='Harbor Port' onclick='openVocabModal(\"துறைமுகம்\")'>துறைமுகம்</span> உள்ளது. தூரத்தில் கம்பீரமான <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தருகிறது. ஒரு சோழ நாட்டு <span class='vocab-word' data-hint='Merchant' onclick='openVocabModal(\"வணிகன்\")'>வணிகன்</span> உங்களிடம் பழங்காலச் சோழர் <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> ஒன்றை அளிக்கிறான்.",
+                questions: [
+                    {
+                        question: "1. வாசிப்புப் புதிர்: கதையின் படி, சிறுவன் பயணம் செய்த வரலாற்று சாம்ராஜ்யம் எது?",
+                        options: [
+                            { text: "1. சோழ சாம்ராஜ்யம்", correct: true },
+                            { text: "2. சேர சாம்ராஜ்யம்", correct: false },
+                            { text: "3. பாண்டிய சாம்ராஜ்யம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'துறைமுகம்' என்பதன் சரியான பொருள் என்ன?",
+                        options: [
+                            { text: "1. கப்பல்கள் வந்து நிற்கும் கடல் பகுதி (Sea Port)", correct: true },
+                            { text: "2. பெரிய மலை உச்சி (Mountain Peak)", correct: false },
+                            { text: "3. காட்டின் அடர்ந்த பாதை (Jungle Path)", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -756,13 +763,25 @@
                 location: "📍 வங்காள விரிகுடா கடல்",
                 progress: 60,
                 ambienceType: "ocean",
-                vocabKeys: ["கப்பலில்", "மிதந்தது", "மாலுமி", "பனை ஓலை", "செய்யுள்", "முத்திரை"],
-                text: "சோழர் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>கப்பலில்</span> பயணம் செய்த போது கப்பல் தண்ணீரில் <span class='vocab-word' data-hint='Floated / Sailed' onclick='openVocabModal(\"மிதந்தது\")'>மிதந்தது</span>. <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> ஒரு <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடியைக் காட்டி: 'இதில் எழுதப்பட்டுள்ள கவிதைச் <span class='vocab-word' data-hint='Poem / Verse' onclick='openVocabModal(\"செய்யுள்\")'>செய்யுள்</span> புதிரை விடுவித்தால் சோழ மன்னனின் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> உனக்குக் கிடைக்கும்!' என்றான்.",
-                compQuestion: "மாலுமி சிறுவனுக்கு எதைக் காட்டினான்?",
-                compOptions: [
-                    { text: "1. பனை ஓலைச் சுவடி", correct: true },
-                    { text: "2. தங்கக் கிண்ணம்", correct: false },
-                    { text: "3. பழைய வரைபடம்", correct: false }
+                vocabKeys: ["கப்பலில்", "மாலுமி", "பனை ஓலை", "முத்திரை"],
+                text: "சோழர் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>கப்பலில்</span> பயணம் செய்த போது <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> ஒரு <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடியைக் காட்டி: 'இதில் எழுதப்பட்டுள்ள புதிரை விடுவித்தால் சோழ மன்னனின் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> உனக்குக் கிடைக்கும்!' என்றான்.",
+                questions: [
+                    {
+                        question: "1. கதையின் படி: சோழர் கப்பலில் மாலுமி சிறுவனுக்கு எதைக் காட்டினான்?",
+                        options: [
+                            { text: "1. பனை ஓலைச் சுவடி", correct: true },
+                            { text: "2. தங்கக் கிண்ணம்", correct: false },
+                            { text: "3. பழைய வரைபடம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. வாக்கியப் பயன்பாடு: 'கலங்கரை விளக்கம்' என்ற சொல்லைச் சரியான இடத்தில் அமைப்பது எது?",
+                        options: [
+                            { text: "1. இரவில் கப்பல்களுக்கு வழிகாட்ட கலங்கரை விளக்கம் ஒளிர்கிறது", correct: true },
+                            { text: "2. சிறுவன் கலங்கரை விளக்கத்தைச் சாப்பிட்டான்", correct: false },
+                            { text: "3. கலங்கரை விளக்கம் மரத்தில் பூத்தது", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -783,11 +802,23 @@
                 ambienceType: "port",
                 vocabKeys: ["அரண்மனை", "நூலகம்", "பனை ஓலை", "புலவர்", "முத்திரை"],
                 text: "<span class='vocab-word' data-hint='Royal Palace' onclick='openVocabModal(\"அரண்மனை\")'>அரண்மனை</span> <span class='vocab-word' data-hint='Library' onclick='openVocabModal(\"நூலகம்\")'>நூலகத்தில்</span> ஆயிரக்கணக்கான <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடிகள் அடுக்கி வைக்கப்பட்டிருந்தன. பெரிய <span class='vocab-word' data-hint='Poet / Scholar' onclick='openVocabModal(\"புலவர்\")'>புலவர்</span> ஒருவர் ஒரு புதிரைக் கேட்டார். சரியான விடை கூறினால் அரச <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> பெட்டியைத் திறக்கலாம்!",
-                compQuestion: "நூலகத்தில் எது அடுக்கி வைக்கப்பட்டிருந்தது?",
-                compOptions: [
-                    { text: "1. காகிதப் புத்தகங்கள்", correct: false },
-                    { text: "2. பனை ஓலைச் சுவடிகள்", correct: true },
-                    { text: "3. கல் பலகைகள்", correct: false }
+                questions: [
+                    {
+                        question: "1. வாசிப்புப் புதிர்: அரண்மனை நூலகத்தில் எது அடுக்கி வைக்கப்பட்டிருந்தது?",
+                        options: [
+                            { text: "1. பனை ஓலைச் சுவடிகள்", correct: true },
+                            { text: "2. காகிதப் புத்தகங்கள்", correct: false },
+                            { text: "3. கல் பலகைகள்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'புலவர்' என்ற சொல்லின் விளக்கம் என்ன?",
+                        options: [
+                            { text: "1. கவிஞர் / தமிழறிஞர் (Poet / Scholar)", correct: true },
+                            { text: "2. கப்பல் மாலுமி (Ship Captain)", correct: false },
+                            { text: "3. காட்டின் மிருகம் (Wild Animal)", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -811,13 +842,25 @@
                 statusDesc: "வரலாற்று வெற்றி! கரிகாலச் சோழ மன்னனின் அரச அவையில் உங்கள் கவிப் புலமையை நிரூபித்து சோழநாட்டின் தலைசிறந்த அறிஞர் மகுடம் வென்றீர்கள்!",
                 trophyIcon: "🗡️",
                 targetNextLevel: "level3",
-                vocabKeys: ["அரியணை", "முத்திரை", "நாணயம்", "பரிசளித்தான்", "புலவர்"],
-                text: "உங்கள் தமிழ் அறிவைக் கண்டு <span class='vocab-word' data-hint='Throne' onclick='openVocabModal(\"அரியணை\")'>அரியணையில்</span> வீற்றிருந்த மன்னன் கரிகாலச் சோழன் உங்களை மெச்சினான்! உங்களுக்குச் சோழர் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> மோதிரத்தையும் தங்க <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> பையையும் <span class='vocab-word' data-hint='Awarded / Gifted' onclick='openVocabModal(\"பரிசளித்தான்\")'>பரிசளிக்கத்</span> தயார் செய்கிறான்.",
-                compQuestion: "இறுதிச் சவால்: அரண்மனை அவையில் சிறுவனின் தமிழ் அறிவைப் பாராட்டிய சோழ மன்னன் யார்?",
-                compOptions: [
-                    { text: "1. கரிகாலச் சோழன் (King Karikala Chola)", correct: true },
-                    { text: "2. முதலாம் ராஜராஜன்", correct: false },
-                    { text: "3. நரசிம்மவர்மன்", correct: false }
+                vocabKeys: ["முத்திரை", "நாணயம்", "புலவர்"],
+                text: "உங்கள் தமிழ் அறிவைக் கண்டு மன்னன் கரிகாலச் சோழன் உங்களை மெச்சினான்! உங்களுக்குச் சோழர் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> மோதிரத்தையும் தங்க <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> பையையும் பரிசளிக்கத் தயார் செய்கிறான்.",
+                questions: [
+                    {
+                        question: "1. இறுதிச் சவால்: அரண்மனை அவையில் சிறுவனின் தமிழ் அறிவைப் பாராட்டிய சோழ மன்னன் யார்?",
+                        options: [
+                            { text: "1. கரிகாலச் சோழன் (King Karikala Chola)", correct: true },
+                            { text: "2. முதலாம் ராஜராஜன்", correct: false },
+                            { text: "3. நரசிம்மவர்மன்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. சொல் பயன்பாடு: 'அரியணை' என்பதன் பொருள் என்ன?",
+                        options: [
+                            { text: "1. மன்னரின் அரச சிம்மாசனம் (Royal Throne)", correct: true },
+                            { text: "2. மரப் படகு", correct: false },
+                            { text: "3. பழைய நாணயம்", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -841,12 +884,24 @@
                 trophyIcon: "📜",
                 targetNextLevel: "level3",
                 vocabKeys: ["பொக்கிஷம்", "புலவர்"],
-                text: "நீங்கள் புதிரை வென்று சங்கத் தமிழின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> நிறைந்த பெட்டியைத் திறந்தீர்கள்! தமிழ் மொழிப் <span class='vocab-word' data-hint='Poet / Scholar' onclick='openVocabModal(\"புலவர்\")'>புலமைக்கான</span> விருது உங்கள் கைகளில் உள்ளது.",
-                compQuestion: "இறுதிச் சவால்: புதிரை வென்ற சிறுவனுக்குச் சங்கச் சபையில் வழங்கப்பட்ட உயரிய விருது எது?",
-                compOptions: [
-                    { text: "1. சங்கத் தமிழ் அறிஞர் விருது (Sangam Tamil Laureate)", correct: true },
-                    { text: "2. வீரப் பட்டம்", correct: false },
-                    { text: "3. சிறந்த மாலுமி விருது", correct: false }
+                text: "நீங்கள் புதிரை வென்று சங்கத் தமிழின் மாபெரும் <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> நிறைந்த பெட்டியைத் திறந்தீர்கள்! தமிழ் மொழிப் <span class='vocab-word' data-hint='Scholarship' onclick='openVocabModal(\"புலவர்\")'>புலமைக்கான</span> விருது உங்கள் கைகளில் உள்ளது.",
+                questions: [
+                    {
+                        question: "1. இறுதிச் சவால்: புதிரை வென்ற சிறுவனுக்குச் சங்கச் சபையில் வழங்கப்பட்ட உயரிய விருது எது?",
+                        options: [
+                            { text: "1. சங்கத் தமிழ் அறிஞர் விருது (Sangam Tamil Laureate)", correct: true },
+                            { text: "2. வீரப் பட்டம்", correct: false },
+                            { text: "3. சிறந்த மாலுமி விருது", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'முத்திரை' என்பதன் விளக்கம் என்ன?",
+                        options: [
+                            { text: "1. அரச அடையாளம் / சின்னம் (Royal Seal / Emblem)", correct: true },
+                            { text: "2. உணவுப் பொருள்", correct: false },
+                            { text: "3. கடல் அலை", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -856,7 +911,7 @@
                 ]
             },
 
-            /* ================= LEVEL 3: MAYA ISLAND NAUTICAL ADVENTURE ================= */
+            /* ================= LEVEL 3: MAYA ISLAND NAUTICAL ADVENTURE (3 QUESTIONS PER SCENE) ================= */
             "l3_scene_1": {
                 chapter: "அத்தியாயம் 1 • Chapter 1",
                 title: "மாயாவி தீவின் கரை (Shore of Maya Island)",
@@ -866,13 +921,33 @@
                 location: "📍 மாயாவி தீவின் நங்கூரக் கரை",
                 progress: 30,
                 ambienceType: "ocean",
-                vocabKeys: ["பெருங்கடல்", "பயணம்", "புயல்", "ஒதுங்கியது", "நங்கூரம்", "மணலில்", "புதைந்துள்ளது", "திசைகாட்டி", "வடக்கு"],
-                text: "நீங்கள் <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடல்</span> வழியே <span class='vocab-word' data-hint='Journey' onclick='openVocabModal(\"பயணம்\")'>பயணம்</span> செய்தபோது ஒரு பெரிய <span class='vocab-word' data-hint='Storm' onclick='openVocabModal(\"புயல்\")'>புயல்</span> வீசியது. உங்கள் கப்பல் மாயாவி தீவின் கரையில் <span class='vocab-word' data-hint='Washed Ashore' onclick='openVocabModal(\"ஒதுங்கியது\")'>ஒதுங்கியது</span>. கப்பலின் <span class='vocab-word' data-hint='Anchor' onclick='openVocabModal(\"நங்கூரம்\")'>நங்கூரம்</span> <span class='vocab-word' data-hint='In Sand' onclick='openVocabModal(\"மணலில்\")'>மணலில்</span> <span class='vocab-word' data-hint='Buried' onclick='openVocabModal(\"புதைந்துள்ளது\")'>புதைந்துள்ளது</span>. உங்கள் கையிலுள்ள <span class='vocab-word' data-hint='Compass' onclick='openVocabModal(\"திசைகாட்டி\")'>திசைகாட்டி</span> <span class='vocab-word' data-hint='North Direction' onclick='openVocabModal(\"வடக்கு\")'>வடக்கு</span> நோக்கிப் பயணிக்கச் சொல்கிறது.",
-                compQuestion: "கப்பல் எந்தத் தீவின் கரையில் ஒதுங்கியது?",
-                compOptions: [
-                    { text: "1. மாயாவி தீவு", correct: true },
-                    { text: "2. அந்தமான் தீவு", correct: false },
-                    { text: "3. பவளத் தீவு", correct: false }
+                vocabKeys: ["பெருங்கடல்", "புயல்", "நங்கூரம்", "திசைகாட்டி"],
+                text: "நீங்கள் <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடல்</span> வழியே பயணம் செய்தபோது ஒரு பெரிய <span class='vocab-word' data-hint='Storm' onclick='openVocabModal(\"புயல்\")'>புயல்</span> வீசியது. உங்கள் கப்பல் மாயாவி தீவின் கரையில் ஒதுங்கியது. கப்பலின் <span class='vocab-word' data-hint='Anchor' onclick='openVocabModal(\"நங்கூரம்\")'>நங்கூரம்</span> மணலில் புதைந்துள்ளது. உங்கள் கையிலுள்ள <span class='vocab-word' data-hint='Compass' onclick='openVocabModal(\"திசைகாட்டி\")'>திசைகாட்டி</span> வடக்கு நோக்கிப் பயணிக்கச் சொல்கிறது.",
+                questions: [
+                    {
+                        question: "1. வாசிப்புப் புதிர்: கப்பல் புயலுக்குப் பின் எந்தத் தீவின் கரையில் ஒதுங்கியது?",
+                        options: [
+                            { text: "1. மாயாவி தீவு", correct: true },
+                            { text: "2. அந்தமான் தீவு", correct: false },
+                            { text: "3. பவளத் தீவு", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'நங்கூரம்' என்றால் என்ன?",
+                        options: [
+                            { text: "1. கப்பலை நகராமல் நிறுத்தும் இரும்புக் கருவி (Anchor)", correct: true },
+                            { text: "2. மாலுமி போர்க்கருவி", correct: false },
+                            { text: "3. திசை காட்டும் பலகை", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. கருவிப் பயன்பாடு: 'திசைகாட்டி' எந்தத் திசையை நோக்கிக் காட்டியது?",
+                        options: [
+                            { text: "1. வடக்கு திசை (North)", correct: true },
+                            { text: "2. தெற்கு திசை", correct: false },
+                            { text: "3. மேற்கு திசை", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -896,13 +971,33 @@
                 location: "📍 பவளப் பாறை குகை",
                 progress: 70,
                 ambienceType: "ocean",
-                vocabKeys: ["பவளம்", "பாறைகள்", "சோதி", "ஒளி", "பொக்கிஷம்", "அரிய", "முத்து"],
-                text: "குகைக்குள் சிவப்பான <span class='vocab-word' data-hint='Coral' onclick='openVocabModal(\"பவளம்\")'>பவளப்</span> <span class='vocab-word' data-hint='Rocks / Reefs' onclick='openVocabModal(\"பாறைகள்\")'>பாறைகள்</span> <span class='vocab-word' data-hint='Glow / Flame' onclick='openVocabModal(\"சோதி\")'>சோதி</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னின! குகையின் நடுவில் ஒரு பெரிய <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> பெட்டி இருந்தது. அதில் பெருங்கடலின் <span class='vocab-word' data-hint='Rare / Precious' onclick='openVocabModal(\"அரிய\")'>அரிய</span> <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்துக்கள்</span> இருந்தன.",
-                compQuestion: "குகைக்குள் பாறைகள் எவ்வாறு மின்னின?",
-                compOptions: [
-                    { text: "1. பவளம் போலச் சிவப்பாக", correct: true },
-                    { text: "2. நீல நிறமாக", correct: false },
-                    { text: "3. கறுப்பாக", correct: false }
+                vocabKeys: ["பவளம்", "ஒளி", "பொக்கிஷம்", "முத்து"],
+                text: "குகைக்குள் சிவப்பான <span class='vocab-word' data-hint='Coral' onclick='openVocabModal(\"பவளம்\")'>பவளப்</span> பாறைகள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> போல மின்னின! குகையின் நடுவில் ஒரு பெரிய <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> பெட்டி இருந்தது. அதில் பெருங்கடலின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்துக்கள்</span> இருந்தன.",
+                questions: [
+                    {
+                        question: "1. கதையின் படி: குகைக்குள் பாறைகள் எவ்வாறு மின்னின?",
+                        options: [
+                            { text: "1. பவளம் போலச் சிவப்பாக", correct: true },
+                            { text: "2. நீல நிறமாக", correct: false },
+                            { text: "3. கறுப்பாக", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'பவளம்' என்பது எதனைப் குறிக்கும்?",
+                        options: [
+                            { text: "1. கடலில் விளையும் ரத்தின மணி (Red Coral)", correct: true },
+                            { text: "2. காட்டின் பச்சை இலை", correct: false },
+                            { text: "3. பழைய இரும்பு", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. அரும்பொருள் புதிர்: 'முத்து' எங்கு உருவாக்கப்படுகிறது?",
+                        options: [
+                            { text: "1. பெருங்கடல் சிப்பிக்குள் (Inside Ocean Shell)", correct: true },
+                            { text: "2. மரத்தின் கிளையில்", correct: false },
+                            { text: "3. குகை சுவரில்", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -921,13 +1016,33 @@
                 location: "📍 எரிமலை உச்சி கலங்கரை",
                 progress: 70,
                 ambienceType: "ocean",
-                vocabKeys: ["எரிமலை", "கலங்கரை விளக்கம்", "பெருங்கடல்", "வெளிச்சம்", "மாலுமி", "திசைகாட்டி"],
-                text: "<span class='vocab-word' data-hint='Volcano' onclick='openVocabModal(\"எரிமலை\")'>எரிமலை</span> உச்சியிலிருந்த <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடல்</span> முழுவதும் <span class='vocab-word' data-hint='Brightness' onclick='openVocabModal(\"வெளிச்சம்\")'>வெளிச்சம்</span> சிந்தியது. அங்குள்ள பழைய <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> உங்கள் <span class='vocab-word' data-hint='Compass' onclick='openVocabModal(\"திசைகாட்டி\")'>திசைகாட்டி</span> திறமையைப் பாராட்டி சாவியைக் கொடுத்தான்!",
-                compQuestion: "எரிமலை உச்சியில் எது இருந்தது?",
-                compOptions: [
-                    { text: "1. கலங்கரை விளக்கம்", correct: true },
-                    { text: "2. பழைய அரண்மனை", correct: false },
-                    { text: "3. பெரிய மரம்", correct: false }
+                vocabKeys: ["எரிமலை", "கலங்கரை விளக்கம்", "பெருங்கடல்", "மாலுமி", "திசைகாட்டி"],
+                text: "<span class='vocab-word' data-hint='Volcano' onclick='openVocabModal(\"எரிமலை\")'>எரிமலை</span> உச்சியிலிருந்த <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடல்</span> முழுவதும் வெளிச்சம் சிந்தியது. அங்குள்ள பழைய <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> உங்கள் <span class='vocab-word' data-hint='Compass' onclick='openVocabModal(\"திசைகாட்டி\")'>திசைகாட்டி</span> திறமையைப் பாராட்டி சாவியைக் கொடுத்தான்!",
+                questions: [
+                    {
+                        question: "1. கதையின் படி: எரிமலை உச்சியில் பெருங்கடலுக்கு வெளிச்சம் தந்தது எது?",
+                        options: [
+                            { text: "1. கலங்கரை விளக்கம்", correct: true },
+                            { text: "2. பழைய அரண்மனை", correct: false },
+                            { text: "3. பெரிய மரம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'எரிமலை' என்ற சொல்லின் பொருள் என்ன?",
+                        options: [
+                            { text: "1. நெருப்பைக் கக்கும் மலை (Volcano)", correct: true },
+                            { text: "2. பனிக்கட்டி மலை", correct: false },
+                            { text: "3. தண்ணீர்க் குளம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. தொழில் புதிர்: 'மாலுமி' என்பவரின் பணி என்ன?",
+                        options: [
+                            { text: "1. கப்பலை இயக்கிப் பயணம் செய்பவர் (Sailor / Captain)", correct: true },
+                            { text: "2. தோட்டத்தில் நீர் பாய்ச்சுபவர்", correct: false },
+                            { text: "3. கவிதை எழுதுபவர்", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -951,13 +1066,33 @@
                 statusDesc: "அதிசய சாதனை! மாயாவி தீவின் அரிய முத்து பொக்கிஷத்தைக் கண்டுபிடித்து பெருங்கடலின் மாபெரும் கேப்டன் என்ற உயரிய பட்டத்தை வென்றீர்கள்!",
                 trophyIcon: "⚓",
                 targetNextLevel: "level1",
-                vocabKeys: ["அரிய", "முத்து", "பொக்கிஷம்", "பெருங்கடல்", "மாலுமி"],
-                text: "மாயாவி தீவின் <span class='vocab-word' data-hint='Rare / Precious' onclick='openVocabModal(\"அரிய\")'>அரிய</span> <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்து</span> <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> உங்கள் கண் முன்னே ஒளிர்கிறது. <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடலின்</span> மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> பட்டம் உங்களை நோக்கி வருகிறது.",
-                compQuestion: "இறுதிச் சவால்: மாயாவி தீவின் குகையில் நீங்கள் கண்டெடுத்த அரிய பெருங்கடல் பொக்கிஷம் எது?",
-                compOptions: [
-                    { text: "1. மாபெரும் முத்து பொக்கிஷம் (Ocean Pearl Chest)", correct: true },
-                    { text: "2. பழைய மரப் பெட்டி", correct: false },
-                    { text: "3. இரும்பு நங்கூரம்", correct: false }
+                vocabKeys: ["முத்து", "பொக்கிஷம்", "பெருங்கடல்", "மாலுமி"],
+                text: "மாயாவி தீவின் அரிய <span class='vocab-word' data-hint='Pearl' onclick='openVocabModal(\"முத்து\")'>முத்து</span> <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> உங்கள் கண் முன்னே ஒளிர்கிறது. <span class='vocab-word' data-hint='Ocean' onclick='openVocabModal(\"பெருங்கடல்\")'>பெருங்கடலின்</span> மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> பட்டம் உங்களை நோக்கி வருகிறது.",
+                questions: [
+                    {
+                        question: "1. இறுதிச் சவால்: மாயாவி தீவின் குகையில் கண்டெடுத்த பெருங்கடல் பொக்கிஷம் எது?",
+                        options: [
+                            { text: "1. மாபெரும் முத்து பொக்கிஷம்", correct: true },
+                            { text: "2. பழைய மரப் பெட்டி", correct: false },
+                            { text: "3. இரும்பு நங்கூரம்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'பெருங்கடல்' என்பதன் சரியான பொருள் என்ன?",
+                        options: [
+                            { text: "1. பறந்து விரிந்த பெரிய சமுத்திரம் (Ocean)", correct: true },
+                            { text: "2. சிறிய குளம்", correct: false },
+                            { text: "3. ஆறு", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. பட்டச் சிறப்பு: 'கேப்டன்' என்பவருக்குரிய தமிழ் சொல் எது?",
+                        options: [
+                            { text: "1. மாலுமி / கப்பல் தளபதி (Captain)", correct: true },
+                            { text: "2. விவசாயி", correct: false },
+                            { text: "3. வணிகன்", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -980,13 +1115,33 @@
                 statusDesc: "பிரமாண்டமான வெற்றி! உங்கள் கூரிய மாலுமி திறமையால் தங்கக் கப்பலை இயக்கி கதை உலகத்தின் தங்கக் கப்பல் சக்ரவர்த்தி ஆனீர்கள்!",
                 trophyIcon: "⛵",
                 targetNextLevel: "level1",
-                vocabKeys: ["கப்பலில்", "மாலுமி", "தளபதி", "பொக்கிஷம்"],
-                text: "உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமியாக\")'>மாலுமியாக</span> கரை தொடுகிறீர்கள். நீங்கள் தங்கக் கப்பலின் மாபெரும் <span class='vocab-word' data-hint='Commander' onclick='openVocabModal(\"தளபதி\")'>தளபதி</span> ஆனீர்கள்!",
-                compQuestion: "இறுதிச் சவால்: புயலைக் கடந்து வெற்றிப் பயணத்தை முடித்த சிறுவன் இயக்கிய கப்பலின் பெயர் என்ன?",
-                compOptions: [
-                    { text: "1. தங்கக் கப்பல் (Golden Ship)", correct: true },
-                    { text: "2. மரப் படகு", correct: false },
-                    { text: "3. பழைய படகு", correct: false }
+                vocabKeys: ["கப்பலில்", "மாலுமி", "பொக்கிஷம்"],
+                text: "உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமியாக</span> கரை தொடுகிறீர்கள்.",
+                questions: [
+                    {
+                        question: "1. இறுதிச் சவால்: வெற்றிப் பயணத்தை முடித்த சிறுவன் இயக்கிய கப்பல் எது?",
+                        options: [
+                            { text: "1. தங்கக் கப்பல்", correct: true },
+                            { text: "2. மரப் படகு", correct: false },
+                            { text: "3. பழைய படகு", correct: false }
+                        ]
+                    },
+                    {
+                        question: "2. அருஞ்சொல் புதிர்: 'தளபதி' என்பதன் பொருள் என்ன?",
+                        options: [
+                            { text: "1. படைத் தலைவன் / கேப்டன் (Commander / Captain)", correct: true },
+                            { text: "2. வேலை செய்பவர்", correct: false },
+                            { text: "3. சமையல்காரர்", correct: false }
+                        ]
+                    },
+                    {
+                        question: "3. சொல் பயன்பாடு: 'சக்ரவர்த்தி' என்ற பட்டம் எதனைக் குறிக்கும்?",
+                        options: [
+                            { text: "1. மாபெரும் பேரரசன் (Emperor)", correct: true },
+                            { text: "2. சிறிய வேலைக்காரன்", correct: false },
+                            { text: "3. வணிகன்", correct: false }
+                        ]
+                    }
                 ],
                 choices: [
                     {
@@ -1011,7 +1166,8 @@
 
         let currentModalWordKey = "";
         let pendingVictoryData = null;
-        let attemptsForCurrentScene = 0;
+        let activeQuestionIndex = 0;
+        let attemptsForActiveQuestion = 0;
 
         /* ================= ADVANCED PROCEDURAL SOUNDTRACK ENGINE (WEB AUDIO API) ================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1483,26 +1639,12 @@
 
             gameState.currentNode = nodeId;
             gameState.comprehensionPassed = false;
-            attemptsForCurrentScene = 0; // Reset attempts counter for new scene
+            activeQuestionIndex = 0;
+            attemptsForActiveQuestion = 0;
 
             // Update UI Chapter, Difficulty & Progress
             document.getElementById('story-chapter-tag').textContent = node.chapter;
             document.getElementById('story-title').textContent = node.title;
-
-            // Reset XP potential badge
-            const xpBadge = document.getElementById('xp-potential-badge');
-            xpBadge.textContent = '+50 XP (1st Try)';
-            xpBadge.className = 'text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold';
-
-            // Header label for comprehension box
-            const compLabel = document.getElementById('comp-header-label');
-            if (node.isEndingNode) {
-                compLabel.textContent = '🏆 இறுதிச் சவால் (Final Victory Challenge)';
-                compLabel.className = 'text-amber-400 font-extrabold';
-            } else {
-                compLabel.textContent = 'வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)';
-                compLabel.className = 'text-indigo-300 font-bold';
-            }
             
             const lvlInfo = levelStories[gameState.currentLevel];
             if (lvlInfo) {
@@ -1540,28 +1682,10 @@
                 hintsContainer.innerHTML = '<span class="text-slate-500 italic">சொற்கள் இல்லை</span>';
             }
 
-            // Render Comprehension Question
-            document.getElementById('comp-question').textContent = node.compQuestion;
-            const compOptionsContainer = document.getElementById('comp-options');
-            compOptionsContainer.innerHTML = '';
-            
-            node.compOptions.forEach((opt) => {
-                const btn = document.createElement('button');
-                btn.className = 'bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98';
-                btn.innerHTML = `<span>${opt.text}</span> <span class="opt-status text-xs"></span>`;
-                btn.onclick = () => handleComprehensionAnswer(opt.correct, btn, node);
-                compOptionsContainer.appendChild(btn);
-            });
-
-            // Hide feedback box
-            const compFeedback = document.getElementById('comp-feedback');
-            compFeedback.className = 'mt-3 text-sm font-semibold hidden p-3 rounded-xl';
-            compFeedback.textContent = '';
-
             // Lock Choices initially
             const choicesContainer = document.getElementById('choices-container');
             choicesContainer.classList.add('opacity-40', 'pointer-events-none');
-            document.getElementById('choices-lock-status').textContent = '🔒 வினாவிற்கு விடையளித்து வழியைத் திறக்கவும்';
+            document.getElementById('choices-lock-status').textContent = '🔒 வினாக்களுக்கு விடையளித்து வழியைத் திறக்கவும்';
 
             // Render Choice Buttons
             const choicesGrid = document.getElementById('choices-grid');
@@ -1575,11 +1699,60 @@
                 choicesGrid.appendChild(btn);
             });
 
+            // Render First Question of Node
+            renderActiveQuestion();
+
             // Trigger Pop Animation
             const storyCard = document.getElementById('story-card');
             storyCard.classList.remove('animate-pop');
             void storyCard.offsetWidth;
             storyCard.classList.add('animate-pop');
+        }
+
+        /* Render Current Sequential Question */
+        function renderActiveQuestion() {
+            const node = storyNodes[gameState.currentNode];
+            if (!node || !node.questions || node.questions.length === 0) return;
+
+            const qObj = node.questions[activeQuestionIndex];
+            attemptsForActiveQuestion = 0; // Reset attempts counter for current active question
+
+            // Update Counter Badge
+            const qCounterBadge = document.getElementById('q-counter-badge');
+            qCounterBadge.textContent = `வினா ${activeQuestionIndex + 1} / ${node.questions.length}`;
+
+            // Reset Potential XP Badge
+            const xpBadge = document.getElementById('xp-potential-badge');
+            xpBadge.textContent = '+50 XP (1st Try)';
+            xpBadge.className = 'text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold';
+
+            // Header Label
+            const compLabel = document.getElementById('comp-header-label');
+            if (node.isEndingNode) {
+                compLabel.textContent = `🏆 இறுதிச் சவால் (${activeQuestionIndex + 1}/${node.questions.length})`;
+                compLabel.className = 'text-amber-400 font-extrabold';
+            } else {
+                compLabel.textContent = `வாசிப்பு & அரும்பொருள் புதிர் (${activeQuestionIndex + 1}/${node.questions.length})`;
+                compLabel.className = 'text-indigo-300 font-bold';
+            }
+
+            // Question Text & Options
+            document.getElementById('comp-question').textContent = qObj.question;
+            const compOptionsContainer = document.getElementById('comp-options');
+            compOptionsContainer.innerHTML = '';
+
+            qObj.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98';
+                btn.innerHTML = `<span>${opt.text}</span> <span class="opt-status text-xs"></span>`;
+                btn.onclick = () => handleComprehensionAnswer(opt.correct, btn, node);
+                compOptionsContainer.appendChild(btn);
+            });
+
+            // Hide feedback box
+            const compFeedback = document.getElementById('comp-feedback');
+            compFeedback.className = 'mt-3 text-sm font-semibold hidden p-3 rounded-xl';
+            compFeedback.textContent = '';
         }
 
         function handleComprehensionAnswer(isCorrect, btnElement, currentNodeObj) {
@@ -1591,45 +1764,60 @@
                 btnElement.classList.add('border-emerald-500');
                 btnElement.querySelector('.opt-status').textContent = '✅';
 
-                // Calculate XP earned based on attempt count
+                // Calculate XP earned based on attempt count for this active question
                 let xpGained = 50;
-                if (attemptsForCurrentScene === 1) xpGained = 30;
-                else if (attemptsForCurrentScene === 2) xpGained = 15;
-                else if (attemptsForCurrentScene >= 3) xpGained = 5;
+                if (attemptsForActiveQuestion === 1) xpGained = 30;
+                else if (attemptsForActiveQuestion === 2) xpGained = 15;
+                else if (attemptsForActiveQuestion >= 3) xpGained = 5;
 
-                if (!gameState.comprehensionPassed) {
-                    gameState.xp += xpGained;
-                    document.getElementById('xp-display').textContent = `${gameState.xp} XP`;
-                    gameState.comprehensionPassed = true;
-                }
+                gameState.xp += xpGained;
+                document.getElementById('xp-display').textContent = `${gameState.xp} XP`;
 
-                compFeedback.className = 'mt-3 text-sm font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 p-3.5 rounded-xl animate-pop';
-                compFeedback.textContent = `🎉 சரியான விடை! வழிகள் திறக்கப்பட்டன (+${xpGained} XP)`;
+                const totalQuestions = currentNodeObj.questions.length;
 
-                // Unlock Choices
-                const choicesContainer = document.getElementById('choices-container');
-                choicesContainer.classList.remove('opacity-40', 'pointer-events-none');
-                document.getElementById('choices-lock-status').textContent = '🔓 வழி திறக்கப்பட்டது!';
-                document.getElementById('choices-lock-status').classList.replace('text-amber-400', 'text-emerald-400');
-
-                if (currentNodeObj && currentNodeObj.isEndingNode) {
-                    setTimeout(() => {
-                        triggerVictoryCeremony(currentNodeObj);
-                    }, 400);
-                } else {
+                if (activeQuestionIndex < totalQuestions - 1) {
+                    // Advance to Next Question in same scene
                     playSound('success');
+                    compFeedback.className = 'mt-3 text-sm font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 p-3.5 rounded-xl animate-pop';
+                    compFeedback.textContent = `🎉 சரியான விடை! (+${xpGained} XP) • அடுத்த வினாவுக்குச் செல்கிறது...`;
+
+                    setTimeout(() => {
+                        activeQuestionIndex++;
+                        renderActiveQuestion();
+                    }, 1200);
+
+                } else {
+                    // All Questions Completed for this scene!
+                    gameState.comprehensionPassed = true;
+
+                    compFeedback.className = 'mt-3 text-sm font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 p-3.5 rounded-xl animate-pop';
+                    compFeedback.textContent = `🎉 அனைத்து வினாக்களுக்கும் சரியான விடை! (+${xpGained} XP) வழிகள் திறக்கப்பட்டன!`;
+
+                    // Unlock Choices
+                    const choicesContainer = document.getElementById('choices-container');
+                    choicesContainer.classList.remove('opacity-40', 'pointer-events-none');
+                    document.getElementById('choices-lock-status').textContent = '🔓 வழிகள் திறக்கப்பட்டன!';
+                    document.getElementById('choices-lock-status').classList.replace('text-amber-400', 'text-emerald-400');
+
+                    if (currentNodeObj && currentNodeObj.isEndingNode) {
+                        setTimeout(() => {
+                            triggerVictoryCeremony(currentNodeObj);
+                        }, 500);
+                    } else {
+                        playSound('success');
+                    }
                 }
             } else {
                 playSound('error');
-                attemptsForCurrentScene++;
+                attemptsForActiveQuestion++;
 
                 btnElement.classList.replace('bg-slate-800', 'bg-rose-600/30');
                 btnElement.classList.add('border-rose-500');
                 btnElement.querySelector('.opt-status').textContent = '❌';
 
                 let nextXpPossible = 30;
-                if (attemptsForCurrentScene === 2) nextXpPossible = 15;
-                else if (attemptsForCurrentScene >= 3) nextXpPossible = 5;
+                if (attemptsForActiveQuestion === 2) nextXpPossible = 15;
+                else if (attemptsForActiveQuestion >= 3) nextXpPossible = 5;
 
                 const xpBadge = document.getElementById('xp-potential-badge');
                 xpBadge.textContent = `+${nextXpPossible} XP (Retry)`;
