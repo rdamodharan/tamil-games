@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamil Story Quest - கதை உலகம்</title>
-    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, procedural background soundtracks, audio narration, and vocabulary tools.">
+    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, extensive inline vocabulary hints, procedural soundtracks, and comprehension challenges.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -149,7 +149,6 @@
                     <button id="slow-speech-btn" onclick="toggleSlowSpeech()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 font-semibold px-3 py-2 rounded-xl transition text-xs sm:text-sm" title="Toggle Slow Narration Speed">
                         <span>🐢</span> <span id="slow-speech-text">மெதுவான வாசிப்பு (Normal)</span>
                     </button>
-                    <!-- Procedural Soundtrack Ambience Toggle -->
                     <button id="ambience-btn" onclick="toggleAmbience()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 font-semibold px-3.5 py-2 rounded-xl transition text-xs sm:text-sm">
                         <span id="ambience-icon">🎵</span> <span id="ambience-text">பின்னணி இசை (Music)</span>
                     </button>
@@ -478,10 +477,16 @@
             "பொக்கிஷம்": { hint: "Treasure", phonetic: "Pokkisham", meaning: "செல்வம் / புதையல் (Treasure)", example: "அறிவே சிறந்த பொக்கிஷம் ஆகும்." },
             "நண்பன்": { hint: "Friend", phonetic: "Nanban", meaning: "தோழன் (Friend)", example: "கிளி சிறுவனுக்கு நல்ல நண்பனாக மாறியது." },
             "ஒளி": { hint: "Light", phonetic: "Oli", meaning: "வெளிச்சம் (Light / Glow)", example: "மந்திர விளக்கு வெளிச்சம் தந்தது." },
+            "விளக்கு": { hint: "Lamp / Lantern", phonetic: "Vilakku", meaning: "வெளிச்சம் தரும் விளக்கு (Lamp / Lantern)", example: "குகைக்குள் மந்திர விளக்கு ஒளிர்கிறது." },
+            "பழங்காலம்": { hint: "Ancient Times", phonetic: "Pazhangaalam", meaning: "பண்டைய காலம் (Ancient Times / History)", example: "சுவரில் பழங்கால எழுத்துக்கள் செதுக்கப்பட்டிருந்தன." },
+            "எழுத்துக்கள்": { hint: "Letters / Scripts", phonetic: "Ezhuthukkal", meaning: "எழுத்துக்கள் / கல்வெட்டு (Letters / Inscriptions)", example: "பழைய எழுத்துக்கள் வழியைக் காட்டின." },
+            "ரகசியம்": { hint: "Secret", phonetic: "Ragasiyam", meaning: "மறைபொருள் (Secret)", example: "இந்தக் குகைக்குள் ஒரு பெரிய ரகசியம் உள்ளது." },
             "அருவி": { hint: "Waterfall", phonetic: "Aruvi", meaning: "நீர்வீழ்ச்சி (Waterfall)", example: "மலையிலிருந்து குளிர்ந்த அருவி கொட்டுகிறது." },
             "பளிங்கு": { hint: "Crystal", phonetic: "Palingu", meaning: "தெளிவான கண்ணாடி / பளிங்குக்கல் (Crystal)", example: "பளிங்கு போன்ற தூய்மையான தண்ணீர் ஓடியது." },
+            "நீரூற்று": { hint: "Water Spring", phonetic: "Neerootru", meaning: "இயற்கை நீரூற்று (Natural Spring)", example: "காட்டின் அமுத நீரூற்று குளிர்ந்த நீரைப் பொழிகிறது." },
             
             // Level 2 Words
+            "மந்திரக் கடிகாரம்": { hint: "Magic Clock", phonetic: "Mandhira Kadigaaram", meaning: "காலப் பயணம் செய்யும் கடிகாரம் (Time Travel Clock)", example: "மந்திரக் கடிகாரம் பழங்காலத்திற்கு அழைத்துச் சென்றது." },
             "துறைமுகம்": { hint: "Harbor Port", phonetic: "Thuraimugam", meaning: "கப்பல்கள் வந்து நிற்கும் இடம் (Sea Port)", example: "பூம்புகார் சோழநாட்டின் துறைமுகம் ஆகும்." },
             "கலங்கரை விளக்கம்": { hint: "Lighthouse", phonetic: "Kalangarai Vilakkam", meaning: "கப்பல்களுக்கு வழிகாட்டும் கலங்கரை கோபுரம் (Lighthouse)", example: "இரவில் கலங்கரை விளக்கம் வழிகாட்டியது." },
             "பனை ஓலை": { hint: "Palm Scroll", phonetic: "Panai Olai", meaning: "பழங்கால எழுத்துச் சுவடி (Palm Leaf Scroll)", example: "பனை ஓலையில் இலக்கியங்களை எழுதினர்." },
@@ -489,7 +494,8 @@
             "முத்திரை": { hint: "Royal Seal", phonetic: "Muthirai", meaning: "அரச அடையாளம் (Royal Seal / Emblem)", example: "புலி முத்திரை சோழ மன்னனின் அடையாளம்." },
             "வணிகன்": { hint: "Merchant", phonetic: "Vanigan", meaning: "வியாபாரி (Merchant / Trader)", example: "வணிகன் கப்பலில் பொருட்களைக் கொண்டுவந்தான்." },
             "நூலகம்": { hint: "Library", phonetic: "Noolagam", meaning: "புத்தகங்கள் உள்ள இடம் (Library)", example: "அரண்மனை நூலகத்தில் சுவடிகள் இருந்தன." },
-            "புலவர்": { hint: "Poet", phonetic: "Pulavar", meaning: "கவிஞர் / தமிழறிஞர் (Poet / Scholar)", example: "புலவர் புதிரான செய்யுளைப் பாடினார்." },
+            "புலவர்": { hint: "Poet / Scholar", phonetic: "Pulavar", meaning: "கவிஞர் / தமிழறிஞர் (Poet / Scholar)", example: "புலவர் புதிரான செய்யுளைப் பாடினார்." },
+            "அரண்மனை": { hint: "Royal Palace", phonetic: "Aranmanai", meaning: "மன்னரின் மாளிகை (Royal Palace)", example: "சோழ அரண்மனை கம்பீரமாக இருந்தது." },
 
             // Level 3 Words
             "பெருங்கடல்": { hint: "Ocean", phonetic: "Perungadal", meaning: "பெரிய சமுத்திரம் (Ocean)", example: "பெருங்கடலில் அலைகள் உயரமாக எழும்பின." },
@@ -595,8 +601,8 @@
                 location: "📍 குகையின் உள்பகுதி",
                 progress: 50,
                 ambienceType: "jungle",
-                vocabKeys: ["குகையின்", "ஒளி", "திறவுகோல்", "வாசல்"],
-                text: "<span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகைக்குள்</span> இருட்டாக இருந்தது. உங்கள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தரும் விளக்கு வழியைக் காட்டியது! சுவரில் பழங்கால எழுத்துக்கள் செதுக்கப்பட்டிருந்தன. அந்த எழுத்துக்கள் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசலைத்</span> திறக்கச் சொன்னது.",
+                vocabKeys: ["குகையின்", "ஒளி", "விளக்கு", "பழங்காலம்", "எழுத்துக்கள்", "திறவுகோல்", "வாசல்"],
+                text: "<span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal(\"குகையின்\")'>குகைக்குள்</span> இருட்டாக இருந்தது. உங்கள் <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தரும் <span class='vocab-word' data-hint='Lamp / Lantern' onclick='openVocabModal(\"விளக்கு\")'>விளக்கு</span> வழியைக் காட்டியது! சுவரில் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழங்கால</span> <span class='vocab-word' data-hint='Letters / Scripts' onclick='openVocabModal(\"எழுத்துக்கள்\")'>எழுத்துக்கள்</span> செதுக்கப்பட்டிருந்தன. அந்த எழுத்துக்கள் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசலைத்</span> திறக்கச் சொன்னது.",
                 compQuestion: "குகையின் இருட்டைப் போக்க சிறுவனுக்கு எது உதவியது?",
                 compOptions: [
                     { text: "1. தீப்பந்தம்", correct: false },
@@ -630,8 +636,8 @@
                 statusDesc: "வாழ்த்துக்கள்! உங்கள் கூரிய வாசிப்புப் புரிதலால் ஆம்பல் காட்டின் அரிய அமுத நீரூற்றைக் கண்டுபிடித்து மாபெரும் கதாநாயகன் பட்டம் பெற்றீர்கள்!",
                 trophyIcon: "🏆",
                 targetNextLevel: "level2",
-                vocabKeys: ["அருவி", "பளிங்கு", "ஒளி", "பொக்கிஷம்"],
-                text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத நீரூற்று உங்கள் கண் முன்னே குளிர்ந்த நீரைப் பொழிகிறது.",
+                vocabKeys: ["அருவி", "பளிங்கு", "ஒளி", "நீரூற்று", "பொக்கிஷம்"],
+                text: "நீங்கள் அழகிய <span class='vocab-word' data-hint='Waterfall' onclick='openVocabModal(\"அருவி\")'>அருவி</span> கரையை அடைந்தீர்கள்! நீர்வீழ்ச்சி <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> போல <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> வீசி மின்னியது. காட்டின் தாகத்தைத் தீர்க்கும் அமுத <span class='vocab-word' data-hint='Water Spring' onclick='openVocabModal(\"நீரூற்று\")'>நீரூற்று</span> உங்கள் கண் முன்னே குளிர்ந்த நீரைப் பொழிகிறது.",
                 compQuestion: "இறுதிச் சவால்: காட்டின் தாகத்தைத் தீர்க்கும் நீரூற்றை அடைய நீங்கள் கண்ட நீர்வீழ்ச்சி எவ்வாறு மின்னியது?",
                 compOptions: [
                     { text: "1. பளிங்கு போல (Like Crystal)", correct: true },
@@ -659,8 +665,8 @@
                 statusDesc: "அற்புதமான அறிவுத்திறன்! திறவுகோல் புதிரை விடுவித்து பளிங்கு அறையின் மாபெரும் அறிவுக் கருவூலத்தைக் கைப்பற்றி அறிவுக் சக்ரவர்த்தி ஆனீர்கள்!",
                 trophyIcon: "👑",
                 targetNextLevel: "level2",
-                vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பொக்கிஷம்"],
-                text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் பழமையான அறிவுக் கருவூலம் ஒளி வீசுகிறது.",
+                vocabKeys: ["திறவுகோல்", "வாசல்", "பளிங்கு", "பழங்காலம்", "பொக்கிஷம்"],
+                text: "<span class='vocab-word' data-hint='Key' onclick='openVocabModal(\"திறவுகோல்\")'>திறவுகோல்</span> கொண்டு <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal(\"வாசல்\")'>வாசல்</span> திறந்தது! உள்ளே <span class='vocab-word' data-hint='Crystal' onclick='openVocabModal(\"பளிங்கு\")'>பளிங்கு</span> கற்களால் ஆன பெரிய அறை இருந்தது. அதில் காட்டின் <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழமையான</span> அறிவுக் கருவூலம் என்ற <span class='vocab-word' data-hint='Treasure' onclick='openVocabModal(\"பொக்கிஷம்\")'>பொக்கிஷம்</span> ஒளி வீசுகிறது.",
                 compQuestion: "இறுதிச் சவால்: பளிங்கு அறையின் நடுவே ஒளிரும் காட்டின் மாபெரும் பொக்கிஷம் எது?",
                 compOptions: [
                     { text: "1. அறிவுக் கருவூலம் (Treasury of Wisdom)", correct: true },
@@ -685,8 +691,8 @@
                 location: "📍 சங்க காலச் சோழ துறைமுகம்",
                 progress: 25,
                 ambienceType: "port",
-                vocabKeys: ["துறைமுகம்", "கலங்கரை விளக்கம்", "ஒளி", "வணிகன்", "நாணயம்"],
-                text: "நீங்கள் மந்திரக் கடிகாரம் மூலம் 2000 ஆண்டுகள் பின்னோக்கி சோழர் காலத்திற்கு வந்தீர்கள்! உங்களுக்கு முன்னால் பிரம்மாண்டமான <span class='vocab-word' data-hint='Harbor Port' onclick='openVocabModal(\"துறைமுகம்\")'>துறைமுகம்</span> உள்ளது. தூரத்தில் கம்பீரமான <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தருகிறது. ஒரு சோழ நாட்டு <span class='vocab-word' data-hint='Merchant' onclick='openVocabModal(\"வணிகன்\")'>வணிகன்</span> உங்களிடம் பழங்காலச் சோழர் <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> ஒன்றை அளிக்கிறான்.",
+                vocabKeys: ["மந்திரக் கடிகாரம்", "பழங்காலம்", "துறைமுகம்", "கலங்கரை விளக்கம்", "ஒளி", "வணிகன்", "நாணயம்"],
+                text: "நீங்கள் <span class='vocab-word' data-hint='Magic Clock' onclick='openVocabModal(\"மந்திரக் கடிகாரம்\")'>மந்திரக் கடிகாரம்</span> மூலம் 2000 ஆண்டுகள் பின்னோக்கி <span class='vocab-word' data-hint='Ancient Times' onclick='openVocabModal(\"பழங்காலம்\")'>பழங்காலச்</span> சோழர் காலத்திற்கு வந்தீர்கள்! உங்களுக்கு முன்னால் பிரம்மாண்டமான <span class='vocab-word' data-hint='Harbor Port' onclick='openVocabModal(\"துறைமுகம்\")'>துறைமுகம்</span> உள்ளது. தூரத்தில் கம்பீரமான <span class='vocab-word' data-hint='Lighthouse' onclick='openVocabModal(\"கலங்கரை விளக்கம்\")'>கலங்கரை விளக்கம்</span> <span class='vocab-word' data-hint='Light' onclick='openVocabModal(\"ஒளி\")'>ஒளி</span> தருகிறது. ஒரு சோழ நாட்டு <span class='vocab-word' data-hint='Merchant' onclick='openVocabModal(\"வணிகன்\")'>வணிகன்</span> உங்களிடம் பழங்காலச் சோழர் <span class='vocab-word' data-hint='Coin' onclick='openVocabModal(\"நாணயம்\")'>நாணயம்</span> ஒன்றை அளிக்கிறான்.",
                 compQuestion: "சிறுவன் பயணம் செய்த வரலாற்று சாம்ராஜ்யம் எது?",
                 compOptions: [
                     { text: "1. சேர சாம்ராஜ்யம்", correct: false },
@@ -715,7 +721,7 @@
                 location: "📍 வங்காள விரிகுடா கடல்",
                 progress: 60,
                 ambienceType: "ocean",
-                vocabKeys: ["கப்பலில்", "பனை ஓலை", "முத்திரை", "மாலுமி"],
+                vocabKeys: ["கப்பலில்", "மாலுமி", "பனை ஓலை", "முத்திரை"],
                 text: "சோழர் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>கப்பலில்</span> பயணம் செய்த போது <span class='vocab-word' data-hint='Sailor' onclick='openVocabModal(\"மாலுமி\")'>மாலுமி</span> ஒரு <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடியைக் காட்டி: 'இதில் எழுதப்பட்டுள்ள புதிரை விடுவித்தால் சோழ மன்னனின் <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> உனக்குக் கிடைக்கும்!' என்றான்.",
                 compQuestion: "மாலுமி சிறுவனுக்கு எதைக் காட்டினான்?",
                 compOptions: [
@@ -740,8 +746,8 @@
                 location: "📍 தஞ்சைக் கவிகள் நூலகம்",
                 progress: 60,
                 ambienceType: "port",
-                vocabKeys: ["நூலகம்", "பனை ஓலை", "புலவர்", "முத்திரை"],
-                text: "அரண்மனை <span class='vocab-word' data-hint='Library' onclick='openVocabModal(\"நூலகம்\")'>நூலகத்தில்</span> ஆயிரக்கணக்கான <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடிகள் அடுக்கி வைக்கப்பட்டிருந்தன. பெரிய <span class='vocab-word' data-hint='Poet / Scholar' onclick='openVocabModal(\"புலவர்\")'>புலவர்</span> ஒருவர் ஒரு புதிரைக் கேட்டார். சரியான விடை கூறினால் அரச <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> பெட்டியைத் திறக்கலாம்!",
+                vocabKeys: ["அரண்மனை", "நூலகம்", "பனை ஓலை", "புலவர்", "முத்திரை"],
+                text: "<span class='vocab-word' data-hint='Royal Palace' onclick='openVocabModal(\"அரண்மனை\")'>அரண்மனை</span> <span class='vocab-word' data-hint='Library' onclick='openVocabModal(\"நூலகம்\")'>நூலகத்தில்</span> ஆயிரக்கணக்கான <span class='vocab-word' data-hint='Palm Scroll' onclick='openVocabModal(\"பனை ஓலை\")'>பனை ஓலை</span> சுவடிகள் அடுக்கி வைக்கப்பட்டிருந்தன. பெரிய <span class='vocab-word' data-hint='Poet / Scholar' onclick='openVocabModal(\"புலவர்\")'>புலவர்</span> ஒருவர் ஒரு புதிரைக் கேட்டார். சரியான விடை கூறினால் அரச <span class='vocab-word' data-hint='Royal Seal' onclick='openVocabModal(\"முத்திரை\")'>முத்திரை</span> பெட்டியைத் திறக்கலாம்!",
                 compQuestion: "நூலகத்தில் எது அடுக்கி வைக்கப்பட்டிருந்தது?",
                 compOptions: [
                     { text: "1. காகிதப் புத்தகங்கள்", correct: false },
@@ -1067,7 +1073,6 @@
                     soundscapeNodes.push({ osc, gain });
                 });
 
-                // Bird Chimes Interval
                 soundscapeInterval = setInterval(() => {
                     if (!isAmbiencePlaying) return;
                     const chimes = [880, 1046.5, 1318.5, 1567.98];
@@ -1100,7 +1105,6 @@
                     soundscapeNodes.push({ osc, gain });
                 });
 
-                // Chola Temple Bell Chimes Interval
                 soundscapeInterval = setInterval(() => {
                     if (!isAmbiencePlaying) return;
                     const bells = [587.33, 659.25, 783.99, 880.00];
@@ -1133,7 +1137,6 @@
                     soundscapeNodes.push({ osc, gain });
                 });
 
-                // Mariner Compass Rim Chimes Interval
                 soundscapeInterval = setInterval(() => {
                     if (!isAmbiencePlaying) return;
                     const chimes = [740, 880, 1108.73, 1318.5];
@@ -1564,7 +1567,6 @@
                 document.getElementById('choices-lock-status').textContent = '🔓 வழி திறக்கப்பட்டது!';
                 document.getElementById('choices-lock-status').classList.replace('text-amber-400', 'text-emerald-400');
 
-                // If this is an ending node, trigger Victory Ceremony!
                 if (currentNodeObj && currentNodeObj.isEndingNode) {
                     setTimeout(() => {
                         triggerVictoryCeremony(currentNodeObj);
