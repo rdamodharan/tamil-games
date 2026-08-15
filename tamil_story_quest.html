@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamil Story Quest - கதை உலகம்</title>
-    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, victory status titles, interactive confetti celebrations, audio narration, and vocabulary tools.">
+    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, procedural background soundtracks, audio narration, and vocabulary tools.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -149,8 +149,9 @@
                     <button id="slow-speech-btn" onclick="toggleSlowSpeech()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-sky-300 border border-sky-500/40 font-semibold px-3 py-2 rounded-xl transition text-xs sm:text-sm" title="Toggle Slow Narration Speed">
                         <span>🐢</span> <span id="slow-speech-text">மெதுவான வாசிப்பு (Normal)</span>
                     </button>
-                    <button id="ambience-btn" onclick="toggleAmbience()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-semibold px-3 py-2 rounded-xl transition text-xs sm:text-sm">
-                        <span id="ambience-icon">🍃</span> <span id="ambience-text" class="hidden sm:inline">சூழ்நிலை ஒலி</span>
+                    <!-- Procedural Soundtrack Ambience Toggle -->
+                    <button id="ambience-btn" onclick="toggleAmbience()" class="flex items-center justify-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/40 font-semibold px-3.5 py-2 rounded-xl transition text-xs sm:text-sm">
+                        <span id="ambience-icon">🎵</span> <span id="ambience-text">பின்னணி இசை (Music)</span>
                     </button>
                     <button id="narration-btn" onclick="toggleNarration()" class="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-xl transition shadow-lg shadow-indigo-600/30 active:scale-95 text-xs sm:text-sm">
                         <span id="narration-icon">🔊</span> <span id="narration-text">கதை கேளுங்கள் (Listen)</span>
@@ -259,7 +260,6 @@
         <canvas id="confetti-canvas" class="absolute inset-0 pointer-events-none z-10"></canvas>
         <div class="glass-card bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 border-2 border-amber-400/80 rounded-3xl p-6 md:p-10 max-w-xl w-full shadow-2xl animate-pop relative z-20 text-center">
             
-            <!-- Glowing Trophy Badge -->
             <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-amber-500/20 border-2 border-amber-400 text-6xl mb-4 pulse-glow">
                 <span id="victory-trophy-icon">🏆</span>
             </div>
@@ -280,7 +280,6 @@
                 வாழ்த்துக்கள்! உங்கள் கூரிய வாசிப்புப் புரிதலால் காட்டின் அரிய நீரூற்றைக் கண்டுபிடித்து வெற்றி பெற்றீர்கள்!
             </p>
 
-            <!-- Summary Stats Grid -->
             <div class="grid grid-cols-3 gap-3 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 mb-6 text-center">
                 <div>
                     <span class="block text-xs text-slate-400">மொத்த XP:</span>
@@ -296,7 +295,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-3">
                 <button id="victory-next-btn" onclick="closeVictoryModalAndProceed()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold py-3.5 px-6 rounded-2xl shadow-xl transition transform hover:scale-105 active:scale-95 text-base sm:text-lg">
                     🌟 அடுத்த நிலைக்குச் செல் (Next Level)
@@ -325,7 +323,6 @@
                 </div>
             </div>
 
-            <!-- Full Artwork Container -->
             <div class="relative rounded-2xl overflow-hidden h-64 md:h-80 bg-slate-950 mb-4 border border-slate-700">
                 <img id="inspect-img" src="assets/aambal_jungle.jpg" alt="Inspect Artwork" class="w-full h-full object-cover">
                 <div class="absolute bottom-3 left-3 right-3 bg-slate-950/80 backdrop-blur-md p-3 rounded-xl border border-white/10 text-xs text-slate-300">
@@ -336,8 +333,8 @@
             </div>
 
             <div class="flex items-center justify-between gap-3">
-                <button onclick="toggleAmbience()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-amber-400 font-bold py-3 px-4 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
-                    🔊 சூழ்நிலை ஒலி இயக்க (Ambience Sound)
+                <button onclick="toggleAmbience()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold py-3 px-4 rounded-xl border border-slate-700 transition flex items-center justify-center gap-2 text-sm">
+                    🎵 பின்னணி இசை இயக்க (Toggle Music)
                 </button>
                 <button onclick="closeSceneInspectModal()" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-3 px-6 rounded-xl transition text-sm">
                     திரும்பு (Back)
@@ -363,10 +360,7 @@
                 </div>
             </div>
 
-            <!-- Level Cards Grid -->
             <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
-                
-                <!-- Level 1 Card -->
                 <div onclick="selectLevel('level1')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-emerald-500/40 hover:border-emerald-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
                     <div class="flex items-center gap-4">
                         <span class="text-4xl group-hover:scale-110 transition">🌲</span>
@@ -383,7 +377,6 @@
                     <span class="text-emerald-400 font-bold text-xl">▶️</span>
                 </div>
 
-                <!-- Level 2 Card -->
                 <div onclick="selectLevel('level2')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-amber-500/40 hover:border-amber-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
                     <div class="flex items-center gap-4">
                         <span class="text-4xl group-hover:scale-110 transition">🏛️</span>
@@ -400,7 +393,6 @@
                     <span class="text-amber-400 font-bold text-xl">▶️</span>
                 </div>
 
-                <!-- Level 3 Card -->
                 <div onclick="selectLevel('level3')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-cyan-500/40 hover:border-cyan-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
                     <div class="flex items-center gap-4">
                         <span class="text-4xl group-hover:scale-110 transition">🏴‍☠️</span>
@@ -420,7 +412,7 @@
         </div>
     </div>
 
-    <!-- Vocabulary Modal (Popup when word is clicked) -->
+    <!-- Vocabulary Modal -->
     <div id="vocab-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
         <div class="glass-card bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl animate-pop relative">
             <button onclick="closeVocabModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition">
@@ -979,10 +971,10 @@
         let currentModalWordKey = "";
         let pendingVictoryData = null;
 
-        /* ================= SOUND ENGINE (WEB AUDIO API) ================= */
+        /* ================= ADVANCED PROCEDURAL SOUNDTRACK ENGINE (WEB AUDIO API) ================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        let activeAmbienceOsc = null;
-        let activeAmbienceGain = null;
+        let soundscapeNodes = [];
+        let soundscapeInterval = null;
         let isAmbiencePlaying = false;
 
         function playSound(type) {
@@ -1003,7 +995,6 @@
                 osc.start(now);
                 osc.stop(now + 0.25);
             } else if (type === 'fanfare') {
-                // Victory Fanfare Melody (C5 -> E5 -> G5 -> C6)
                 const notes = [523.25, 659.25, 783.99, 1046.50];
                 notes.forEach((freq, idx) => {
                     const noteOsc = audioCtx.createOscillator();
@@ -1041,7 +1032,7 @@
             }
         }
 
-        /* Ambient Environment Sound Synthesizer */
+        /* Procedural Soundscapes for Level 1, 2, and 3 */
         function toggleAmbience() {
             if (isAmbiencePlaying) {
                 stopAmbience();
@@ -1059,40 +1050,128 @@
             const node = storyNodes[gameState.currentNode];
             const type = node ? (node.ambienceType || 'jungle') : 'jungle';
 
-            activeAmbienceOsc = audioCtx.createOscillator();
-            activeAmbienceGain = audioCtx.createGain();
+            const now = audioCtx.currentTime;
 
             if (type === 'jungle') {
-                activeAmbienceOsc.type = 'sine';
-                activeAmbienceOsc.frequency.setValueAtTime(320, audioCtx.currentTime);
-                activeAmbienceGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-            } else if (type === 'ocean' || type === 'waterfall') {
-                activeAmbienceOsc.type = 'triangle';
-                activeAmbienceOsc.frequency.setValueAtTime(180, audioCtx.currentTime);
-                activeAmbienceGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-            } else {
-                activeAmbienceOsc.type = 'sine';
-                activeAmbienceOsc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                activeAmbienceGain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-            }
+                // LEVEL 1: Lush Forest Pentatonic Chord Pad & Bird Chimes
+                const freqs = [174.61, 220.00, 261.63, 329.63]; // F3, A3, C4, E4
+                freqs.forEach(f => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, now);
+                    gain.gain.setValueAtTime(0.02, now);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    soundscapeNodes.push({ osc, gain });
+                });
 
-            activeAmbienceOsc.connect(activeAmbienceGain);
-            activeAmbienceGain.connect(audioCtx.destination);
-            activeAmbienceOsc.start();
+                // Bird Chimes Interval
+                soundscapeInterval = setInterval(() => {
+                    if (!isAmbiencePlaying) return;
+                    const chimes = [880, 1046.5, 1318.5, 1567.98];
+                    const pick = chimes[Math.floor(Math.random() * chimes.length)];
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    const cNow = audioCtx.currentTime;
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(pick, cNow);
+                    gain.gain.setValueAtTime(0.04, cNow);
+                    gain.gain.exponentialRampToValueAtTime(0.001, cNow + 0.6);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(cNow);
+                    osc.stop(cNow + 0.6);
+                }, 2400);
+
+            } else if (type === 'port') {
+                // LEVEL 2: Chola Royal Drone & Temple Bells
+                const Freqs = [73.42, 110.00, 146.83]; // D2, A2, D3 Tambura Drone
+                Freqs.forEach(f => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(f, now);
+                    gain.gain.setValueAtTime(0.03, now);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    soundscapeNodes.push({ osc, gain });
+                });
+
+                // Chola Temple Bell Chimes Interval
+                soundscapeInterval = setInterval(() => {
+                    if (!isAmbiencePlaying) return;
+                    const bells = [587.33, 659.25, 783.99, 880.00];
+                    const pick = bells[Math.floor(Math.random() * bells.length)];
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    const cNow = audioCtx.currentTime;
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(pick, cNow);
+                    gain.gain.setValueAtTime(0.06, cNow);
+                    gain.gain.exponentialRampToValueAtTime(0.001, cNow + 1.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(cNow);
+                    osc.stop(cNow + 1.2);
+                }, 3000);
+
+            } else {
+                // LEVEL 3 / WATERFALL: Deep Ocean Wave Swell & Mariner Chimes
+                const Freqs = [110.00, 164.81, 220.00]; // A2, E3, A3 Nautical Pad
+                Freqs.forEach(f => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(f, now);
+                    gain.gain.setValueAtTime(0.025, now);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    soundscapeNodes.push({ osc, gain });
+                });
+
+                // Mariner Compass Rim Chimes Interval
+                soundscapeInterval = setInterval(() => {
+                    if (!isAmbiencePlaying) return;
+                    const chimes = [740, 880, 1108.73, 1318.5];
+                    const pick = chimes[Math.floor(Math.random() * chimes.length)];
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    const cNow = audioCtx.currentTime;
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(pick, cNow);
+                    gain.gain.setValueAtTime(0.05, cNow);
+                    gain.gain.exponentialRampToValueAtTime(0.001, cNow + 0.9);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(cNow);
+                    osc.stop(cNow + 0.9);
+                }, 2800);
+            }
 
             isAmbiencePlaying = true;
             document.getElementById('ambience-icon').textContent = '🔊';
-            document.getElementById('ambience-btn').classList.add('border-amber-500', 'text-amber-400');
+            document.getElementById('ambience-btn').classList.add('border-emerald-400', 'text-emerald-300');
         }
 
         function stopAmbience() {
-            if (activeAmbienceOsc) {
-                try { activeAmbienceOsc.stop(); } catch(e){}
-                activeAmbienceOsc = null;
+            if (soundscapeInterval) {
+                clearInterval(soundscapeInterval);
+                soundscapeInterval = null;
             }
+            soundscapeNodes.forEach(n => {
+                try {
+                    n.gain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
+                    setTimeout(() => n.osc.stop(), 200);
+                } catch(e){}
+            });
+            soundscapeNodes = [];
             isAmbiencePlaying = false;
-            document.getElementById('ambience-icon').textContent = '🍃';
-            document.getElementById('ambience-btn').classList.remove('border-amber-500', 'text-amber-400');
+            document.getElementById('ambience-icon').textContent = '🎵';
+            document.getElementById('ambience-btn').classList.remove('border-emerald-400', 'text-emerald-300');
         }
 
         /* ================= SPEECH SYNTHESIS ENGINE ================= */
