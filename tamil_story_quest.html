@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tamil Story Quest - கதை உலகம்</title>
-    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, maximum inline vocabulary hints, procedural soundtracks, and comprehension challenges.">
+    <meta name="description" content="An interactive multi-level Tamil reading adventure game with story branching, rich scene illustrations, maximum inline vocabulary hints, procedural soundtracks, and dynamic XP penalties for retries.">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts -->
@@ -206,8 +206,13 @@
 
             <!-- Final Comprehension Gateway Section -->
             <div id="comprehension-box" class="bg-gradient-to-r from-indigo-950/80 to-slate-900/90 border-2 border-indigo-500/40 rounded-2xl p-5 md:p-6 shadow-lg">
-                <div class="flex items-center gap-2 text-indigo-300 font-bold mb-3 text-base">
-                    <span>❓</span> <span id="comp-header-label">வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)</span>
+                <div class="flex items-center justify-between text-indigo-300 font-bold mb-3 text-base">
+                    <div class="flex items-center gap-2">
+                        <span>❓</span> <span id="comp-header-label">வாசிப்புப் புரிதல் சவால் (Comprehension Challenge)</span>
+                    </div>
+                    <span id="xp-potential-badge" class="text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold">
+                        +50 XP 1-st Try
+                    </span>
                 </div>
                 <p id="comp-question" class="tamil-text text-lg md:text-xl font-bold text-white mb-4">
                     <!-- Question injected dynamically -->
@@ -976,7 +981,7 @@
                 trophyIcon: "⛵",
                 targetNextLevel: "level1",
                 vocabKeys: ["கப்பலில்", "மாலுமி", "தளபதி", "பொக்கிஷம்"],
-                text: "உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமி\")'>மாலுமியாக</span> கரை தொடுகிறீர்கள். நீங்கள் தங்கக் கப்பலின் மாபெரும் <span class='vocab-word' data-hint='Commander' onclick='openVocabModal(\"தளபதி\")'>தளபதி</span> ஆனீர்கள்!",
+                text: "உங்கள் கூரிய திறமையால் <span class='vocab-word' data-hint='In Ship' onclick='openVocabModal(\"கப்பலில்\")'>தங்கக் கப்பலை</span> இயக்கி மாபெரும் <span class='vocab-word' data-hint='Captain' onclick='openVocabModal(\"மாலுமியாக\")'>மாலுமியாக</span> கரை தொடுகிறீர்கள். நீங்கள் தங்கக் கப்பலின் மாபெரும் <span class='vocab-word' data-hint='Commander' onclick='openVocabModal(\"தளபதி\")'>தளபதி</span> ஆனீர்கள்!",
                 compQuestion: "இறுதிச் சவால்: புயலைக் கடந்து வெற்றிப் பயணத்தை முடித்த சிறுவன் இயக்கிய கப்பலின் பெயர் என்ன?",
                 compOptions: [
                     { text: "1. தங்கக் கப்பல் (Golden Ship)", correct: true },
@@ -1006,6 +1011,7 @@
 
         let currentModalWordKey = "";
         let pendingVictoryData = null;
+        let attemptsForCurrentScene = 0;
 
         /* ================= ADVANCED PROCEDURAL SOUNDTRACK ENGINE (WEB AUDIO API) ================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1477,10 +1483,16 @@
 
             gameState.currentNode = nodeId;
             gameState.comprehensionPassed = false;
+            attemptsForCurrentScene = 0; // Reset attempts counter for new scene
 
             // Update UI Chapter, Difficulty & Progress
             document.getElementById('story-chapter-tag').textContent = node.chapter;
             document.getElementById('story-title').textContent = node.title;
+
+            // Reset XP potential badge
+            const xpBadge = document.getElementById('xp-potential-badge');
+            xpBadge.textContent = '+50 XP (1st Try)';
+            xpBadge.className = 'text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold';
 
             // Header label for comprehension box
             const compLabel = document.getElementById('comp-header-label');
@@ -1579,14 +1591,20 @@
                 btnElement.classList.add('border-emerald-500');
                 btnElement.querySelector('.opt-status').textContent = '✅';
 
-                compFeedback.className = 'mt-3 text-sm font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 p-3.5 rounded-xl animate-pop';
-                compFeedback.textContent = '🎉 சரியான விடை! வழிகள் திறக்கப்பட்டன (+50 XP)';
+                // Calculate XP earned based on attempt count
+                let xpGained = 50;
+                if (attemptsForCurrentScene === 1) xpGained = 30;
+                else if (attemptsForCurrentScene === 2) xpGained = 15;
+                else if (attemptsForCurrentScene >= 3) xpGained = 5;
 
                 if (!gameState.comprehensionPassed) {
-                    gameState.xp += 50;
+                    gameState.xp += xpGained;
                     document.getElementById('xp-display').textContent = `${gameState.xp} XP`;
                     gameState.comprehensionPassed = true;
                 }
+
+                compFeedback.className = 'mt-3 text-sm font-bold bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 p-3.5 rounded-xl animate-pop';
+                compFeedback.textContent = `🎉 சரியான விடை! வழிகள் திறக்கப்பட்டன (+${xpGained} XP)`;
 
                 // Unlock Choices
                 const choicesContainer = document.getElementById('choices-container');
@@ -1603,12 +1621,22 @@
                 }
             } else {
                 playSound('error');
+                attemptsForCurrentScene++;
+
                 btnElement.classList.replace('bg-slate-800', 'bg-rose-600/30');
                 btnElement.classList.add('border-rose-500');
                 btnElement.querySelector('.opt-status').textContent = '❌';
 
+                let nextXpPossible = 30;
+                if (attemptsForCurrentScene === 2) nextXpPossible = 15;
+                else if (attemptsForCurrentScene >= 3) nextXpPossible = 5;
+
+                const xpBadge = document.getElementById('xp-potential-badge');
+                xpBadge.textContent = `+${nextXpPossible} XP (Retry)`;
+                xpBadge.className = 'text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full font-extrabold';
+
                 compFeedback.className = 'mt-3 text-sm font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40 p-3.5 rounded-xl animate-pop';
-                compFeedback.textContent = '❌ தவறான விடை. மீண்டும் கதையைப் படித்து முயற்சி செய்யுங்கள்!';
+                compFeedback.textContent = `❌ தவறான விடை. மீண்டும் முயற்சி செய்யுங்கள்! (அடுத்த சரியான விடைக்கு +${nextXpPossible} XP கிடைக்கும்)`;
             }
         }
 
