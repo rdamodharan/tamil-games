@@ -1562,23 +1562,6 @@
             }
         };
 
-        /* ================= GAME STATE ================= */
-        let gameState = {
-            currentLevel: "level1",
-            currentNode: "l1_scene_1",
-            hp: 3,
-            xp: 0,
-            inventory: [],
-            learnedWords: new Set(),
-            comprehensionPassed: false,
-            speechRate: 0.9
-        };
-
-        let currentModalWordKey = "";
-        let pendingVictoryData = null;
-        let activeQuestionIndex = 0;
-        let attemptsForActiveQuestion = 0;
-
         /* ================= ADVANCED PROCEDURAL SOUNDTRACK ENGINE (WEB AUDIO API) ================= */
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let soundscapeNodes = [];
