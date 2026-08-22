@@ -196,14 +196,16 @@
                     <span>💡</span> <span>சொற்கள் குறிப்பு (Word Hints):</span>
                 </span>
                 <div id="scene-vocab-quickhints" class="flex flex-wrap gap-1.5">
-                    <!-- Quick hints injected dynamically -->
+                    <span class="bg-slate-800 hover:bg-amber-950 text-slate-200 border border-amber-500/30 px-2 py-0.5 rounded-md cursor-pointer transition" onclick="openVocabModal('அடர்ந்த')"><strong class="text-amber-400">அடர்ந்த</strong>: Dense / Thick</span>
+                    <span class="bg-slate-800 hover:bg-amber-950 text-slate-200 border border-amber-500/30 px-2 py-0.5 rounded-md cursor-pointer transition" onclick="openVocabModal('காட்டிற்குள்')"><strong class="text-amber-400">காட்டிற்குள்</strong>: Inside Forest</span>
+                    <span class="bg-slate-800 hover:bg-amber-950 text-slate-200 border border-amber-500/30 px-2 py-0.5 rounded-md cursor-pointer transition" onclick="openVocabModal('பாதை')"><strong class="text-amber-400">பாதை</strong>: Path</span>
                 </div>
             </div>
 
             <!-- Paragraph Narrative Content -->
             <div class="bg-slate-900/60 rounded-2xl p-5 md:p-6 border border-slate-800 leading-relaxed text-lg md:text-xl text-slate-100">
                 <p id="story-text" class="tamil-text leading-loose">
-                    <!-- Text injected dynamically -->
+                    நீங்கள் ஒரு <span class='vocab-word' data-hint='Dense' onclick='openVocabModal("அடர்ந்த")'>அடர்ந்த</span> ஆம்பல் <span class='vocab-word' data-hint='Inside Forest' onclick='openVocabModal("காட்டிற்குள்")'>காட்டிற்குள்</span> நிற்கிறீர்கள். சுற்றிலும் <span class='vocab-word' data-hint='Tall' onclick='openVocabModal("உயரமான")'>உயரமான</span> <span class='vocab-word' data-hint='Trees' onclick='openVocabModal("மரங்களும்")'>மரங்களும்</span> <span class='vocab-word' data-hint='Birds&#39;' onclick='openVocabModal("பறவைகளின்")'>பறவைகளின்</span> ஒலியும் கேட்கின்றன. <span class='vocab-word' data-hint='Path' onclick='openVocabModal("பாதை")'>பாதை</span> இரண்டாகப் பிரிகிறது. இடது புறத்தில் ஒரு பழைய <span class='vocab-word' data-hint='Wooden Chest' onclick='openVocabModal("மரப்பெட்டி")'>மரப்பெட்டி</span> உள்ளது. அதில் ஒரு <span class='vocab-word' data-hint='Key' onclick='openVocabModal("திறவுகோல்")'>திறவுகோல்</span> பற்றிய குறிப்பு உள்ளது. வலது புறத்தில் ஒரு <span class='vocab-word' data-hint='Cave&#39;s' onclick='openVocabModal("குகையின்")'>குகையின்</span> <span class='vocab-word' data-hint='Entrance' onclick='openVocabModal("வாசல்")'>வாசல்</span> தெரிகிறது.
                 </p>
             </div>
 
@@ -211,7 +213,7 @@
             <div id="comprehension-box" class="bg-gradient-to-r from-indigo-950/80 to-slate-900/90 border-2 border-indigo-500/40 rounded-2xl p-5 md:p-6 shadow-lg">
                 <div class="flex items-center justify-between text-indigo-300 font-bold mb-3 text-base">
                     <div class="flex items-center gap-2">
-                        <span>❓</span> <span id="comp-header-label">வாசிப்பு & அரும்பொருள் புதிர் சவால்</span>
+                        <span>❓</span> <span id="comp-header-label">வாசிப்பு & அரும்பொருள் புதிர் சவால் (1/1)</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span id="q-counter-badge" class="text-xs bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-full font-extrabold">
@@ -223,10 +225,12 @@
                     </div>
                 </div>
                 <p id="comp-question" class="tamil-text text-lg md:text-xl font-bold text-white mb-4">
-                    <!-- Question injected dynamically -->
+                    1. வாசிப்புப் புதிர்: சிறுவன் நின்ற காட்டின் பெயர் என்ன?
                 </p>
                 <div id="comp-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <!-- Option buttons injected dynamically -->
+                    <button class="bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98" onclick="handleComprehensionAnswer(true, this, storyNodes['l1_scene_1'])"><span>1. ஆம்பல் காடு</span> <span class="opt-status text-xs"></span></button>
+                    <button class="bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98" onclick="handleComprehensionAnswer(false, this, storyNodes['l1_scene_1'])"><span>2. சுந்தரவனம்</span> <span class="opt-status text-xs"></span></button>
+                    <button class="bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98" onclick="handleComprehensionAnswer(false, this, storyNodes['l1_scene_1'])"><span>3. சந்தனக் காடு</span> <span class="opt-status text-xs"></span></button>
                 </div>
                 <div id="comp-feedback" class="mt-3 text-sm font-semibold hidden p-3 rounded-xl"></div>
             </div>
@@ -238,7 +242,8 @@
                     <span id="choices-lock-status" class="text-amber-400">🔒 வினாக்களுக்கு விடையளித்து வழியைத் திறக்கவும்</span>
                 </div>
                 <div id="choices-grid" class="flex flex-col gap-3">
-                    <!-- Choice buttons injected dynamically -->
+                    <button class="choice-btn bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold p-4 rounded-2xl shadow-lg border border-blue-400/30 text-left transition flex items-center justify-between text-base md:text-lg tamil-text" onclick="makeChoice({text:'📦 மரப்பெட்டியைத் திறந்து பார்', targetNode:'l1_scene_2a', itemReward:'📜 பழமையான வரைபடம்'})"><span>📦 மரப்பெட்டியைத் திறந்து பார் (Open Wooden Chest)</span> <span>➡️</span></button>
+                    <button class="choice-btn bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold p-4 rounded-2xl shadow-lg border border-blue-400/30 text-left transition flex items-center justify-between text-base md:text-lg tamil-text" onclick="makeChoice({text:'🚪 குகைக்குள் நேரடியாக நுழை', targetNode:'l1_scene_2b', itemReward:'🏮 மந்திரித்த விளக்கு'})"><span>🚪 குகைக்குள் நேரடியாக நுழை (Enter Cave Directly)</span> <span>➡️</span></button>
                 </div>
             </div>
         </div>
@@ -399,7 +404,7 @@
     </div>
 
     <!-- START GAME MODAL (Appears on Launch to configure and start the game) -->
-    <div id="start-game-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-lg z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+    <div id="start-game-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-lg z-50 flex items-center justify-center p-4 transition-opacity duration-300">
         <div class="glass-card bg-slate-900 border-2 border-amber-500/60 rounded-3xl p-6 md:p-8 max-w-2xl w-full shadow-2xl animate-pop relative max-h-[90vh] overflow-y-auto">
             
             <div class="text-center mb-6">
@@ -1931,8 +1936,11 @@
             playSound('fanfare');
             const startModal = document.getElementById('start-game-modal');
             if (startModal) {
-                startModal.classList.add('opacity-0');
-                setTimeout(() => startModal.classList.add('hidden'), 300);
+                startModal.style.opacity = '0';
+                startModal.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    startModal.style.display = 'none';
+                }, 300);
             }
             selectLevel(pendingStartLevel, pendingStartDifficulty);
         }
@@ -2504,18 +2512,29 @@
             ).join('');
         }
 
-        // Initialize Game on Load
-        window.addEventListener('DOMContentLoaded', () => {
-            // Pre-render Level 1 Easy so scene, text, image, and questions are ready
-            selectLevel('level1', 'easy');
+        // Safe DOM Initialization on Load
+        function initGame() {
+            try {
+                // Pre-render Level 1 Easy so scene, text, image, and questions are ready
+                selectLevel('level1', 'easy');
 
-            // Display Start Game Modal so the player selects level & difficulty first
-            const startModal = document.getElementById('start-game-modal');
-            if (startModal) {
-                startModal.classList.remove('hidden');
-                setTimeout(() => startModal.classList.remove('opacity-0'), 10);
+                // Display Start Game Modal so the player selects level & difficulty first
+                const startModal = document.getElementById('start-game-modal');
+                if (startModal) {
+                    startModal.style.display = 'flex';
+                    startModal.style.opacity = '1';
+                    startModal.style.pointerEvents = 'auto';
+                }
+            } catch (err) {
+                console.error('Initialization error:', err);
             }
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', initGame);
+        } else {
+            initGame();
+        }
     </script>
 </body>
 </html>
