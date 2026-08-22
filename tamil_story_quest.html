@@ -112,14 +112,17 @@
             </div>
 
             <!-- Level Selector & Status Bar -->
-            <div class="flex items-center gap-3 text-sm font-bold">
-                <button onclick="openLevelSelectModal()" class="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 px-3 py-1.5 rounded-xl font-extrabold shadow-md transition active:scale-95 text-xs sm:text-sm">
+            <div class="flex items-center gap-2 sm:gap-3 text-sm font-bold">
+                <button onclick="openLevelSelectModal()" class="flex items-center gap-1.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 px-2.5 sm:px-3 py-1.5 rounded-xl font-extrabold shadow-md transition active:scale-95 text-xs sm:text-sm" title="Select Story Chapter">
                     <span>🗺️</span> <span id="current-level-badge">நிலை 1</span> <span>▼</span>
                 </button>
-                <div class="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700" title="Player Health">
-                    <span>❤️</span> <span id="hp-display" class="text-rose-400">3/3</span>
+                <button onclick="openDifficultyMenuModal()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-slate-700 px-2.5 sm:px-3 py-1.5 rounded-xl font-extrabold shadow-md transition active:scale-95 text-xs sm:text-sm" title="Change Difficulty & Lives Mid-Game">
+                    <span>🎯</span> <span id="current-diff-badge">🟢 15 Lives</span> <span>▼</span>
+                </button>
+                <div class="flex items-center gap-1.5 bg-slate-800 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-700" title="Player Health & Lives">
+                    <span>❤️</span> <span id="hp-display" class="text-rose-400 font-bold">15/15</span>
                 </div>
-                <div class="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700" title="XP Points">
+                <div class="flex items-center gap-1.5 bg-slate-800 px-2.5 sm:px-3 py-1.5 rounded-xl border border-slate-700" title="XP Points">
                     <span>⭐</span> <span id="xp-display" class="text-amber-400">0 XP</span>
                 </div>
             </div>
@@ -484,8 +487,76 @@
                             <p class="text-xs text-slate-400">Nautical sea adventure! Questions escalate from 3 to 5 in final climax!</p>
                         </div>
                     </div>
-                    <span class="text-cyan-400 font-bold text-xl">▶️</span>
+        </div>
+    </div>
+
+    <!-- MID-GAME DIFFICULTY SELECTION MODAL -->
+    <div id="diff-menu-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
+        <div class="glass-card bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-lg w-full shadow-2xl animate-pop relative">
+            <button onclick="closeDifficultyMenuModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition">
+                ✕
+            </button>
+
+            <div class="flex items-center gap-3 mb-4">
+                <span class="text-4xl">🎯</span>
+                <div>
+                    <h3 class="tamil-text text-2xl md:text-3xl font-extrabold text-amber-400">
+                        கடின நிலை & உயிர்கள் (Difficulty Mode)
+                    </h3>
+                    <p class="text-slate-400 text-xs sm:text-sm">Change difficulty mid-game (Lives and XP scale proportionally!)</p>
                 </div>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="changeDifficultyMidGame('easy')" class="w-full bg-slate-800/90 hover:bg-slate-700 border-2 border-emerald-500/60 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between text-left group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🟢</span>
+                        <div>
+                            <h4 class="tamil-text text-lg font-bold text-emerald-300">எளிது (Easy)</h4>
+                            <p class="text-xs text-slate-400">15 Maximum Lives • 1.0x Base XP Points</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1 rounded-full font-bold">1.0x XP</span>
+                </button>
+
+                <button onclick="changeDifficultyMidGame('medium')" class="w-full bg-slate-800/90 hover:bg-slate-700 border-2 border-amber-500/60 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between text-left group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🟡</span>
+                        <div>
+                            <h4 class="tamil-text text-lg font-bold text-amber-300">நடுத்தரம் (Medium)</h4>
+                            <p class="text-xs text-slate-400">10 Maximum Lives • 1.5x Multiplied XP Points</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-amber-950 text-amber-300 border border-amber-800 px-3 py-1 rounded-full font-bold">1.5x XP</span>
+                </button>
+
+                <button onclick="changeDifficultyMidGame('hard')" class="w-full bg-slate-800/90 hover:bg-slate-700 border-2 border-cyan-500/60 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between text-left group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🔴</span>
+                        <div>
+                            <h4 class="tamil-text text-lg font-bold text-cyan-300">கடினம் (Hard)</h4>
+                            <p class="text-xs text-slate-400">5 Maximum Lives • 2.0x Double XP Points</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-cyan-950 text-cyan-300 border border-cyan-800 px-3 py-1 rounded-full font-bold">2.0x XP</span>
+                </button>
+
+                <button onclick="changeDifficultyMidGame('extra_hard')" class="w-full bg-slate-800/90 hover:bg-slate-700 border-2 border-rose-500/60 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between text-left group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-3xl">🔥</span>
+                        <div>
+                            <h4 class="tamil-text text-lg font-bold text-rose-300">கடும் சவால் (Extra Hard)</h4>
+                            <p class="text-xs text-slate-400">1 Single Life • 3.0x Triple XP Points (0 Extra Mistakes!)</p>
+                        </div>
+                    </div>
+                    <span class="text-xs bg-rose-950 text-rose-300 border border-rose-800 px-3 py-1 rounded-full font-bold">3.0x XP</span>
+                </button>
+            </div>
+
+            <div class="mt-5 text-center">
+                <button onclick="closeDifficultyMenuModal()" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 px-6 rounded-xl transition text-sm">
+                    மூடு (Close)
+                </button>
             </div>
         </div>
     </div>
@@ -1748,13 +1819,76 @@
             setTimeout(() => modal.classList.add('hidden'), 200);
         }
 
+        /* MID-GAME SEPARATE DIFFICULTY SELECTOR MODAL */
+        function openDifficultyMenuModal() {
+            playSound('click');
+            const modal = document.getElementById('diff-menu-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeDifficultyMenuModal() {
+            playSound('click');
+            const modal = document.getElementById('diff-menu-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function changeDifficultyMidGame(diffKey) {
+            playSound('click');
+            closeDifficultyMenuModal();
+
+            if (diffKey === selectedDifficultyKey) return;
+
+            const oldMaxHp = gameState.maxHp;
+            const currentHp = gameState.hp;
+            const newConf = difficultyConfigs[diffKey];
+            if (!newConf) return;
+
+            // Proportional remaining lives scaling
+            const ratio = currentHp / oldMaxHp;
+            const newHp = Math.max(1, Math.round(ratio * newConf.lives));
+
+            selectedDifficultyKey = diffKey;
+            currentDifficultyTab = diffKey;
+            gameState.maxHp = newConf.lives;
+            gameState.hp = newHp;
+            gameState.xpMultiplier = newConf.xpMult;
+
+            // Update Top Badges & HP Display
+            updateHPDisplay();
+            const diffBadge = document.getElementById('current-diff-badge');
+            if (diffBadge) diffBadge.textContent = `${newConf.name.split(' ')[0]} (${newConf.lives} Lives)`;
+
+            const lvlInfo = levelStories[gameState.currentLevel];
+            if (lvlInfo) {
+                document.getElementById('current-level-badge').textContent = `${lvlInfo.shortBadge}`;
+                const diffTag = document.getElementById('story-difficulty-tag');
+                if (diffTag) {
+                    diffTag.textContent = `${newConf.name} (❤️ ${gameState.hp}/${gameState.maxHp} • ${newConf.xpMult}x XP)`;
+                    diffTag.className = `text-xs font-bold px-2.5 py-0.5 rounded-full border ${newConf.badgeColor}`;
+                }
+            }
+
+            // Re-render active question to update potential XP badge & option labels instantly for current & future questions
+            renderActiveQuestion(true);
+
+            // Show Feedback Toast
+            const compFeedback = document.getElementById('comp-feedback');
+            if (compFeedback) {
+                compFeedback.classList.remove('hidden');
+                compFeedback.className = 'mt-3 text-sm font-bold bg-indigo-950/90 text-indigo-200 border border-indigo-500 p-3.5 rounded-xl animate-pop';
+                compFeedback.textContent = `🎯 கடின நிலை மாற்றப்பட்டது: ${newConf.name} (❤️ மீதி உயிர்கள்: ${gameState.hp}/${gameState.maxHp} • ${newConf.xpMult}x XP)!`;
+            }
+        }
+
         function selectLevel(levelKey, diffKey) {
             stopNarration();
             closeLevelSelectModal();
             const lvl = levelStories[levelKey];
             if (!lvl) return;
 
-            const targetDiffKey = diffKey || lvl.defaultDifficulty || 'easy';
+            const targetDiffKey = diffKey || selectedDifficultyKey || lvl.defaultDifficulty || 'easy';
             selectedDifficultyKey = targetDiffKey;
             currentDifficultyTab = targetDiffKey;
 
@@ -1766,7 +1900,10 @@
             gameState.xpMultiplier = diffObj.xpMult;
 
             updateHPDisplay();
-            document.getElementById('current-level-badge').textContent = `${lvl.shortBadge} • ❤️ ${gameState.hp}`;
+            document.getElementById('current-level-badge').textContent = `${lvl.shortBadge}`;
+            const diffBadge = document.getElementById('current-diff-badge');
+            if (diffBadge) diffBadge.textContent = `${diffObj.name.split(' ')[0]} (${diffObj.lives} Lives)`;
+
             renderScene(lvl.startNode);
         }
 
@@ -2239,6 +2376,7 @@
         // Initialize Game on Load
         window.addEventListener('DOMContentLoaded', () => {
             selectLevel('level1', 'easy');
+            openLevelSelectModal();
         });
     </script>
 </body>
