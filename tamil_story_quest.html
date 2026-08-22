@@ -1771,6 +1771,38 @@
             document.getElementById('ambience-btn').classList.remove('border-emerald-400', 'text-emerald-300');
         }
 
+        /* ================= GAME STATE & VARIABLES ================= */
+        let gameState = {
+            currentLevel: "level1",
+            currentNode: "l1_scene_1",
+            hp: 15,
+            maxHp: 15,
+            xpMultiplier: 1.0,
+            xp: 0,
+            inventory: [],
+            learnedWords: new Set(),
+            comprehensionPassed: false,
+            speechRate: 0.9
+        };
+
+        let selectedDifficultyKey = "easy";
+        let currentModalWordKey = "";
+        let pendingVictoryData = null;
+        let activeQuestionIndex = 0;
+        let attemptsForActiveQuestion = 0;
+
+        function updateHPDisplay() {
+            const hpDisplay = document.getElementById('hp-display');
+            if (hpDisplay) {
+                hpDisplay.textContent = `${gameState.hp}/${gameState.maxHp}`;
+                if (gameState.hp <= Math.ceil(gameState.maxHp * 0.3)) {
+                    hpDisplay.className = 'text-rose-400 font-extrabold animate-pulse';
+                } else {
+                    hpDisplay.className = 'text-rose-400 font-bold';
+                }
+            }
+        }
+
         /* ================= SPEECH SYNTHESIS ENGINE ================= */
         let ttsSynth = window.speechSynthesis;
         let isNarrating = false;
