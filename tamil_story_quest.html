@@ -353,6 +353,48 @@
         </div>
     </div>
 
+    <!-- GAME OVER MODAL -->
+    <div id="gameover-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-lg z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-300">
+        <div class="glass-card bg-gradient-to-b from-slate-900 via-rose-950 to-slate-900 border-2 border-rose-500/80 rounded-3xl p-6 md:p-10 max-w-xl w-full shadow-2xl animate-pop relative z-20 text-center">
+            
+            <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-rose-500/20 border-2 border-rose-400 text-6xl mb-4">
+                <span>💔</span>
+            </div>
+
+            <span class="block text-xs font-extrabold uppercase tracking-widest text-rose-400 bg-rose-950/80 border border-rose-500/40 px-4 py-1.5 rounded-full w-max mx-auto mb-2">
+                விளையாட்டு முடிந்தது • Game Over
+            </span>
+
+            <h2 class="tamil-text text-3xl sm:text-4xl font-extrabold text-white my-3 leading-tight drop-shadow-md">
+                உயிர்கள் தீர்ந்துவிட்டன!
+            </h2>
+
+            <p class="tamil-text text-slate-200 text-base md:text-lg mb-6 leading-relaxed bg-slate-900/70 p-4 rounded-2xl border border-slate-700/80">
+                கவலைப்படாதீர்கள்! மீண்டும் முயற்சி செய்து தமிழ்ச் சொற்களைக் கற்று வெற்றி பெறலாம்!
+            </p>
+
+            <div class="grid grid-cols-2 gap-3 bg-slate-950/80 p-4 rounded-2xl border border-slate-800 mb-6 text-center">
+                <div>
+                    <span class="block text-xs text-slate-400">ஈட்டிய XP:</span>
+                    <span id="gameover-xp-val" class="text-amber-400 text-xl font-extrabold">0 XP</span>
+                </div>
+                <div>
+                    <span class="block text-xs text-slate-400">கற்ற சொற்கள்:</span>
+                    <span id="gameover-words-val" class="text-emerald-400 text-xl font-extrabold">0</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="retryCurrentLevel()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold py-3.5 px-6 rounded-2xl shadow-xl transition transform hover:scale-105 active:scale-95 text-base">
+                    🔄 மீண்டும் முயற்சி செய் (Retry Level)
+                </button>
+                <button onclick="closeGameOverModal(); openLevelSelectModal();" class="bg-slate-800 hover:bg-slate-700 text-white font-bold py-3.5 px-6 rounded-2xl transition text-base">
+                    🗺️ நிலை மாற்று (Change Level)
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- LEVEL SELECTION MODAL -->
     <div id="level-modal" class="fixed inset-0 bg-slate-950/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200">
         <div class="glass-card bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl animate-pop relative">
@@ -360,23 +402,49 @@
                 ✕
             </button>
 
-            <div class="flex items-center gap-3 mb-6">
+            <div class="flex items-center gap-3 mb-4">
                 <span class="text-4xl">🗺️</span>
                 <div>
                     <h3 class="tamil-text text-2xl md:text-3xl font-extrabold text-amber-400">
                         கதைத் நிலையைத் தேர்ந்தெடுக்கவும்
                     </h3>
-                    <p class="text-slate-400 text-xs sm:text-sm">Select a story adventure level with escalating scene questions</p>
+                    <p class="text-slate-400 text-xs sm:text-sm">Select difficulty (lives & XP scaling) and story chapter</p>
                 </div>
             </div>
 
-            <div class="space-y-4 max-h-[60vh] overflow-y-auto pr-1">
-                <div onclick="selectLevel('level1')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-emerald-500/40 hover:border-emerald-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
+            <!-- Difficulty Mode Selection Tabs -->
+            <div class="mb-5 bg-slate-950 p-3 rounded-2xl border border-slate-800">
+                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                    🎯 கடின நிலை & உயிர்கள் (Difficulty & Lives):
+                </label>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-bold">
+                    <button id="diff-tab-easy" onclick="setDifficultyTab('easy')" class="diff-tab-btn p-2 rounded-xl border border-emerald-500/60 bg-emerald-950/80 text-emerald-300 flex flex-col items-center transition shadow-lg scale-105">
+                        <span>🟢 எளிது</span>
+                        <span class="text-[10px] text-slate-300 font-semibold">❤️ 15 Lives • 1.0x XP</span>
+                    </button>
+                    <button id="diff-tab-medium" onclick="setDifficultyTab('medium')" class="diff-tab-btn p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 flex flex-col items-center transition">
+                        <span>🟡 நடுத்தரம்</span>
+                        <span class="text-[10px] text-slate-400 font-semibold">❤️ 10 Lives • 1.5x XP</span>
+                    </button>
+                    <button id="diff-tab-hard" onclick="setDifficultyTab('hard')" class="diff-tab-btn p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 flex flex-col items-center transition">
+                        <span>🔴 கடினம்</span>
+                        <span class="text-[10px] text-slate-400 font-semibold">❤️ 5 Lives • 2.0x XP</span>
+                    </button>
+                    <button id="diff-tab-extra_hard" onclick="setDifficultyTab('extra_hard')" class="diff-tab-btn p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 flex flex-col items-center transition">
+                        <span>🔥 கடும் சவால்</span>
+                        <span class="text-[10px] text-slate-400 font-semibold">❤️ 1 Life • 3.0x XP</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Story Level Cards -->
+            <div class="space-y-3 max-h-[50vh] overflow-y-auto pr-1">
+                <div onclick="selectLevelWithActiveDiff('level1')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-emerald-500/40 hover:border-emerald-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
                     <div class="flex items-center gap-4">
                         <span class="text-4xl group-hover:scale-110 transition">🌲</span>
                         <div>
                             <span class="text-xs font-bold text-emerald-400 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-800">
-                                நிலை 1 • 🟢 எளிது (1 ➔ 2 ➔ 3 Questions)
+                                நிலை 1 (1 ➔ 2 ➔ 3 Questions)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 ஆம்பல் அடவி ரகசியம்
@@ -387,12 +455,12 @@
                     <span class="text-emerald-400 font-bold text-xl">▶️</span>
                 </div>
 
-                <div onclick="selectLevel('level2')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-amber-500/40 hover:border-amber-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
+                <div onclick="selectLevelWithActiveDiff('level2')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-amber-500/40 hover:border-amber-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
                     <div class="flex items-center gap-4">
                         <span class="text-4xl group-hover:scale-110 transition">🏛️</span>
                         <div>
                             <span class="text-xs font-bold text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-800">
-                                நிலை 2 • 🟡 நடுத்தரம் (2 ➔ 3 ➔ 4 Questions)
+                                நிலை 2 (2 ➔ 3 ➔ 4 Questions)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 காலப் பயணம்: சோழ சாம்ராஜ்யம்
@@ -403,12 +471,12 @@
                     <span class="text-amber-400 font-bold text-xl">▶️</span>
                 </div>
 
-                <div onclick="selectLevel('level3')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-cyan-500/40 hover:border-cyan-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
+                <div onclick="selectLevelWithActiveDiff('level3')" class="bg-slate-800/80 hover:bg-slate-700 border-2 border-cyan-500/40 hover:border-cyan-400 rounded-2xl p-4 cursor-pointer transition flex items-center justify-between gap-4 group">
                     <div class="flex items-center gap-4">
                         <span class="text-4xl group-hover:scale-110 transition">🏴‍☠️</span>
                         <div>
                             <span class="text-xs font-bold text-cyan-400 bg-cyan-950 px-2.5 py-0.5 rounded-full border border-cyan-800">
-                                நிலை 3 • 🔴 கடினம் (3 ➔ 4 ➔ 5 Questions)
+                                நிலை 3 (3 ➔ 4 ➔ 5 Questions)
                             </span>
                             <h4 class="tamil-text text-lg font-bold text-white mt-1">
                                 மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்
@@ -521,24 +589,59 @@
             "தளபதி": { hint: "Captain", phonetic: "Thalapathi", meaning: "கப்பல் கேப்டன் / தளபதி (Captain / Commander)", example: "நீங்கள் கப்பல் தளபதி ஆனீர்கள்." }
         };
 
-        /* ================= MULTI-LEVEL STORY DATA WITH ESCALATING INTRA-LEVEL QUESTIONS ================= */
+        /* ================= DIFFICULTY & LIVES CONFIGURATION ================= */
+        const difficultyConfigs = {
+            "easy": {
+                key: "easy",
+                name: "எளிது (Easy)",
+                lives: 15,
+                xpMult: 1.0,
+                badgeText: "🟢 15 Lives • 1.0x XP",
+                badgeColor: "text-emerald-400 bg-emerald-950/60 border-emerald-800/50"
+            },
+            "medium": {
+                key: "medium",
+                name: "நடுத்தரம் (Medium)",
+                lives: 10,
+                xpMult: 1.5,
+                badgeText: "🟡 10 Lives • 1.5x XP",
+                badgeColor: "text-amber-400 bg-amber-950/60 border-amber-800/50"
+            },
+            "hard": {
+                key: "hard",
+                name: "கடினம் (Hard)",
+                lives: 5,
+                xpMult: 2.0,
+                badgeText: "🔴 5 Lives • 2.0x XP",
+                badgeColor: "text-cyan-400 bg-cyan-950/60 border-cyan-800/50"
+            },
+            "extra_hard": {
+                key: "extra_hard",
+                name: "கடும் சவால் (Extra Hard)",
+                lives: 1, // 0 extra lives / 1 total life (single mistake = Game Over!)
+                xpMult: 3.0,
+                badgeText: "🔥 1 Life • 3.0x XP",
+                badgeColor: "text-rose-400 bg-rose-950/60 border-rose-800/50"
+            }
+        };
+
         const levelStories = {
             "level1": {
                 name: "ஆம்பல் அடவி ரகசியம்",
-                difficulty: "எளிது (1 ➔ 2 ➔ 3 Questions)",
-                difficultyColor: "text-emerald-400 bg-emerald-950/60 border-emerald-800/50",
+                shortBadge: "நிலை 1",
+                defaultDifficulty: "easy",
                 startNode: "l1_scene_1"
             },
             "level2": {
                 name: "காலப் பயணம்: சோழ சாம்ராஜ்யம்",
-                difficulty: "நடுத்தரம் (2 ➔ 3 ➔ 4 Questions)",
-                difficultyColor: "text-amber-400 bg-amber-950/60 border-amber-800/50",
+                shortBadge: "நிலை 2",
+                defaultDifficulty: "medium",
                 startNode: "l2_scene_1"
             },
             "level3": {
                 name: "மாயாவி தீவின் பெருங்கடல் பொக்கிஷம்",
-                difficulty: "கடினம் (3 ➔ 4 ➔ 5 Questions)",
-                difficultyColor: "text-cyan-400 bg-cyan-950/60 border-cyan-800/50",
+                shortBadge: "நிலை 3",
+                defaultDifficulty: "hard",
                 startNode: "l3_scene_1"
             }
         };
@@ -1604,9 +1707,35 @@
             setTimeout(() => modal.classList.add('hidden'), 200);
         }
 
-        /* ================= LEVEL SELECTION MODAL LOGIC ================= */
+        /* ================= LEVEL SELECTION & DIFFICULTY LOGIC ================= */
+        function setDifficultyTab(diffKey) {
+            playSound('click');
+            currentDifficultyTab = diffKey;
+
+            const diffKeys = ['easy', 'medium', 'hard', 'extra_hard'];
+            diffKeys.forEach(k => {
+                const btn = document.getElementById(`diff-tab-${k}`);
+                if (!btn) return;
+                if (k === diffKey) {
+                    const conf = difficultyConfigs[k];
+                    btn.className = `diff-tab-btn p-2 rounded-xl border ${conf.badgeColor} flex flex-col items-center transition shadow-lg scale-105`;
+                    const subText = btn.querySelector('.font-semibold');
+                    if (subText) subText.className = 'text-[10px] text-slate-200 font-semibold';
+                } else {
+                    btn.className = 'diff-tab-btn p-2 rounded-xl border border-slate-700 bg-slate-800 text-slate-400 flex flex-col items-center transition';
+                    const subText = btn.querySelector('.font-semibold');
+                    if (subText) subText.className = 'text-[10px] text-slate-400 font-semibold';
+                }
+            });
+        }
+
+        function selectLevelWithActiveDiff(levelKey) {
+            selectLevel(levelKey, currentDifficultyTab);
+        }
+
         function openLevelSelectModal() {
             playSound('click');
+            setDifficultyTab(selectedDifficultyKey || 'easy');
             const modal = document.getElementById('level-modal');
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
@@ -1619,15 +1748,51 @@
             setTimeout(() => modal.classList.add('hidden'), 200);
         }
 
-        function selectLevel(levelKey) {
+        function selectLevel(levelKey, diffKey) {
             stopNarration();
             closeLevelSelectModal();
             const lvl = levelStories[levelKey];
             if (!lvl) return;
 
+            const targetDiffKey = diffKey || lvl.defaultDifficulty || 'easy';
+            selectedDifficultyKey = targetDiffKey;
+            currentDifficultyTab = targetDiffKey;
+
+            const diffObj = difficultyConfigs[targetDiffKey];
+
             gameState.currentLevel = levelKey;
-            document.getElementById('current-level-badge').textContent = levelKey === 'level1' ? 'நிலை 1' : (levelKey === 'level2' ? 'நிலை 2' : 'நிலை 3');
+            gameState.maxHp = diffObj.lives;
+            gameState.hp = diffObj.lives;
+            gameState.xpMultiplier = diffObj.xpMult;
+
+            updateHPDisplay();
+            document.getElementById('current-level-badge').textContent = `${lvl.shortBadge} • ❤️ ${gameState.hp}`;
             renderScene(lvl.startNode);
+        }
+
+        /* ================= GAME OVER MODAL ================= */
+        function triggerGameOver() {
+            stopNarration();
+            playSound('error');
+
+            document.getElementById('gameover-xp-val').textContent = `${gameState.xp} XP`;
+            document.getElementById('gameover-words-val').textContent = `${gameState.learnedWords.size}`;
+
+            const modal = document.getElementById('gameover-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function closeGameOverModal() {
+            playSound('click');
+            const modal = document.getElementById('gameover-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function retryCurrentLevel() {
+            closeGameOverModal();
+            selectLevel(gameState.currentLevel, selectedDifficultyKey);
         }
 
         /* ================= VOCABULARY MODAL ================= */
@@ -1701,7 +1866,7 @@
         function closeVictoryModalAndProceed() {
             closeVictoryModal();
             if (pendingVictoryData && pendingVictoryData.targetNextLevel) {
-                selectLevel(pendingVictoryData.targetNextLevel);
+                selectLevel(pendingVictoryData.targetNextLevel, selectedDifficultyKey);
             }
         }
 
@@ -1805,10 +1970,11 @@
             document.getElementById('story-title').textContent = node.title;
             
             const lvlInfo = levelStories[gameState.currentLevel];
-            if (lvlInfo) {
+            const diffObj = difficultyConfigs[selectedDifficultyKey || (lvlInfo ? lvlInfo.defaultDifficulty : 'easy')];
+            if (lvlInfo && diffObj) {
                 const diffTag = document.getElementById('story-difficulty-tag');
-                diffTag.textContent = lvlInfo.difficulty;
-                diffTag.className = `text-xs font-bold px-2.5 py-0.5 rounded-full border ${lvlInfo.difficultyColor}`;
+                diffTag.textContent = `${diffObj.name} (❤️ ${gameState.hp}/${gameState.maxHp} • ${gameState.xpMultiplier}x XP)`;
+                diffTag.className = `text-xs font-bold px-2.5 py-0.5 rounded-full border ${diffObj.badgeColor}`;
             }
 
             // Update Scene Image & Icon
@@ -1883,11 +2049,13 @@
             const qCounterBadge = document.getElementById('q-counter-badge');
             qCounterBadge.textContent = `வினா ${activeQuestionIndex + 1} / ${node.questions.length}`;
 
-            // Reset Potential XP Badge based on current attempt state
-            let nextXpPossible = 50;
-            if (attemptsForActiveQuestion === 1) nextXpPossible = 30;
-            else if (attemptsForActiveQuestion === 2) nextXpPossible = 15;
-            else if (attemptsForActiveQuestion >= 3) nextXpPossible = 5;
+            // Reset Potential XP Badge based on current attempt state & difficulty multiplier
+            let baseXP = 50;
+            if (attemptsForActiveQuestion === 1) baseXP = 30;
+            else if (attemptsForActiveQuestion === 2) baseXP = 15;
+            else if (attemptsForActiveQuestion >= 3) baseXP = 5;
+
+            const nextXpPossible = Math.round(baseXP * gameState.xpMultiplier);
 
             const xpBadge = document.getElementById('xp-potential-badge');
             xpBadge.textContent = `+${nextXpPossible} XP ${attemptsForActiveQuestion === 0 ? '(1st Try)' : '(Retry)'}`;
@@ -1948,11 +2116,13 @@
                 btnElement.classList.add('border-emerald-500');
                 btnElement.querySelector('.opt-status').textContent = '✅';
 
-                // Calculate XP earned based on attempt count for this active question
-                let xpGained = 50;
-                if (attemptsForActiveQuestion === 1) xpGained = 30;
-                else if (attemptsForActiveQuestion === 2) xpGained = 15;
-                else if (attemptsForActiveQuestion >= 3) xpGained = 5;
+                // Calculate XP earned based on attempt count for this active question and difficulty multiplier
+                let baseXP = 50;
+                if (attemptsForActiveQuestion === 1) baseXP = 30;
+                else if (attemptsForActiveQuestion === 2) baseXP = 15;
+                else if (attemptsForActiveQuestion >= 3) baseXP = 5;
+
+                const xpGained = Math.round(baseXP * gameState.xpMultiplier);
 
                 gameState.xp += xpGained;
                 document.getElementById('xp-display').textContent = `${gameState.xp} XP`;
@@ -1996,20 +2166,36 @@
                 playSound('error');
                 attemptsForActiveQuestion++;
 
+                // Deduct 1 Life!
+                gameState.hp--;
+                updateHPDisplay();
+
                 btnElement.classList.replace('bg-slate-800', 'bg-rose-600/30');
                 btnElement.classList.add('border-rose-500');
                 btnElement.querySelector('.opt-status').textContent = '❌';
 
-                let nextXpPossible = 30;
-                if (attemptsForActiveQuestion === 2) nextXpPossible = 15;
-                else if (attemptsForActiveQuestion >= 3) nextXpPossible = 5;
+                if (gameState.hp <= 0) {
+                    compFeedback.className = 'mt-3 text-sm font-bold bg-rose-950/90 text-rose-200 border border-rose-500 p-3.5 rounded-xl animate-pop';
+                    compFeedback.textContent = `💔 அனைத்து உயிர்களும் தீர்ந்துவிட்டன! (Game Over)`;
+
+                    setTimeout(() => {
+                        triggerGameOver();
+                    }, 1100);
+                    return;
+                }
+
+                let nextBaseXp = 30;
+                if (attemptsForActiveQuestion === 2) nextBaseXp = 15;
+                else if (attemptsForActiveQuestion >= 3) nextBaseXp = 5;
+
+                const nextXpPossible = Math.round(nextBaseXp * gameState.xpMultiplier);
 
                 const xpBadge = document.getElementById('xp-potential-badge');
                 xpBadge.textContent = `+${nextXpPossible} XP (Retry)`;
                 xpBadge.className = 'text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full font-extrabold';
 
                 compFeedback.className = 'mt-3 text-sm font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40 p-3.5 rounded-xl animate-pop';
-                compFeedback.textContent = `❌ தவறான விடை. மீண்டும் முயற்சி செய்யுங்கள்! (அடுத்த சரியான விடைக்கு +${nextXpPossible} XP கிடைக்கும்)`;
+                compFeedback.textContent = `❌ தவறான விடை! (1 உயிர் குறைந்தது! மீதி ❤️ ${gameState.hp}/${gameState.maxHp}) • மீண்டும் முயற்சி செய்யுங்கள்! (+${nextXpPossible} XP)`;
 
                 // Re-shuffle & re-enable options after 1100ms for retry
                 setTimeout(() => {
@@ -2030,7 +2216,7 @@
 
             // Level Transition Choice
             if (choiceObj.targetLevel) {
-                selectLevel(choiceObj.targetLevel);
+                selectLevel(choiceObj.targetLevel, selectedDifficultyKey);
                 return;
             }
 
@@ -2052,7 +2238,7 @@
 
         // Initialize Game on Load
         window.addEventListener('DOMContentLoaded', () => {
-            renderScene('l1_scene_1');
+            selectLevel('level1', 'easy');
         });
     </script>
 </body>
