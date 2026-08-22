@@ -2474,10 +2474,14 @@
 
         // Initialize Game on Load
         window.addEventListener('DOMContentLoaded', () => {
+            // Pre-render Level 1 Easy so scene, text, image, and questions are ready
+            selectLevel('level1', 'easy');
+
             // Display Start Game Modal so the player selects level & difficulty first
             const startModal = document.getElementById('start-game-modal');
             if (startModal) {
-                startModal.classList.remove('hidden', 'opacity-0');
+                startModal.classList.remove('hidden');
+                setTimeout(() => startModal.classList.remove('opacity-0'), 10);
             }
         });
     </script>
