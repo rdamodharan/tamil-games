@@ -1620,6 +1620,7 @@
         }
 
         function selectLevel(levelKey) {
+            stopNarration();
             closeLevelSelectModal();
             const lvl = levelStories[levelKey];
             if (!lvl) return;
@@ -1774,6 +1775,16 @@
             }
         }
 
+        /* Helper: Non-mutative Array Shuffle */
+        function shuffleArray(array) {
+            const copy = [...array];
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
         /* ================= SCENE RENDERER ================= */
         function renderScene(nodeId) {
             stopNarration();
@@ -1829,10 +1840,12 @@
                 hintsContainer.innerHTML = '<span class="text-slate-500 italic">சொற்கள் இல்லை</span>';
             }
 
-            // Lock Choices initially
+            // Lock Choices initially & reset lock status text/style
             const choicesContainer = document.getElementById('choices-container');
             choicesContainer.classList.add('opacity-40', 'pointer-events-none');
-            document.getElementById('choices-lock-status').textContent = '🔒 வினாக்களுக்கு விடையளித்து வழியைத் திறக்கவும்';
+            const choicesLockStatus = document.getElementById('choices-lock-status');
+            choicesLockStatus.textContent = '🔒 வினாக்களுக்கு விடையளித்து வழியைத் திறக்கவும்';
+            choicesLockStatus.className = 'text-amber-400';
 
             // Render Choice Buttons
             const choicesGrid = document.getElementById('choices-grid');
@@ -1847,7 +1860,7 @@
             });
 
             // Render First Question of Node
-            renderActiveQuestion();
+            renderActiveQuestion(false);
 
             // Trigger Pop Animation
             const storyCard = document.getElementById('story-card');
@@ -1857,21 +1870,30 @@
         }
 
         /* Render Current Sequential Question */
-        function renderActiveQuestion() {
+        function renderActiveQuestion(isRetry = false) {
             const node = storyNodes[gameState.currentNode];
             if (!node || !node.questions || node.questions.length === 0) return;
 
             const qObj = node.questions[activeQuestionIndex];
-            attemptsForActiveQuestion = 0; // Reset attempts counter for current active question
+            if (!isRetry) {
+                attemptsForActiveQuestion = 0; // Reset attempts counter when rendering a new active question
+            }
 
             // Update Counter Badge
             const qCounterBadge = document.getElementById('q-counter-badge');
             qCounterBadge.textContent = `வினா ${activeQuestionIndex + 1} / ${node.questions.length}`;
 
-            // Reset Potential XP Badge
+            // Reset Potential XP Badge based on current attempt state
+            let nextXpPossible = 50;
+            if (attemptsForActiveQuestion === 1) nextXpPossible = 30;
+            else if (attemptsForActiveQuestion === 2) nextXpPossible = 15;
+            else if (attemptsForActiveQuestion >= 3) nextXpPossible = 5;
+
             const xpBadge = document.getElementById('xp-potential-badge');
-            xpBadge.textContent = '+50 XP (1st Try)';
-            xpBadge.className = 'text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold';
+            xpBadge.textContent = `+${nextXpPossible} XP ${attemptsForActiveQuestion === 0 ? '(1st Try)' : '(Retry)'}`;
+            xpBadge.className = attemptsForActiveQuestion === 0
+                ? 'text-xs bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-2.5 py-1 rounded-full font-extrabold'
+                : 'text-xs bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2.5 py-1 rounded-full font-extrabold';
 
             // Header Label
             const compLabel = document.getElementById('comp-header-label');
@@ -1883,26 +1905,41 @@
                 compLabel.className = 'text-indigo-300 font-bold';
             }
 
-            // Question Text & Options
+            // Question Text
             document.getElementById('comp-question').textContent = qObj.question;
+
+            // Shuffle options & Strip hardcoded numeric prefixes
+            const shuffledOptions = shuffleArray(qObj.options);
             const compOptionsContainer = document.getElementById('comp-options');
             compOptionsContainer.innerHTML = '';
 
-            qObj.options.forEach((opt) => {
+            shuffledOptions.forEach((opt, idx) => {
+                const cleanText = opt.text.replace(/^\d+\.\s*/, '');
+                const formattedText = `${idx + 1}. ${cleanText}`;
+
                 const btn = document.createElement('button');
                 btn.className = 'bg-slate-800 hover:bg-slate-700 text-white font-semibold p-3.5 rounded-xl border border-slate-700 text-left transition text-sm sm:text-base tamil-text flex items-center justify-between active:scale-98';
-                btn.innerHTML = `<span>${opt.text}</span> <span class="opt-status text-xs"></span>`;
+                btn.innerHTML = `<span>${formattedText}</span> <span class="opt-status text-xs"></span>`;
                 btn.onclick = () => handleComprehensionAnswer(opt.correct, btn, node);
                 compOptionsContainer.appendChild(btn);
             });
 
-            // Hide feedback box
-            const compFeedback = document.getElementById('comp-feedback');
-            compFeedback.className = 'mt-3 text-sm font-semibold hidden p-3 rounded-xl';
-            compFeedback.textContent = '';
+            if (!isRetry) {
+                // Hide feedback box on new question
+                const compFeedback = document.getElementById('comp-feedback');
+                compFeedback.className = 'mt-3 text-sm font-semibold hidden p-3 rounded-xl';
+                compFeedback.textContent = '';
+            }
         }
 
         function handleComprehensionAnswer(isCorrect, btnElement, currentNodeObj) {
+            // Immediately disable ALL option buttons in #comp-options to prevent repeat clicks & duplicate points
+            const allOptionBtns = document.querySelectorAll('#comp-options button');
+            allOptionBtns.forEach(btn => {
+                btn.disabled = true;
+                btn.classList.add('opacity-70', 'cursor-not-allowed', 'pointer-events-none');
+            });
+
             const compFeedback = document.getElementById('comp-feedback');
             compFeedback.classList.remove('hidden');
 
@@ -1930,7 +1967,7 @@
 
                     setTimeout(() => {
                         activeQuestionIndex++;
-                        renderActiveQuestion();
+                        renderActiveQuestion(false);
                     }, 1200);
 
                 } else {
@@ -1943,8 +1980,9 @@
                     // Unlock Choices
                     const choicesContainer = document.getElementById('choices-container');
                     choicesContainer.classList.remove('opacity-40', 'pointer-events-none');
-                    document.getElementById('choices-lock-status').textContent = '🔓 வழிகள் திறக்கப்பட்டன!';
-                    document.getElementById('choices-lock-status').classList.replace('text-amber-400', 'text-emerald-400');
+                    const choicesLockStatus = document.getElementById('choices-lock-status');
+                    choicesLockStatus.textContent = '🔓 வழிகள் திறக்கப்பட்டன!';
+                    choicesLockStatus.className = 'text-emerald-400';
 
                     if (currentNodeObj && currentNodeObj.isEndingNode) {
                         setTimeout(() => {
@@ -1972,6 +2010,11 @@
 
                 compFeedback.className = 'mt-3 text-sm font-bold bg-rose-950/80 text-rose-300 border border-rose-500/40 p-3.5 rounded-xl animate-pop';
                 compFeedback.textContent = `❌ தவறான விடை. மீண்டும் முயற்சி செய்யுங்கள்! (அடுத்த சரியான விடைக்கு +${nextXpPossible} XP கிடைக்கும்)`;
+
+                // Re-shuffle & re-enable options after 1100ms for retry
+                setTimeout(() => {
+                    renderActiveQuestion(true);
+                }, 1100);
             }
         }
 
